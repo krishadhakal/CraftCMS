@@ -1,0 +1,119 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set type = helpers.getOption(type ?? null, ["videoPlayerFile", "videoPlayerYT", "videoPlayerVimeo"]) %}
+{% set coverImageSizes = coverImageSizes ?? null %}
+{% set coverImageSources = coverImageSources ?? null %}
+{% set coverImageUrl = coverImageUrl ?? null %}
+{% set coverImageAlt = coverImageAlt ?? null %}
+{% set aspectRatio = aspectRatio ?? "16:9" %}
+{% set data = data ?? {} %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "el-VideoPlayer" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% if type|length and data|length %}
+<div class="{{ classes }}" data-playing="false" data-aspect-ratio={{ aspectRatio|t }}>
+	
+	{% switch type %}
+		{% case "videoPlayerFile" %}
+			{% set sources = data.sources ?? [] %}
+
+			{% if sources|length %}
+				<video class="{{ baseClass }}__player">
+					{% for source in sources %}
+						{% set sourceUrl = source.url ?? null %}
+						{% set sourceType = source.type ?? null %}
+
+						{% if sourceUrl|length %}
+							<source src="{{ sourceUrl }}" type="{{ sourceType }}">
+						{% endif %}
+					{% endfor %}
+				</video>
+				{% if coverImageUrl|length %}
+					<div class="{{ baseClass }}__cover-image">
+						{% include "_components/atoms/Media/ResponsiveImage/ResponsiveImage" with {
+							backgroundImage: true,
+							sizes: coverImageSizes,
+							sources: coverImageSources,
+							url: coverImageUrl,
+							alt: coverImageAlt,
+						} only %}
+					</div>
+				{% endif %}
+			{% endif %}
+
+		{% case "videoPlayerYT" %}
+			{% set videoId = data.videoId ?? null %}
+
+			{% if videoId|length %}
+				{% set source = "https://www.youtube.com/embed/" ~ videoId ~ "?origin=https://plyr.io&amp;iv_load_policy=3&amp;modestbranding=1&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;enablejsapi=1" %}
+
+				<div class="{{ baseClass }}__player">
+					<iframe
+						src="{{ source }}"
+						frameborder="0"
+						allowfullscreen
+						allowtransparency
+						allow="autoplay">
+					</iframe>
+					{% if coverImageUrl|length %}
+						<div class="{{ baseClass }}__cover-image">
+							{% include "_components/atoms/Media/ResponsiveImage/ResponsiveImage" with {
+								backgroundImage: true,
+								sizes: coverImageSizes,
+								sources: coverImageSources,
+								url: coverImageUrl,
+								alt: coverImageAlt,
+							} only %}
+						</div>
+					{% endif %}
+				</div>
+			{% endif %}
+
+		{% case "videoPlayerVimeo" %}
+			{% set videoId = data.videoId ?? null %}
+
+			{% if videoId|length %}
+				{% set source = "https://player.vimeo.com/video/" ~ videoId ~ "?loop=false&amp;byline=false&amp;portrait=false&amp;title=false&amp;speed=true&amp;transparent=0&amp;gesture=media" %}
+
+				<div class="{{ baseClass }}__player">
+					<iframe
+						src="{{ source }}"
+						frameborder="0"
+						allowfullscreen
+						allowtransparency
+						allow="autoplay">
+					</iframe>
+					{% if coverImageUrl|length %}
+						<div class="{{ baseClass }}__cover-image">
+							{% include "_components/atoms/Media/ResponsiveImage/ResponsiveImage" with {
+								backgroundImage: true,
+								sizes: coverImageSizes,
+								sources: coverImageSources,
+								url: coverImageUrl,
+								alt: coverImageAlt,
+							} only %}
+						</div>
+					{% endif %}
+				</div>
+			{% endif %}
+
+		{% default %}
+	{% endswitch %}
+
+	<div class="{{ baseClass }}__play-button">
+		<div class="{{ baseClass }}__play-button__icon {{ baseClass }}__play-button__play">
+			{{ helpers.getIcon("play") }}
+		</div>
+		<div class="{{ baseClass }}__play-button__icon {{ baseClass }}__play-button__pause">
+			{{ helpers.getIcon("pause") }}
+		</div>
+	</div>
+	
+</div>
+{% endif %}

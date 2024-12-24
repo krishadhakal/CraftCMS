@@ -1,0 +1,44 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = "dark" %}
+{% set label = null %}
+{% set heading = null %}
+{% set copy = null %}
+{% set form = null %}
+
+{#---------- Data Handling ----------#}
+{% set useModalForm = globalModalForm.globalModalForm_useModalForm ?? false %}
+
+{% if useModalForm %}
+	{% set label = globalModalForm.globalModalForm_label ?? label %}
+	{% set heading = globalModalForm.globalModalForm_heading ?? heading %}
+	{% set copy = globalModalForm.globalModalForm_copy ?? copy %}
+	{% set formieForm = globalModalForm.globalModalForm_form.one() ?? null %}
+
+	{% if formieForm|length %}
+		{% set form %}
+			{% apply spaceless %}
+				{% include "_components/elements/Forms/Form/Form.handler" with {
+					theme: theme,
+					formieForm: formieForm,
+				} only %}
+			{% endapply %}
+		{% endset %}
+	{% endif %}
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/Modals/ModalForm/ModalForm" with {
+	variants: variants,
+	theme: theme,
+	label: label,
+	heading: heading,
+	copy: copy,
+	form: form,
+} only %}

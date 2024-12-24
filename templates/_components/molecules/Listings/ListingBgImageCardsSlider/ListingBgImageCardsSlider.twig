@@ -1,0 +1,117 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set centerSlides = centerSlides ?? true %}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set label = label ?? null %}
+{% set heading = heading ?? null %}
+{% set cards = cards ?? [] %}
+
+{#---------- Data Handling ----------#}
+
+{# we need >= a certain number of slides for swiper to work properly in loop mode #}
+{% set minSlides = 15 %}
+
+{# get the number of times we need to output our slides to have >= minSlides total slides #}
+{% set slidesMultiplier = (minSlides / cards|length)|round(0, 'ceil') %}
+
+{# get the number of slides that will be output #}
+{% set numberOfSlidesOutput = slidesMultiplier * cards|length %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-ListingBgImageCardsSlider" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% set navigationMarkup %}
+<div class="{{ baseClass }}__arrows">
+
+	<button class="{{ baseClass }}__arrow {{ baseClass }}__arrow--prev">
+		{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+			size: "large",
+			theme: theme,
+			style: "outline",
+			shape: "square",
+			type: "chevron-left",
+		} only %}
+	</button>
+
+	<button class="{{ baseClass }}__arrow {{ baseClass }}__arrow--next">
+		{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+			size: "large",
+			theme: theme,
+			style: "outline",
+			shape: "square",
+			type: "chevron-right",
+		} only %}
+	</button>
+
+</div>
+{% endset %}
+
+<div class="{{ classes }}" data-center-slides="{{ centerSlides ? "true" : "false" }}" data-number-of-slides="{{ numberOfSlidesOutput }}">
+
+	<div class="grid-container">
+
+		{% if label or heading %}
+		
+			<div class="row {{ baseClass }}__top">
+
+				<div class="column xsmall-12 medium-9 xlarge-7 {{ baseClass }}__content">
+
+					{% if label %}
+						<h5 class="{{ baseClass }}__label">{{ label }}</h5>
+					{% endif %}
+					
+					{% if heading %}
+						<h2 class="{{ baseClass }}__heading">{{ heading }}</h2>
+					{% endif %}
+
+				</div>
+
+				<div class="column xsmall-12 medium-3 xlarge-5 {{ baseClass }}__arrowsColumn">
+
+					{{ navigationMarkup }}
+
+				</div>
+
+			</div>
+
+		{% endif %}
+		
+		<div class="{{ baseClass }}__cards">
+
+			<div class="swiper-wrapper">
+
+				{#
+					We ouput the slides twice, because a limitation of swiper.js requires us to start
+					the slider at the beginning of the second set. If we don't do this, there will be no
+					slides to the left when the page loads.
+				#}
+				{% for i in range(1, 2) %}
+
+					{# this loop ensures at least minSlides are output #}
+					{% for i in range(1, slidesMultiplier) %}
+						
+						{% for card in cards %}
+							<div class="{{ baseClass }}__cardWrapper swiper-slide">
+								{{ card }}
+							</div>
+						{% endfor %}
+
+					{% endfor %}
+
+				{% endfor %}
+
+			</div>
+
+		</div>
+		
+		{% if not label and not heading %}
+			{{ navigationMarkup }}
+		{% endif %}
+
+	</div>
+
+</div>

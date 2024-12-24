@@ -1,0 +1,83 @@
+$base-class: '.mol-CallToActionStandard';
+
+@mixin useCallToActionStandardVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--background-color: #{$color-base-surface-primary-dark};
+	--color: #{$color-base-text-primary-dark};
+	--overlay-color: #{rgba($color-black, .25)};
+	@include interpolate((padding-top, padding-bottom), 64px, 198px);
+	@include useDisableSpacing;
+	background-color: var(--background-color);
+	position: relative;
+	display: flex;
+	align-items: center;
+	aspect-ratio: 1440/732;
+
+	@include breakpoint("1680px") {
+		aspect-ratio: auto;
+		min-height: 732px;
+	}
+
+	&--light {
+		--background-color: #{$color-base-surface-primary-light};
+		--color: #{$color-base-text-primary-light};
+	}
+
+	&__media {
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+
+		&__inner {
+			@include useMediaTakeover;
+			height: 100%;
+			width: 100%;
+
+			&:after {
+				content: "";
+				background-color: var(--overlay-color);
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				z-index: 0;
+			}
+		}
+	}
+
+	&__content {
+		position: relative;
+		color: var(--color);
+		text-align: center;
+		z-index: 2;
+	}
+
+	@include useContentSpacing($button: true);
+
+	&__label {
+		@include font-h6;
+	}
+
+	&__heading {
+		@include font-h2;
+		@include maxWidth(22em);
+	}
+
+	&__copy {
+		@include richText;
+		@include maxWidth(52em);
+	}
+
+	&__button {
+
+	}
+
+}

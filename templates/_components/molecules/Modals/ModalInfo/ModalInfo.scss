@@ -1,0 +1,134 @@
+$base-class: '.mol-ModalInfo';
+
+@mixin useModalInfoVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--overlay-color: #{rgba($color-black, .5)};
+	--inner-background-color: #{$color-base-surface-tertiary-light};
+	--text-color: #{$color-base-text-primary-light};
+	--scrollbar-color: #{rgba($color-base-text-primary-light, 0.75)};
+	position: fixed;
+	z-index: $zIndex-modal;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	visibility: hidden;
+	opacity: 0;
+	overflow: hidden;
+	height: 100%;
+	width: 100%;
+	display: none;
+
+	&--dark {
+		--inner-background-color: #{$color-base-surface-tertiary-dark};
+		--text-color: #{$color-base-text-primary-dark};
+		--scrollbar-color: #{rgba($color-base-text-primary-dark, 0.75)};
+	}
+
+	&__wrapper {
+		@include interpolate((padding-top, padding-bottom), 25px, 50px);
+		@include interpolate((padding-left, padding-right), 40px, 80px);
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		display: flex;
+		width: 100%;
+		max-width: 100%;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	&__overlay {
+		background-color: var(--overlay-color);
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: $zIndex-modal + 1;
+		cursor: pointer;
+	}
+
+	&__inner {
+		background-color: var(--inner-background-color);
+		color: var(--text-color);
+		position: relative;
+		width: 100%;
+		max-width: 45rem;
+		margin-top: auto;
+		margin-bottom: auto;
+		z-index: $zIndex-modal + 2;
+		overflow-y: auto;
+
+		@include breakpoint("small", "max") {
+			width: 80%;
+		}
+
+		@include breakpoint("xsmall", "max") {
+			width: 100%;
+		}
+	}
+
+	&__close {
+		@include interpolate((top, right), 10px, 20px);
+		position: fixed;
+		z-index: $zIndex-modal + 2;
+	}
+
+	&__carousel {
+		@include carouselAspectRatio(720, 275);
+		// @include useMediaTakeover;
+
+		// &__inner {
+		// 	@include aspectRatio(720, 275);
+		// }
+	}
+
+	&__content {
+		@include interpolate((padding-left, padding-right), 25px, 50px);
+		@include interpolate((padding-top, padding-bottom), 24px, 48px);
+	}
+
+	&__introduction {
+		text-align: center;
+	}
+
+	@include useContentSpacing($button: false);
+
+	&__label {
+		@include font-h6;
+	}
+
+	&__heading {
+		@include font-h3;
+	}
+
+	&__copy {
+		@include richText;
+	}
+
+	&__button {
+		@include interpolate(margin-top, 15px, 30px);
+	}
+
+	&__form {
+		@include interpolate(margin-top, 25px, 50px);
+	}
+
+	.os-scrollbar {
+		// The background of the scrollbar handle
+		--os-handle-bg: var(--scrollbar-color);
+		// The :hover background of the scrollbar handle
+		--os-handle-bg-hover: var(--scrollbar-color);
+		// The :active background of the scrollbar handle
+		--os-handle-bg-active: var(--scrollbar-color);
+	}
+
+}

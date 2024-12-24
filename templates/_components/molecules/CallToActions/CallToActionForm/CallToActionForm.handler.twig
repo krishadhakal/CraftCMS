@@ -1,0 +1,46 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = "dark" %}
+{% set label = null %}
+{% set heading = null %}
+{% set copy = null %}
+{% set form = null %}
+
+{#---------- Data Handling ----------#}
+{% if block|length %}
+	{% set disableTopSpacing = block.common_disableTopSpacing ?? false %}
+	{% set disableBottomSpacing = block.common_disableBottomSpacing ?? false %}
+	{% set variants = variants|merge([disableTopSpacing ? "disableTopSpacing", disableBottomSpacing ? "disableBottomSpacing"]) %}
+	
+	{% set label = block.molCallToActionForm_label ?? label %}
+	{% set heading = block.molCallToActionForm_heading ?? heading %}
+	{% set copy = helpers.getRawText(block.molCallToActionForm_copy, copy) %}
+	{% set formieForm = block.molCallToActionForm_form.one() ?? null %}
+
+	{% if formieForm|length %}
+		{% set form %}
+			{% apply spaceless %}
+				{% include "_components/elements/Forms/Form/Form.handler" with {
+					formieForm: formieForm,
+					theme: theme,
+				} only %}
+			{% endapply %}
+		{% endset %}
+	{% endif %}
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/CallToActions/CallToActionForm/CallToActionForm" with {
+	variants: variants,
+	theme: theme,
+	label: label,
+	heading: heading,
+	copy: copy,
+	form: form,
+} only %}

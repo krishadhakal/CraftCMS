@@ -1,0 +1,11 @@
+$base-class: '.mol-ListingComponent';
+
+@mixin useListingComponentVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	
+}

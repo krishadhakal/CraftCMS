@@ -1,0 +1,32 @@
+$base-class: '.mol-CarouselFullWidth';
+
+@mixin useCarouselFullWidthVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--background-color: #{$color-base-surface-primary-light};
+	@include sectionSpacing;
+	@include useDisableSpacing;
+	background-color: var(--background-color);
+
+	&--dark {
+		--background-color: #{$color-base-surface-primary-dark};
+	}
+
+	&__carousel {
+		@include overlayCarousel();
+		width: 100%;
+		aspect-ratio: 16/9;
+		max-height: 945px;
+	}
+
+}
+
+#{$base-class}--disableBottomSpacing + #{$base-class}--disableTopSpacing,
+.mol-MediaDuo--disableBottomSpacing + #{$base-class}--disableTopSpacing,
+.mol-MediaTrio--disableBottomSpacing + #{$base-class}--disableTopSpacing {
+	@include interpolate(padding-top, 4px, 8px);
+}

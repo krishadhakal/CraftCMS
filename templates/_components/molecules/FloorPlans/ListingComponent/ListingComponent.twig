@@ -1,0 +1,20 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+
+{#---------- Data Handling ----------#}
+{% set heading = heading ?? false %}
+{% set copy = copy ?? false %}
+{% set image = image ?? false %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-ListingComponent" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [], []) %}
+
+{#---------- Output ----------#}
+<div class="{{ classes }}">
+    <p> {{ heading }} </p>
+    {{ copy }}
+    {{ image }}
+</div>

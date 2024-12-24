@@ -1,0 +1,60 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["dark", "light"]) %}
+{% set imageSizes = imageSizes ?? null %}
+{% set imageSources = imageSources ?? null %}
+{% set imageUrl = imageUrl ?? null %}
+{% set imageAlt = imageAlt ?? null %}
+{% set heading = heading ?? null %}
+{% set copy = copy ?? null %}
+{% set button = button ?? null %}
+
+{#---------- Data Handling ----------#}
+{% set buttonText = null %}
+{% set buttonUrl = null %}
+{% set buttonTarget = null %}
+
+{% if button %}
+	{% set buttonText = button.text ?? buttonText %}
+	{% set buttonUrl = button.url ?? buttonUrl %}
+	{% set buttonTarget = button.target ?? buttonTarget %}
+{% endif %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "el-CardBgImage" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+<div class="{{ classes }}">
+	<div class="{{ baseClass }}__image">
+		{% include "_components/atoms/Media/ResponsiveImage/ResponsiveImage" with {
+			backgroundImage: true,
+			sizes: imageSizes,
+			sources: imageSources,
+			url: imageUrl,
+			alt: imageAlt,
+		} only %}
+		<div class="{{ baseClass }}__image__overlay"></div>
+	</div>
+	<div class="{{ baseClass }}__content">
+		<h6 class="{{ baseClass }}__content__heading">{{ heading }}</h6>
+		{% if copy %}
+			<div class="{{ baseClass }}__content__copy">{{ copy }}</div>
+		{% endif %}
+		{% if buttonUrl and buttonText %}
+			<div class="{{ baseClass }}__content__button">
+				{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+					size: "large",
+					theme: theme,
+					style: "noUnderline",
+					arrow: "right",
+					target: buttonTarget,
+					url: buttonUrl,
+					text: buttonText,
+				} only %}
+			</div>
+		{% endif %}
+	</div>
+</div>

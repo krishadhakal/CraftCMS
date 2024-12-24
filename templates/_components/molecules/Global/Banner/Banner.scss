@@ -1,0 +1,46 @@
+$base-class: '.mol-Banner';
+
+@mixin useBannerVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	// Note that out of the box the banner uses opposite tokens for light/dark themes.
+	// This is because it's a standalone component, and will not be on a background, but
+	// it borrows the button color tokens which are named based on whether they'll be
+	// on a light or dark background.
+	--background-color: #{$color-button-primary-fill-dark};
+	--color: #{$color-button-primary-fill-text-dark};
+	--hover-background-color: #{$color-button-secondary-fill-dark};
+	--hover-color: #{$color-button-secondary-fill-text-dark};
+	$self: &;
+	@include interpolate((padding-top, padding-bottom), 8px, 10px);
+	@include interpolate((padding-left, padding-right), 10px, 20px);
+	display: block;
+	background-color: var(--background-color);
+	color: var(--color);
+	@include transition((background-color, color));
+
+	&--dark {
+		--background-color: #{$color-button-primary-fill-light};
+		--color: #{$color-button-primary-fill-text-light};
+		--hover-background-color: #{$color-button-secondary-fill-light};
+		--hover-color: #{$color-button-secondary-fill-text-light};
+	}
+
+	&--hover {
+		--background-color: var(--hover-background-color);
+		--color: var(--hover-color);
+	}
+
+	&__copy {
+		@include font-body;
+		text-align: center;
+	}
+
+	&:is(a):hover {
+		@extend #{$self}--hover;
+	}
+}

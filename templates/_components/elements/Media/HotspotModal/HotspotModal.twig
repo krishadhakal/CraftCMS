@@ -1,0 +1,24 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set id = id ?? null %}
+{% set content = content ?? null %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "el-HotspotModal" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [], []) %}
+
+{#---------- Output ----------#}
+<div class="{{ classes }}" data-hotspot-modal-id="{{ id }}">
+	<button class="{{ baseClass }}__close">
+		{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+			type: "x",
+			theme: "light",
+		} only %}
+	</button>
+	<div class="{{ baseClass }}__overlay"></div>
+	<div class="{{ baseClass }}__inner">
+		{{ content }}
+	</div>
+</div>

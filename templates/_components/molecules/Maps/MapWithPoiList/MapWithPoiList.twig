@@ -1,0 +1,60 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set componentId = componentId ?? 'poiMap_' ~ random() %}
+{% set heading = heading ?? null %}
+{% set allFeatures = allFeatures ?? [] %}
+{% set primaryFeatures = primaryFeatures ?? [] %}
+{% set poiFeatures = poiFeatures ?? [] %}
+{% set poiListGroups = poiListGroups ?? [] %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-MapWithPoiList" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+<div class="{{ classes }}" id="{{ componentId }}">
+	<div class="{{ baseClass }}__wrapper">
+		<div class="{{ baseClass }}__poiList">
+			{% if heading %}
+				<h2 class="{{ baseClass }}__poiList__heading">{{ heading }}</h2>
+			{% endif %}
+			<div class="{{ baseClass }}__poiList__itemGroups">
+				{% for group in poiListGroups %}
+					<div class="{{ baseClass }}__poiList__itemGroup">
+						<div class="{{ baseClass }}__poiList__itemGroup__heading">{{ group.type }}</div>
+						<div class="{{ baseClass }}__poiList__items">
+							{% for item in group.points %}
+								<div class="{{ baseClass }}__poiList__item" data-item-id="{{ item.id }}">
+									<div class="{{ baseClass }}__poiList__item__number">{{ item.number }}</div>
+									<div class="{{ baseClass }}__poiList__item__name">{{ item.name }}</div>
+								</div>
+							{% endfor %}
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+		<div class="{{ baseClass }}__map"></div>
+	</div>
+</div>
+
+{% js %}
+  // Mapbox Features
+  window.MapData_{{ componentId }} = {
+	allFeaturesGeoJson: {
+		"type": "FeatureCollection",
+		"features": {{ allFeatures|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
+	},
+    primaryGeoJson: {
+      "type": "FeatureCollection",
+      "features": {{ primaryFeatures|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
+    },
+	poiFeaturesGeoJson: {
+      "type": "FeatureCollection",
+      "features": {{ poiFeatures|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
+    },
+  }
+{% endjs %}

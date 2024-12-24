@@ -1,0 +1,232 @@
+$base-class: '.mol-ContentTextMediaTypeOne';
+
+@mixin useContentTextMediaTypeOneVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--background-color: #{$color-base-surface-primary-light};
+	--color: #{$color-base-text-primary-light};
+	@include sectionSpacing;
+	@include useDisableSpacing;
+	background-color: var(--background-color);
+	color: var(--color);
+
+	&--dark {
+		--background-color: #{$color-base-surface-secondary-dark};
+		--color: #{$color-base-text-primary-dark};
+	}
+
+	&__inner {
+		align-items: center;
+	}
+
+	&__content {
+		@include interpolate(margin-top, 25px, 50px);
+
+		@include breakpoint(medium) {
+			margin-top: 0;
+		}
+
+		@include useContentTextMediaTypeOneVariants(media-left, media-portrait) {
+
+			@include breakpoint(medium) {
+				@include interpolate(padding-left, 20px, 72px);
+			}
+
+		}
+
+		@include useContentTextMediaTypeOneVariants(media-right, media-portrait) {
+			
+			@include breakpoint(medium) {
+				@include interpolate(padding-right, 20px, 72px);
+			}
+
+		}
+
+		@include useContentTextMediaTypeOneVariants(media-left, media-square) {
+
+			@include breakpoint(medium) {
+				@include interpolate(padding-left, 20px, 72px);
+			}
+
+		}
+
+		@include useContentTextMediaTypeOneVariants(media-right, media-square) {
+			
+			@include breakpoint(medium) {
+				@include interpolate(padding-right, 20px, 72px);
+			}
+
+		}
+
+	}
+
+	@include useContentSpacing($button: true);
+
+	&__label {
+		@include font-h6;
+	}
+
+	&__heading {
+		@include font-h2;
+		max-width: 15em;
+	}
+
+	&__copy {
+		@include richText;
+	}
+
+	* + &__infoIconItems {
+		@include interpolate(margin-top, $spacing-body-listing);
+	}
+
+	&__infoIconItems {
+		@include interpolate(margin-bottom, -20px, -28px);
+		margin-left: -12px;
+		margin-right: -12px;
+		display: flex;
+		flex-wrap: wrap;
+
+		@include breakpoint(large) {
+			margin-left: -16px;
+			margin-right: -16px;
+		}
+
+		@include breakpoint(xlarge) {
+			margin-left: -20px;
+			margin-right: -20px;
+		}
+
+	}
+
+	&__infoIconItem {
+		@include interpolate(margin-bottom, 20px, 28px);
+		margin-left: 12px;
+		margin-right: 12px;
+		flex-shrink: 0;
+		flex-grow: 0;
+		flex-basis: calc(50% - 24px);
+
+		@include breakpoint(xlarge) {
+			margin-left: 16px;
+			margin-right: 16px;
+			flex-basis: calc(50% - 32px);
+		}
+
+		@include breakpoint(xlarge) {
+			margin-left: 20px;
+			margin-right: 20px;
+			flex-basis: calc(50% - 40px);
+		}
+
+	}
+
+	&__button {
+		
+	}
+
+	&__media {
+
+		@include breakpoint("small", "max") {
+			order: -1;
+		}
+
+		@include useContentTextMediaTypeOneVariants(media-left, media-landscape) {
+
+			@include breakpoint(medium) {
+				@include interpolate(padding-right, 20px, 72px);
+			}
+
+		}
+
+		@include useContentTextMediaTypeOneVariants(media-right, media-landscape) {
+			
+			@include breakpoint(medium) {
+				@include interpolate(padding-left, 20px, 72px);
+			}
+
+		}
+
+	}
+
+	&__carousel {
+		@include carouselAspectRatio(544, 505);
+		position: relative;
+
+		@include useContentTextMediaTypeOneVariants(media-square) {
+			@include carouselAspectRatio(618, 618)
+		}
+
+		@include useContentTextMediaTypeOneVariants(media-portrait) {
+			@include carouselAspectRatio(618, 728)
+		}
+
+		@include useContentTextMediaTypeOneVariants(media-landscape) {
+			@include carouselAspectRatio(762, 481)
+		}
+
+		@include useContentTextMediaTypeOneVariants(media-left) {
+			@include positionCarouselNav("left");
+
+			@include breakpoint("small", "max") {
+				@include positionCarouselNav("right");
+			}
+		}
+
+		@include useContentTextMediaTypeOneVariants(media-right) {
+			@include positionCarouselNav("right");
+		}
+
+
+		@include useContentTextMediaTypeOneVariants(media-left, mediaFullBleed) {
+			margin-left: $grid-padding-size-xsmall * -1;
+			margin-right: $grid-padding-size-xsmall * -1;
+			@include positionCarouselNav("center");
+
+			@include breakpoint(small) {
+				margin-left: $grid-padding-size-small * -1;
+				margin-right: $grid-padding-size-small * -1;
+			}
+			@include breakpoint(medium) {
+				margin-left: $grid-padding-size-medium * -1;
+				margin-right: 0;
+				@include positionCarouselNav("right");
+			}
+			@include breakpoint(large) {
+				margin-left: $grid-padding-size-large * -1;
+			}
+			@include breakpoint(xlarge) {
+				margin-left: $grid-padding-size-xlarge * -1;
+			}
+
+		}
+
+		@include useContentTextMediaTypeOneVariants(media-right, mediaFullBleed) {
+			margin-left: $grid-padding-size-xsmall * -1;
+			margin-right: $grid-padding-size-xsmall * -1;
+			@include positionCarouselNav("center");
+
+			@include breakpoint(small) {
+				margin-left: $grid-padding-size-small * -1;
+				margin-right: $grid-padding-size-small * -1;
+			}
+			@include breakpoint(medium) {
+				margin-left: 0;
+				margin-right: $grid-padding-size-medium * -1;
+				@include positionCarouselNav("left");
+			}
+			@include breakpoint(large) {
+				margin-right: $grid-padding-size-large * -1;
+			}
+			@include breakpoint(xlarge) {
+				margin-right: $grid-padding-size-xlarge * -1;
+			}
+
+		}
+
+	}
+
+}

@@ -1,0 +1,64 @@
+$base-class: '.el-CardIconInfo';
+
+@mixin useCardIconInfoVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--icon-color: #{$color-base-text-primary-light};
+	--text-color: #{$color-base-text-primary-light};
+	text-align: center;
+	color: var(--text-color);
+
+	&--alignLeft {
+		text-align: left;
+	}
+
+	&--dark {
+		--icon-color: #{$color-base-text-primary-dark};
+		--text-color: #{$color-base-text-primary-dark};
+	}
+
+	&__icon {
+		@include interpolate((width, height), 30px, 42px);
+		@include interpolate(margin-bottom, 10px, 12px);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-left: auto;
+		margin-right: auto;
+
+		@include useCardIconInfoVariants(alignLeft) {
+			margin-left: 0;
+			margin-right: 0;
+		}
+
+		svg {
+			width: 100%;
+			height: 100%;
+			fill: var(--icon-color);
+
+			* {
+				fill: inherit;
+				opacity: 1;
+
+			}
+		}
+	}
+
+	&__heading {
+		@include font-h5;
+	}
+
+	&__copy {
+		@include interpolate(margin-top, 8px, 8px);
+		@include richText();
+
+		p {
+			@include font-body-small;
+		}
+
+	}
+}

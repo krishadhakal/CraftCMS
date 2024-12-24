@@ -1,0 +1,63 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set label = label ?? null %}
+{% set heading = heading ?? null %}
+{% set copyItems = copyItems ?? [] %}
+{% set button = button ?? null %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-ContentTextTypeTwo" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+<div class="{{ classes }}">
+	<div class="grid-container">
+		<div class="row">
+			<div class="column xsmall-12">
+				{% if label|length %}
+					<h5 class="{{ baseClass }}__label">
+						{{ label }}
+					</h5>
+				{% endif %}
+				<h2 class="{{ baseClass }}__heading">
+					{{ heading }}
+				</h2>
+			</div>
+		</div>
+		<div class="row">
+			<div class="{{ baseClass }}__icon column xsmall-1"></div>
+			<div class="column xsmall-11 medium-10 large-9 xlarge-8">
+				<div class="{{ baseClass }}__copy">
+					{% for item in copyItems %}
+						{% set itemCopy = item.copy ?? null %}
+						{% if itemCopy|length %}
+							<div class="{{ baseClass }}__copy__block">
+								{{ itemCopy }}
+							</div>
+						{% endif %}
+					{% endfor %}
+				</div>
+				{% if button %}
+					{% set buttonText = button.text ?? null %}
+					{% set buttonUrl = button.url ?? null %}
+					{% set buttonTarget = button.target ?? null %}
+
+					{% if buttonText|length and buttonUrl|length %}
+						<div class="{{ baseClass }}__button">
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								theme: theme,
+								arrow: "right",
+								target: buttonTarget,
+								url: buttonUrl,
+								text: buttonText,
+							} only %}
+						</div>
+					{% endif %}
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,58 @@
+$base-class: '.el-Intro';
+
+@mixin useIntroVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--color: #{$color-base-text-primary-light};
+	@include interpolate(margin-bottom, $spacing-content-media);
+	@include useContentSpacing();
+	color: var(--color);
+
+	&--dark {
+		--color: #{$color-base-text-primary-dark};
+	}
+
+	&__label {
+		@include font-h6;
+	}
+
+	&__heading {
+		@include font-h2;
+	}
+
+	&__copy {
+		@include richText;
+		max-width: 40em;
+	}
+	
+	&__buttonColumn {
+		
+		@include breakpoint(medium) {
+			display: flex;
+			justify-content: flex-end;
+			align-items: flex-end;
+		}
+
+	}
+
+	&__button {
+
+		@include useIntroVariants(buttonRight) {
+
+			@include breakpoint(small, "max") {
+				@include interpolate(margin-top, $spacing-body-button);
+			}
+
+		}
+
+		@include useIntroVariants(buttonInline) {
+			@include interpolate(margin-top, $spacing-body-button);
+		}
+
+	}
+
+}

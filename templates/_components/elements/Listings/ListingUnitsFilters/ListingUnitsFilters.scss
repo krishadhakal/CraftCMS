@@ -1,0 +1,88 @@
+$base-class: '.el-ListingUnitsFilters';
+
+@mixin useListingUnitsFiltersVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--background-color: #{$color-unit-table-row-fill-light};
+	@include interpolate((padding-top, padding-bottom), 24px, 30px);
+	@include interpolate((padding-left, padding-right), 20px, 40px);
+	@include interpolate(border-radius, 5px, 10px);
+	background-color: var(--background-color);
+
+	&--dark {
+		--background-color: #{$color-unit-table-row-fill-dark};
+	}
+
+	&__form {
+		display: flex;
+		flex-wrap: wrap;
+		flex-direction: row;
+		align-items: flex-end;
+		justify-content: space-between;
+
+		@include breakpoint(medium, "max") {
+			display: block;
+		}
+
+		@include useFormVariants(light) {
+			@include styleForm("light");
+		}
+
+		@include useFormVariants(dark) {
+			@include styleForm("dark");
+		}
+
+		&__markup {
+			display: flex;
+			flex-wrap: wrap;
+			flex-direction: row;
+			align-items: stretch;
+			justify-content: flex-start;
+			flex: 1;
+			@include interpolate((margin-top, margin-bottom), -8px, -10px);
+			@include interpolate((margin-left, margin-right), -8px, -10px);
+
+			&>* {
+				@include interpolate((margin-top, margin-bottom), 8px, 10px);
+				@include interpolate((margin-left, margin-right), 8px, 10px);
+
+				@include breakpoint(small, "max") {
+					width: 100%;
+
+					&>* {
+						width: 100%;
+					}
+
+				}
+
+				@include breakpoint(medium) {
+					flex-basis: 0;
+					flex-grow: 1;
+					max-width: 340px;
+				}
+
+			}
+
+		}
+
+		&__submit {
+			@include interpolate(margin-left, 20px, 40px);
+
+			@include breakpoint(medium, "max") {
+				display: block;
+				margin-left: auto;
+			}
+
+			@include breakpoint(large) {
+				margin-top: 0 !important;
+			}
+
+		}
+
+	}
+
+}

@@ -1,0 +1,117 @@
+$base-class: '.mol-CallToActionFormInset';
+
+@mixin useCallToActionFormInsetVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--background-color: #{$color-base-surface-primary-light};
+	--content-background-color: #{$color-base-surface-secondary-dark};
+	--color: #{$color-base-text-primary-dark};
+	--shape-color: #{$color-base-surface-primary-dark};
+	--media-overlay-color: #{rgba($color-black, .5)};
+	@include sectionSpacing;
+	@include useDisableSpacing;
+	position: relative;
+	background-color: var(--background-color);
+
+	&--light {
+		--background-color: #{$color-base-surface-primary-dark};
+		--content-background-color: #{$color-base-surface-secondary-light};
+		--color: #{$color-base-text-primary-light};
+		--shape-color: #{$color-base-surface-primary-light};
+		--media-overlay-color: #{rgba($color-white, .5)};
+	}
+
+	&:before {
+		content: "";
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		max-height: 50%;
+		width: 100%;
+		z-index: 1;
+		@include interpolate(height, 160px, 320px);
+		background-color: var(--shape-color);
+	}
+
+	&__inner {
+		@include sectionSpacing();
+		position: relative;
+		aspect-ratio: 1/1;
+		display: flex;
+		align-items: center;
+
+		@include breakpoint(small) {
+			aspect-ratio: 16/9;
+		}
+
+		&:after {
+			content: "";
+			background-color: var(--content-background-color);
+			z-index: 1;
+		}
+	}
+
+	&__inner:after,
+	&__media {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		right: 0;
+		left: 0;
+
+		@include breakpoint(small) {
+			left: 5.8%;
+		}
+
+	}
+
+	&__media {
+		z-index: 2;
+		&__inner {
+			@include useMediaTakeover;
+			height: 100%;
+			width: 100%;
+
+			&:after {
+				content: "";
+				background-color: var(--media-overlay-color);
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				z-index: 3;
+			}
+		}
+	}
+
+	&__content {
+		color: var(--color);
+		position: relative;
+		z-index: 4;
+	}
+
+	@include useContentSpacing;
+
+	&__label {
+		@include font-h6;
+	}
+
+	&__heading {
+		@include font-h2;
+		max-width: 15em;
+	}
+
+	&__copy {
+		@include richText;
+	}
+
+	&__form {
+		@include interpolate(margin-top, 30px, 60px);
+	}
+}

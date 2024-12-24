@@ -1,0 +1,90 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entryId = entryId ?? null %}
+{% set theme = theme ?? "light" %}
+
+{#---------- Output Variables ----------#}
+{% set id = null %}
+{% set imageUrl = null %}
+{% set heading = null %}
+{% set subheading = null %}
+{% set subheadingUrl = null %}
+{% set labels = [] %}
+{% set subcopy = null %}
+
+{#---------- Data Handling ----------#}
+{% if entryId|length %}
+	{% set entry = craft.entries({
+		type: "unit",
+		id: entryId,
+		with: ["unit_unitType", "unit_images", "unit_unitType.unit_images"],
+	}).one() %}
+
+	{% if entry|length %}
+		{% set unitType = entry.unit_unitType[0] ?? null %}
+		{% set unitTypeTitle = unitType.title ?? null %}
+		{% set unitTypeUrl = unitType.url ?? null %}
+		{% set id = entry.id ?? null %}
+		{% set availability = entry.unit_availability ?? null %}
+		{% set bathrooms = entry.unit_bathrooms ?? unitType.unit_bathrooms ?? null %}
+		{% set bedrooms = entry.unit_bedrooms ?? unitType.unit_bedrooms ?? null %}
+		{% set cost = entry.unit_cost ?? unitType.unit_cost ?? null %}
+		{% set cost = cost|money %}
+		{% set imageAsset = entry.unit_images[0] ?? unitType.unit_images[0] ?? null %}
+		{% set isAvailable = entry.unit_isAvailable ?? false %}
+		{% set squareFeet = entry.unit_squareFeet ?? unitType.unit_squareFeet ?? null %}
+		{% set title = entry.title ?? null %}
+		{% set availabilityLabel = helpers.getUnitAvailabilityLabel(isAvailable, availability) %}
+
+		{% set heading = title ?? heading %}
+		{% set subheading = unitTypeTitle ?? subheading %}
+		{% set subheadingUrl = unitTypeUrl ?? subheadingUrl %}
+		{% set subcopy = availabilityLabel ?? subcopy %}
+
+		{% if cost|length and isAvailable %}
+			{% set subcopy = subcopy ~ (subcopy|length ? " - " : "") ~ cost %}
+		{% endif %}
+
+		{% if imageAsset|length %}
+			{% set imageUrl = helpers.generateImageUrl(imageAsset, {
+				width: 480,
+				ar: "4:3"
+			}) %}
+		{% endif %}
+
+		{% if bedrooms|length %}
+			{% set labels = labels|merge([{
+				type: "bedrooms",
+				copy: bedrooms in ["Studio"] ? bedrooms : bedrooms ~ "bd"
+			}]) %}
+		{% endif %}
+
+		{% if bathrooms|length %}
+			{% set labels = labels|merge([{
+				type: "bathrooms",
+				copy: bathrooms ~ "ba"
+			}]) %}
+		{% endif %}
+
+		{% if squareFeet|length %}
+			{% set labels = labels|merge([{
+				type: "squareFeet",
+				copy: squareFeet ~ "sqft."
+			}]) %}
+		{% endif %}
+	{% endif %}
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/elements/Popup/PopupUnit/PopupUnit" with {
+	theme: theme,
+	id: id,
+	imageUrl: imageUrl,
+	heading: heading,
+	subheading: subheading,
+	subheadingUrl: subheadingUrl,
+	labels: labels,
+	subcopy: subcopy,
+} only %}

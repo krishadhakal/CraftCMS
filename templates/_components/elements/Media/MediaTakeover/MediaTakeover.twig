@@ -1,0 +1,64 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set media = media ?? null %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "el-MediaTakeover" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [], []) %}
+
+{#---------- Output ----------#}
+<div class="{{ classes }}">
+	{% if media|length %}
+		<div class="{{ baseClass }}__inner">
+			{% set mediaType = media.type ?? null %}
+			{% set mediaData = media.data ?? null %}
+			{% set mediaMarkup = null %}
+
+			{% if mediaType|length and mediaData|length %}
+				{% switch mediaType %}
+					{% case "image" %}
+						{% set imageSizes = mediaData.sizes ?? null %}
+						{% set imageSources = mediaData.sources ?? null %}
+						{% set imageUrl = mediaData.url ?? null %}
+						{% set imageAlt = mediaData.alt ?? null %}
+
+						{% if imageUrl|length %}
+							{% set mediaMarkup %}
+								{% apply spaceless %}
+									{% include "_components/atoms/Media/ResponsiveImage/ResponsiveImage" with {
+										backgroundImage: true,
+										sizes: imageSizes,
+										sources: imageSources,
+										url: imageUrl,
+										alt: imageAlt,
+									} only %}
+								{% endapply %}
+							{% endset %}
+						{% endif %}
+					{% case "videoFile" %}
+						{% set videoSources = mediaData.sources ?? null %}
+
+						{% if videoSources|length %}
+							{% set mediaMarkup %}
+								{% apply spaceless %}
+									<div class="{{ baseClass }}__video">
+										{% include "_components/atoms/Media/VideoLoop/VideoLoop" with {
+											sources: videoSources,
+										} only %}
+									</div>
+								{% endapply %}
+							{% endset %}
+						{% endif %}
+
+					{% default %}
+				{% endswitch %}
+			{% endif %}
+
+			{% if mediaMarkup|length %}
+				{{ mediaMarkup }}
+			{% endif %}
+		</div>
+	{% endif %}
+</div>

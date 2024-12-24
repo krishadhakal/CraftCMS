@@ -1,0 +1,94 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = "dark" %}
+{% set carousel = null %}
+{% set showBreadcrumb = false %}
+{% set breadcrumbs = null %}
+{% set label = null %}
+{% set heading = null %}
+{% set copy = null %}
+{% set button = null %}
+
+{#---------- Data Handling ----------#}
+{% set imageSizes = "100vw" %}
+{% set imageOptions = [
+	{
+        width: 480,
+    },
+    {
+        width: 640,
+    },
+    {
+        width: 1000,
+    },
+    {
+        width: 1600,
+    },
+    {
+        width: 2400,
+    },
+    {
+        width: 3200,
+    },
+] %}
+
+{% if entry|length %}
+	{% set breadcrumbs %}
+		{% apply spaceless %}
+			{% include "_components/elements/Global/Breadcrumbs/Breadcrumbs.handler" with {
+				theme: theme,
+				entry: entry,
+			} only %}
+		{% endapply %}
+	{% endset %}
+	{% set heading = entry.title ?? heading %}
+{% endif %}
+
+{% if block|length %}
+	{% set showBreadcrumb = block.molHeroComplex_showBreadcrumb %}
+	{% set label = block.molHeroComplex_label %}
+	{% set heading = block.molHeroComplex_heading ?? heading %}
+	{% set copy = helpers.getRawText(block.molHeroComplex_copy, copy) %}
+	{% set buttonField = block.molHeroComplex_button ?? null %}
+
+	{% if not buttonField.isEmpty() %}
+		{% set button = {
+			text: helpers.generateLinkText(buttonField),
+			url: helpers.generateLinkUrl(buttonField),
+			target: helpers.generateLinkTarget(buttonField),
+		} %}
+	{% endif %}
+
+	{% set carousel %}
+		{% apply spaceless %}
+			{% include "_components/elements/Media/Carousel/Carousel.handler" with {
+				block: block.children.one() ?? null,
+				theme: theme,
+				showArrows: true,
+				arrowsPosition: "overlay",
+				carouselAspectRatio: "1440:900",
+				imageSizes: imageSizes,
+				imageOptions: imageOptions,
+			} only %}
+		{% endapply %}
+	{% endset %}
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/Heros/HeroComplex/HeroComplex" with {
+	variants: variants,
+	theme: theme,
+	carousel: carousel,
+	showBreadcrumb: showBreadcrumb,
+	breadcrumbs: breadcrumbs,
+	label: label,
+	heading: heading,
+	copy: copy,
+	button: button,
+} only %}

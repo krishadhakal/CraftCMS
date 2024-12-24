@@ -1,0 +1,39 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+{% set theme = theme ?? "light" %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set items = [] %}
+
+{#---------- Data Handling ----------#}
+{% for block in globalFooter.globalFooter_navigation.all() ?? [] %}
+	{% set blockType = block.type.handle ?? null %}
+
+	{% switch blockType %}
+		{% case "item" %}
+			{% set itemLink = block.globalNavigationItem_link ?? null %}
+			{% set itemText = helpers.generateLinkText(itemLink) %}
+			{% set itemUrl = helpers.generateLinkUrl(itemLink) %}
+			{% set itemTarget = helpers.generateLinkTarget(itemLink) %}
+
+			{% if itemText|length and itemUrl|length %}
+				{% set items = items|merge([{
+					text: itemText,
+					url: itemUrl,
+					target: itemTarget,
+				}]) %}
+			{% endif %}
+		{% default %}
+	{% endswitch %}
+{% endfor %}
+
+{#---------- Output ----------#}
+{% include "_components/elements/Global/FooterNavigation/FooterNavigation" with {
+	variants: variants,
+	theme: theme,
+	items: items,
+} only %}

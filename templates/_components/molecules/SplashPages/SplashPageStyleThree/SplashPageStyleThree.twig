@@ -1,0 +1,90 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = theme ?? "light" %}
+{% set backgroundMedia = backgroundMedia ?? null %}
+{% set showLogo = showLogo ?? true %}
+{% set logoUrl = logoUrl ?? null %}
+{% set heading = heading ?? null %}
+{% set copy = copy ?? null %}
+{% set form = form ?? null %}
+{% set carousel = carousel ?? null %}
+
+{#---------- Data Handling ----------#}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-SplashPageStyleThree" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+<div class="{{ classes }}">
+
+	{% if backgroundMedia|length %}
+		<div class="{{ baseClass }}__media">
+			<div class="{{ baseClass }}__media__inner">
+				{{ backgroundMedia }}
+			</div>
+		</div>
+	{% endif %}
+
+	<div class="grid-container">
+
+		<div class="row">
+
+			<div class="column xsmall-12 xlarge-10 offset-xlarge-1">
+
+				<div class="{{ baseClass }}__wrapper">
+
+					<div class="{{ baseClass }}__left">
+
+						{% if showLogo %}
+							<div class="{{ baseClass }}__logo">
+								<div class="{{ baseClass }}__logo__image">
+									{% include "_components/atoms/Media/ResponsiveImage/ResponsiveImage" with {
+										url: logoUrl,
+										alt: currentSite.name,
+									} only %}
+								</div>
+							</div>
+						{% endif %}
+
+						<div class="{{ baseClass }}__content">
+
+							<h1 class="{{ baseClass }}__heading">
+								{{ heading }}
+							</h1>
+				
+							{% if copy|length %}
+								<div class="{{ baseClass }}__copy">
+									{{ copy|raw }}
+								</div>
+							{% endif %}
+				
+							{% if form|length %}
+								<div class="{{ baseClass }}__form">
+									{{ form }}
+								</div>
+							{% endif %}
+							
+						</div>
+
+					</div>
+
+					<div class="{{ baseClass }}__right">
+
+						<div class="{{ baseClass }}__carousel">
+							{{ carousel }}
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</div>

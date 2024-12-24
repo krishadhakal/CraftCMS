@@ -1,0 +1,20 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+{% set theme = theme ?? "light" %}
+{% set pageInfo = pageInfo ?? null %}
+
+{#---------- Output Variables ----------#}
+
+{#---------- Data Handling ----------#}
+{% if pageInfo|length %}
+	{% do seomatic.helper.paginate(pageInfo) %}
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/elements/Global/Pagination/Pagination" with {
+	theme: theme,
+	pageInfo: pageInfo,
+} only %}

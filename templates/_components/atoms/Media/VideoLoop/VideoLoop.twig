@@ -1,0 +1,28 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set videoFit = helpers.getOption(videoFit ?? null, ["cover", "contain"]) %}
+{% set sources = sources ?? [] %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "atom-VideoLoop" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [videoFit], []) %}
+
+{#---------- Output ----------#}
+{% if sources|length %}
+<div class="{{ classes }}">
+	<div class="{{ baseClass }}__inner">
+		<video autoplay muted loop playsinline>
+			{% for source in sources %}
+				{% set sourceUrl = source.url ?? null %}
+				{% set sourceType = source.type ?? null %}
+
+				{% if sourceUrl|length %}
+					<source src="{{ sourceUrl }}" type="{{ sourceType }}">
+				{% endif %}
+			{% endfor %}
+		</video>
+	</div>
+</div>
+{% endif %}

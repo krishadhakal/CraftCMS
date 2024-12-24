@@ -1,0 +1,183 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set carousel = carousel ?? null %}
+{% set heading = heading ?? null %}
+{% set subheading = subheading ?? null %}
+{% set copy = copy ?? null %}
+{% set unitCategories = unitCategories ?? [] %}
+{% set floorPlans = floorPlans ?? [] %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-FloorPlansViewer" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% if floorPlans|length %}
+<div class="{{ classes }}">
+	<div class="grid-container">
+		<div class="{{ baseClass }}__wrapper">
+			<div class="{{ baseClass }}__information">
+				{% if carousel|length %}
+					<div class="{{ baseClass }}__information__carousel">
+						<div class="{{ baseClass }}__information__carousel__inner">
+							{{ carousel }}
+						</div>
+					</div>
+				{% endif %}
+				<div class="{{ baseClass }}__information__content">
+					<h2 class="{{ baseClass }}__information__heading">
+						{{ heading }}
+					</h2>
+					{% if subheading|length %}
+						<div class="{{ baseClass }}__information__subheading">
+							{{ subheading }}
+						</div>
+					{% endif %}
+					{% if copy|length %}
+						<div class="{{ baseClass }}__information__copy">
+							{{ copy }}
+						</div>
+					{% endif %}
+				</div>
+			</div>
+			<div class="{{ baseClass }}__floorplans">
+				<nav class="{{ baseClass }}__floorplans__nav">
+					<div class="{{ baseClass }}__floorplans__nav__selectors">
+						<select class="{{ baseClass }}__floorplans__nav__selector" data-floorplans-selector-selected="true" data-floorplans-selector-floor>
+							{% for floorPlan in floorPlans %}
+								{% set floorPlanId = floorPlan.id ?? null %}
+								{% set floorPlanName = floorPlan.name ?? null %}
+								{% set floorPlanIsSelected = loop.first %}
+
+								{% if floorPlanId|length and floorPlanName|length %}
+									<option {{ floorPlanIsSelected ? "selected" }} value="{{ floorPlanId }}">
+										{{ floorPlanName }}
+									</option>
+								{% endif %}
+							{% endfor %}
+						</select>
+						<select class="{{ baseClass }}__floorplans__nav__selector" data-floorplans-selector-selected="false" data-floorplans-selector-availability>
+							<option selected="true" value="">Availability</option>
+							<option value="available">Available</option>
+							<option value="unavailable">Unavailable</option>
+						</select>
+						{% if unitCategories|length %}
+							<select class="{{ baseClass }}__floorplans__nav__selector" data-floorplans-selector-selected="false" data-floorplans-selector-unit-category>
+								<option selected="true" value="">Categories</option>
+								{% for unitCategory in unitCategories %}
+									{% set unitCategoryValue = unitCategory.value ?? null %}
+									{% set unitCategoryLabel = unitCategory.label ?? null %}
+
+									{% if unitCategoryValue|length and unitCategoryLabel|length %}
+										<option value="{{ unitCategoryValue }}">{{ unitCategoryLabel }}</option>
+									{% endif %}
+								{% endfor %}
+							</select>
+						{% endif %}
+					</div>
+					<button class="{{ baseClass }}__floorplans__nav__reset" data-floorplans-reset>
+						{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+							theme: theme,
+							arrow: "none",
+							text: "Reset Filters",
+						} only %}
+					</button>
+				</nav>
+				<div class="{{ baseClass }}__floorplans__wrapper">
+					{% if floorPlans|length > 1 %}
+						<div class="{{ baseClass }}__floorplans__indicator">
+							<div class="{{ baseClass }}__floorplans__indicator__icons">
+								{% for floorPlan in floorPlans %}
+									{% set floorPlanId = floorPlan.id ?? null %}
+									{% set floorPlanIsSelected = loop.first %}
+									<div class="{{ baseClass }}__floorplans__indicator__icon" data-floor-icon data-floor="{{ floorPlanId }}" data-floor-active="{{ floorPlanIsSelected ? "true" : "false" }}">
+										{% if not loop.last %}
+											{{ helpers.getIcon("floorplan-indicator-cutout") }}		
+										{% else %}
+											{{ helpers.getIcon("floorplan-indicator-full") }}
+										{% endif %}
+									</div>
+								{% endfor %}
+							</div>
+							<div class="{{ baseClass }}__floorplans__indicator__labels">
+								{% for floorPlan in floorPlans %}
+									{% set floorPlanId = floorPlan.id ?? null %}
+									{% set floorPlanName = floorPlan.name ?? null %}
+									{% set floorPlanIsSelected = loop.first %}
+
+									<div class="{{ baseClass }}__floorplans__indicator__label" data-floor-label data-floor="{{ floorPlanId }}" data-floor-active="{{ floorPlanIsSelected ? "true" : "false" }}">
+										{{ floorPlanName }}
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+					{% endif %}
+					<div class="{{ baseClass }}__floorplans__inner">
+
+						<div class="{{ baseClass }}__floorplan-imagesContainer">
+
+							{% for floorPlan in floorPlans %}
+								{% set floorPlanId = floorPlan.id ?? null %}
+								{% set floorPlanName = floorPlan.name ?? null %}
+								{% set floorPlanImageUrl = floorPlan.imageUrl ?? null %}
+								{% set floorPlanUnits = floorPlan.units ?? [] %}
+
+								{% set floorPlanImageSizes = floorPlan.sizes ?? null %}
+								{% set floorPlanImageSources = floorPlan.sources ?? null %}
+								{% set floorPlanImageUrl = floorPlan.url ?? null %}
+								{% set floorPlanImageAlt = floorPlan.alt ?? null %}
+
+								<div class="{{ baseClass }}__floorplan-image-container" data-floor-id="{{ floorPlan.id }}">
+
+									<div class="{{ baseClass }}__floorplan-image">
+										{% apply spaceless %}
+											{% include "_components/atoms/Media/ResponsiveImage/ResponsiveImage" with {
+												sizes: floorPlanImageSizes,
+												sources: floorPlanImageSources,
+												url: floorPlanImageUrl,
+												alt: floorPlanImageAlt,
+											} only %}
+										{% endapply %}
+									</div>
+
+									{% for unit in floorPlanUnits %}
+										{% set unitX = unit.x ?? null %}
+										{% set unitY = unit.y ?? null %}
+										{% set unitIsAvailable = unit.isAvailable ?? false %}
+										{% set unitUnitCategory = unit.unitCategory ?? null %}
+										{% set unitId = unit.id ?? null %}
+
+										<div
+											class="{{ baseClass }}__unit-marker {{ unitIsAvailable ? baseClass ~ "__unit-marker--available" }}"
+											style="left: {{ unitX }}%; top: {{ unitY }}%;"
+											data-unit-id="{{ unitId }}"
+											data-floor="{{ floorPlanId }}"
+											data-modal-unit-show data-modal-unit-unit-id="{{ unitId }}"
+											data-unit-availability="{{ unitIsAvailable ? "available" : "unavailable" }}"
+											data-unit-unit-category="{{ unitUnitCategory }}"
+										>
+										</div>
+
+										<div data-popup-id="{{ unitId }}">
+											{% include "_components/elements/Popup/PopupUnit/PopupUnit.handler" with {
+												theme: theme,
+												entryId: unitId,
+											} only %}
+										</div>
+
+									{% endfor %}
+
+								</div>
+								
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %}

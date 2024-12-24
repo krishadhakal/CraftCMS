@@ -1,0 +1,66 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = "dark" %}
+{% set logoUrl = null %}
+{% set navigationBar = null %}
+{% set items = [] %}
+{% set socialNetworks = [] %}
+
+{#---------- Data Handling ----------#}
+{% set logoDarkUrl = globalLogos.globalLogos_logoSecondaryDark.one().url ?? null %}
+{% set logoLightUrl = globalLogos.globalLogos_logoSecondaryLight.one().url ?? null %}
+
+{% if theme == "dark" %}
+	{% set logoUrl = logoLightUrl %}
+{% else %}
+	{% set logoUrl = logoDarkUrl %}
+{% endif %}
+
+{% set navigationBar %}
+{% apply spaceless %}
+	{% include "_components/elements/Global/FooterNavigation/FooterNavigation.handler" with {
+		theme: theme,
+	} only %}
+{% endapply %}
+{% endset %}
+
+{% for item in globalFooter.globalFooter_items.all() ?? [] %}
+	{% set itemHeading = item.item_heading ?? null %}
+	{% set itemCopy = item.item_copy ?? null %}
+
+	{% if itemHeading|length and itemCopy|length %}
+		{% set items = items|merge([{
+			heading: itemHeading,
+			copy: itemCopy,
+		}]) %}
+	{% endif %}
+{% endfor %}
+
+{% for item in globalSocialNetworks.common_socialNetworks.all() ?? [] %}
+	{% set itemType = item.item_type.value ?? null %}
+	{% set itemUrl = helpers.generateLinkUrl(item.item_url) %}
+
+	{% if itemType|length and itemUrl|length %}
+		{% set socialNetworks = socialNetworks|merge([{
+			type: itemType,
+			url: itemUrl,
+			target: "_blank",
+		}]) %}
+	{% endif %}
+{% endfor %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/Global/Footer/Footer" with {
+	variants: variants,
+	theme: theme,
+	logoUrl: logoUrl,
+	navigationBar: navigationBar,
+	items: items,
+	socialNetworks: socialNetworks,
+} only %}

@@ -1,0 +1,81 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = theme ?? "light" %}
+{% set backgroundMedia = backgroundMedia ?? null %}
+{% set showLogo = showLogo ?? true %}
+{% set logoUrl = logoUrl ?? null %}
+{% set carousel = carousel ?? null %}
+{% set label = label ?? null %}
+{% set heading = heading ?? null %}
+{% set copy = copy ?? null %}
+{% set form = form ?? null %}
+
+{#---------- Data Handling ----------#}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-SplashPageStyleFour" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+<div class="{{ classes }}">
+
+	{% if backgroundMedia|length %}
+		<div class="{{ baseClass }}__media">
+			<div class="{{ baseClass }}__media__inner">
+				{{ backgroundMedia }}
+			</div>
+		</div>
+	{% endif %}
+
+	<div class="grid-container">
+
+		{% if showLogo %}
+			<div class="{{ baseClass }}__logo">
+				<div class="{{ baseClass }}__logo__image">
+					{% include "_components/atoms/Media/ResponsiveImage/ResponsiveImage" with {
+						url: logoUrl,
+						alt: currentSite.name,
+					} only %}
+				</div>
+			</div>
+		{% endif %}
+
+		<div class="{{ baseClass }}__wrapper">
+
+			<div class="{{ baseClass }}__carousel">
+				{{ carousel }}
+			</div>
+
+			<div class="{{ baseClass }}__content">
+
+				{% if label|length %}
+					<h5 class="{{ baseClass }}__label">
+						{{ label }}
+					</h5>
+				{% endif %}
+
+				<h1 class="{{ baseClass }}__heading">
+					{{ heading }}
+				</h1>
+	
+				{% if copy|length %}
+					<div class="{{ baseClass }}__copy">
+						{{ copy|raw }}
+					</div>
+				{% endif %}
+	
+				{% if form|length %}
+					<div class="{{ baseClass }}__form">
+						{{ form }}
+					</div>
+				{% endif %}
+				
+			</div>
+
+		</div>
+
+	</div>
+
+</div>

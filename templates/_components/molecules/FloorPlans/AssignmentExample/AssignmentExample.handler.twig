@@ -1,0 +1,26 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set blockIndex = blockIndex ?? random() %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set heading = block.molListingContentheading ?? false  %}
+{% set copy = block.molListingContentcopy ?? false  %}
+{% set buttonText = block.molListingContentbuttonText ?? false  %}
+{% set buttonUrl = block.molListingContentbuttonUrl ?? false  %}
+{% set image = block.molListingContentimage.one() ?? false  %}
+
+{#---------- Data Handling ----------#}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/FloorPlans/AssignmentExample/AssignmentExample" with {
+	variants: variants,
+	heading: heading,
+	copy: copy, 
+	buttonText: buttonText,
+	buttonUrl: buttonUrl,
+	image: image
+} only %}

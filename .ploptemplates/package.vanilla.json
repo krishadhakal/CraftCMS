@@ -1,0 +1,37 @@
+{
+	"name": "frontend",
+	"version": "1.0.0",
+	"description": "",
+	"private": true,
+	"scripts": {
+		"dev": "npm run development",
+		"development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+		"watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+		"hot": "cross-env NODE_ENV=development webpack-dev-server --inline --hot --https --disable-host-check --config=node_modules/laravel-mix/setup/webpack.config.js",
+		"prod": "npm run production",
+		"production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"browser-sync": "^2.26.3",
+		"browser-sync-webpack-plugin": "2.0.1",
+		"cross-env": "^5.2.0",
+		"dotenv": "^6.2.0",
+		"hamburgers": "^1.1.3",
+		"html-webpack-plugin": "^3.2.0",
+		"jquery": "^3.4.1",
+		"laravel-mix": "4.0.15",
+		"plop": "^2.5",
+		"resolve-url-loader": "2.3.1",
+		"sass": "^1.17.3",
+		"sass-loader": "7.*",
+		"twig-html-loader": "^0.1.7"
+	},
+	"dependencies": {
+		"node-sass": "^4.12.0",
+		"underscore": "^1.9.1",
+		"underpub-js": "^2.0.0"
+	}
+}

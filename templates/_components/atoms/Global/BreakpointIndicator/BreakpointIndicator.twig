@@ -1,0 +1,27 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+
+{#---------- Classes ----------#}
+{% set baseClass = "atom-BreakpointIndicator" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [], []) %}
+
+{#---------- Output ----------#}
+<div class="{{ classes }}">
+	<div class="{{ baseClass }}__item hide show-for-xsmall-only">
+		XS
+	</div>
+	<div class="{{ baseClass }}__item hide show-for-small-only">
+		S
+	</div>
+	<div class="{{ baseClass }}__item hide show-for-medium-only">
+		M
+	</div>
+	<div class="{{ baseClass }}__item hide show-for-large-only">
+		L
+	</div>
+	<div class="{{ baseClass }}__item hide show-for-xlarge-only">
+		XL
+	</div>
+</div>

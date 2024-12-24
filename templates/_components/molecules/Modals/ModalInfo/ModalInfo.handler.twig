@@ -1,0 +1,92 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = "light" %}
+{% set hideDuration = null %}
+{% set carousel = null %}
+{% set label = null %}
+{% set heading = null %}
+{% set copy = null %}
+{% set button = null %}
+{% set form = null %}
+
+{#---------- Data Handling ----------#}
+{% set carouselAspectRatio = "720:275" %}
+{% set imageSizes = "(min-width: 640px) 640px, 100vw" %}
+{% set imageOptions = [
+	{
+        width: 480,
+    },
+    {
+        width: 640,
+    },
+    {
+        width: 1000,
+    },
+    {
+        width: 1280,
+    },
+] %}
+
+{% set useModalInfo = globalModalInfo.globalModalInfo_useModalInfo ?? false %}
+
+{% if useModalInfo %}
+	{% set hideDuration = globalModalInfo.globalModalInfo_hideDuration ?? null %}
+	{% set label = globalModalInfo.globalModalInfo_label ?? label %}
+	{% set heading = globalModalInfo.globalModalInfo_heading ?? heading %}
+	{% set copy = globalModalInfo.globalModalInfo_copy ?? copy %}
+
+	{% set carousel %}
+		{% apply spaceless %}
+			{% include "_components/elements/Media/Carousel/Carousel.handler" with {
+				slidesToParse: globalModalInfo.elCarouselSimple_slides.all() ?? null,
+				theme: theme,
+				showArrows: true,
+				arrowsPosition: "sides",
+				carouselAspectRatio: carouselAspectRatio,
+				imageSizes: imageSizes,
+				imageOptions: imageOptions,
+			} only %}
+		{% endapply %}
+	{% endset %}
+
+	{% set buttonField = globalModalInfo.globalModalInfo_button ?? null %}
+	{% if not buttonField.isEmpty() %}
+		{% set button = {
+			text: helpers.generateLinkText(buttonField),
+			url: helpers.generateLinkUrl(buttonField),
+			target: helpers.generateLinkTarget(buttonField),
+		} %}
+	{% endif %}
+
+	{% set formieForm = globalModalInfo.globalModalInfo_form.one() ?? null %}
+	{% if formieForm|length %}
+		{% set form %}
+			{% apply spaceless %}
+				{% include "_components/elements/Forms/Form/Form.handler" with {
+					theme: theme,
+					formieForm: formieForm,
+				} only %}
+			{% endapply %}
+		{% endset %}
+	{% endif %}
+
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/Modals/ModalInfo/ModalInfo" with {
+	variants: variants,
+	theme: theme,
+	hideDuration: hideDuration,
+	carousel: carousel,
+	label: label,
+	heading: heading,
+	copy: copy,
+	button: button,
+	form: form,
+} only %}

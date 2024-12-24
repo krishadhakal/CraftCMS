@@ -1,0 +1,330 @@
+$base-class: '.mol-FloorPlansViewer';
+
+@mixin useFloorPlansViewerVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--background-color: #{$color-base-surface-primary-light};
+	--information-heading-color: #{$color-base-text-primary-light};
+	--information-subheading-color: #{$color-base-text-primary-light};
+	--information-copy-color: #{$color-base-text-primary-light};
+	--indicator-active-color: #{$color-button-primary-fill-light};
+	--indicator-color: #{rgba($color-button-primary-fill-light, 0.1)};
+	--selector-border-color: #{$color-base-text-primary-light};
+	--selector-text-color: #{$color-base-text-primary-light};
+	--dropdown-chevron-url: url('/built/icons/chevron-down.svg');
+	--marker-background-color: #{rgba($color-button-primary-fill-light, 0.25)};
+	--marker-available-background-color: #{$color-button-primary-fill-light};
+	--popup-arrow-color: #{$color-base-surface-secondary-light};
+	@include sectionSpacing;
+	@include useDisableSpacing;
+	background-color: var(--background-color);
+
+	&--dark {
+		--background-color: #{$color-base-surface-primary-dark};
+		--information-heading-color: #{$color-base-text-primary-dark};
+		--information-subheading-color: #{$color-base-text-primary-dark};
+		--information-copy-color: #{$color-base-text-primary-dark};
+		--indicator-active-color: #{$color-button-primary-fill-dark};
+		--indicator-color: #{rgba($color-button-primary-fill-dark, 0.3)};
+		--selector-border-color: #{$color-base-text-primary-dark};
+		--selector-text-color: #{$color-base-text-primary-dark};
+		--dropdown-chevron-url: url('/built/icons/chevron-down-light.svg');
+		--marker-background-color: #{rgba($color-button-primary-fill-dark, 0.25)};
+		--marker-available-background-color: #{$color-button-primary-fill-dark};
+		--popup-arrow-color: #{$color-base-surface-secondary-dark};
+	}
+
+	&__wrapper {
+		
+		@include breakpoint(large) {
+			display: flex;
+		}
+
+	}
+
+	&__information {
+		@include interpolate(margin-bottom, 30px, 60px);
+
+		@include breakpoint(large) {
+			margin-bottom: 0;
+			flex-grow: 0;
+			flex-shrink: 0;
+			flex-basis: 29%;
+			min-width: 0;
+		}
+
+		@include breakpoint("medium", "max") {
+			display: flex;
+			align-items: flex-start;
+		}
+
+		@include breakpoint("xsmall", "max") {
+			display: block;
+		}
+
+		&__carousel {
+			min-width: 0;
+			
+			@include breakpoint("medium", "max") {
+				flex: 0 1 40%;
+			}
+
+			&__inner {
+				@include carouselAspectRatio(4, 3);
+			}
+		}
+
+		&__content {
+			@include interpolate(margin-left, 25px, 50px);
+			@include interpolate(margin-top, 16px, 32px);
+
+			@include breakpoint("medium", "max") {
+				flex: 1;
+
+				@include breakpoint("small") {
+					margin-top: 0;
+				}
+			}
+
+			@include breakpoint(large) {
+				margin-left: 0;
+			}
+
+			@include breakpoint("xsmall", "max") {
+				margin-left: 0;
+			}
+
+		}
+
+		&__heading {
+			@include font-h4;
+			color: var(--information-heading-color);
+		}
+
+		&__subheading {
+			@include interpolate(margin-top, 8px, 16px);
+			@include font-body-small;
+			color: var(--information-subheading-color);
+		}
+
+		&__copy {
+			@include interpolate(margin-top, 15px, 30px);
+			@include richText;
+			color: var(--information-copy-color);
+		}
+		
+	}
+
+	&__floorplans {
+
+		@include breakpoint(large) {
+			margin-bottom: 0;
+			flex-grow: 0;
+			flex-shrink: 0;
+			flex-basis: 71%;
+			padding-left: 36px;
+		}
+
+		&__nav {
+			display: flex;
+			flex-wrap: wrap;
+			flex-direction: row;
+			align-items: center;
+			justify-content: space-between;
+			@include interpolate(margin-bottom, 20px, 40px);
+
+			&__selectors {
+				@include interpolate((margin-left, margin-right), -6px, -12px);
+				@include interpolate(margin-top, -5px, -10px);
+				flex: 1;
+			}
+
+			select {
+				appearance: none;
+			}
+
+			&__selector {
+				@include interpolate((padding-top, padding-bottom), 8px, 12px);
+				@include interpolate(padding-left, 10px, 20px);
+				@include interpolate(padding-right, 20px, 40px);
+				@include interpolate((margin-left, margin-right), 6px, 12px);
+				@include interpolate(margin-top, 5px, 10px);
+				@include transition(opacity);
+				@include font-body-small;
+				@include interpolate(background-size, 8px, 12px);
+				background-image: var(--dropdown-chevron-url);
+				background-position: right 1em center;
+				background-repeat: no-repeat;
+				border: 2px solid var(--selector-border-color);
+				opacity: .5;
+				color: var(--selector-text-color);
+
+				&[data-floorplans-selector-selected="true"] {
+					opacity: 1;
+				}
+			}
+
+			&__reset {
+				@include interpolate(margin-left, 20px, 40px);
+				flex: none;
+				align-self: flex-start;
+			}
+		}
+
+		&__wrapper {
+			display: flex;
+			flex-wrap: wrap;
+			flex-direction: row;
+			align-items: flex-start;
+			justify-content: space-between;
+		}
+
+		&__indicator {
+			@include interpolate(margin-right, 40px, 64px);
+			// @include interpolate(width, 50px, 100px);
+			text-align: center;
+
+			@include breakpoint("small", "max") {
+				display: none;
+			}
+
+			&__labels {
+				@include interpolate(margin-top, 5px, 10px);
+			}
+
+			&__label {
+				white-space: nowrap;
+				@include font-body-small;
+
+				&[data-floor-active="false"] {
+					display: none;
+				}
+
+				&[data-floor-active="true"] {
+					display: block;
+				}
+			}
+
+			&__icons {
+				display: flex;
+				flex-direction: column-reverse;
+				align-items: center;
+			}
+
+			&__icon {
+				@include interpolate(width, 30px, 40px);
+				@include interpolate(margin-top, -3px, -6px);
+
+				&:last-child {
+					margin-top: 0;
+				}
+
+				svg {
+					fill: var(--indicator-color);
+					@include transition(fill);
+
+					* {
+						fill: inherit;
+					}
+				}
+
+				&[data-floor-active="true"] {
+					svg {
+						fill: var(--indicator-active-color);
+					}
+				}
+
+			}
+		}
+
+		&__inner {
+			flex: 1;
+		}
+	}
+
+	&__floorplan-imagesContainer {
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	&__floorplan-image-container {
+		display: none;
+		position: relative;
+
+		&:first-child {
+			display: block;
+		}
+	}
+
+	&__floorplan-image {
+		width: 100%;
+		transform: scale(1.05);
+	}
+
+	&__unit-marker {
+		@include interpolate((width, height), 15px, 30px);
+		position: absolute;
+		cursor: pointer;
+		border-radius: 50%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		border-style: solid;
+		background-color: var(--marker-background-color);
+		@include transition(opacity);
+		z-index: 1;
+		opacity: 0;
+		transform: scale(0);
+		cursor: pointer;
+
+		&:hover {
+			opacity: 1;
+		}
+
+		&--available {
+			background-color: var(--marker-available-background-color);
+		}
+
+	}
+
+	.tippy-box[data-theme~='floorplansviewer-popup'] {
+		color: $color-black;
+		padding: 0;
+		filter: drop-shadow(0 0px 20px rgba(104, 104, 104, 0.3));
+		@include interpolate(border-radius, 2px, 4px);
+		max-width: 80%;
+
+		.tippy-content {
+			width: 45em;
+			max-width: 70vw;
+			padding: 0;
+
+			@include breakpoint("small", "max") {
+				width: auto;
+				width: 20em;
+				max-width: 50vw;
+			}
+		}
+	}
+
+	.tippy-box[data-theme~='floorplansviewer-popup'][data-placement^='top']>.tippy-arrow::before {
+		border-top-color: var(--popup-arrow-color);
+	}
+
+	.tippy-box[data-theme~='floorplansviewer-popup'][data-placement^='bottom']>.tippy-arrow::before {
+		border-bottom-color: var(--popup-arrow-color);
+	}
+
+	.tippy-box[data-theme~='floorplansviewer-popup'][data-placement^='left']>.tippy-arrow::before {
+		border-left-color: var(--popup-arrow-color);
+	}
+
+	.tippy-box[data-theme~='floorplansviewer-popup'][data-placement^='right']>.tippy-arrow::before {
+		border-right-color: var(--popup-arrow-color);
+	}
+}

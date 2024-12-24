@@ -1,0 +1,50 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["dark", "light"]) %}
+{% set label = label ?? null %}
+{% set heading = heading ?? null %}
+{% set copy = copy ?? null %}
+{% set form = form ?? null %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-ModalForm" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% if form|length %}
+<div class="{{ classes }}">
+	<div class="{{ baseClass }}__overlay"></div>
+	<div class="{{ baseClass }}__wrapper">
+		<button class="{{ baseClass }}__close">
+			{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+				type: "x",
+				theme: theme,
+			} only %}
+		</button>
+		<div class="{{ baseClass }}__wrapperInner">
+			<div class="{{ baseClass }}__content">
+				{% if label|length %}
+					<h5 class="{{ baseClass }}__label">
+						{{ label }}
+					</h5>
+				{% endif %}
+				{% if heading|length %}
+					<h2 class="{{ baseClass }}__heading">
+						{{ heading }}
+					</h2>
+				{% endif %}
+				{% if copy|length %}
+					<div class="{{ baseClass }}__copy">
+						{{ copy }}
+					</div>
+				{% endif %}
+				<div class="{{ baseClass }}__form">
+					{{ form }}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %}

@@ -1,0 +1,64 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = theme ?? null %}
+{% set items = [] %}
+
+{#---------- Data Handling ----------#}
+{% for block in globalHeader.globalHeader_navigationPrimary.all() ?? [] %}
+	{% set blockType = block.type.handle ?? null %}
+
+	{% switch blockType %}
+		{% case "item" %}
+			{% set itemLink = block.globalNavigationItem_link ?? null %}
+			{% set itemText = helpers.generateLinkText(itemLink) %}
+			{% set itemUrl = helpers.generateLinkUrl(itemLink) %}
+			{% set itemTarget = helpers.generateLinkTarget(itemLink) %}
+			{% set itemSubitems = [] %}
+
+			{% for child in block.children.all() ?? [] %}
+				{% set childType = child.type.handle ?? null %}
+
+				{% switch childType %}
+					{% case "subItem" %}
+						{% set subitemLink = child.globalNavigationItem_link ?? null %}
+						{% set subitemText = helpers.generateLinkText(subitemLink) %}
+						{% set subitemUrl = helpers.generateLinkUrl(subitemLink) %}
+						{% set subitemTarget = helpers.generateLinkTarget(subitemLink) %}
+
+						{% if subitemText|length and subitemUrl|length %}
+							{% set itemSubitems = itemSubitems|merge([{
+								text: subitemText,
+								url: subitemUrl,
+								target: subitemTarget,
+							}]) %}
+						{% endif %}
+					{% default %}
+				{% endswitch %}
+			{% endfor %}
+
+			{# and itemUrl not in [currentSite.baseUrl, "/"] #}
+
+			{% if itemText|length and itemUrl|length %}
+				{% set items = items|merge([{
+					text: itemText,
+					url: itemUrl,
+					target: itemTarget,
+					subitems: itemSubitems
+				}]) %}
+			{% endif %}
+		{% default %}
+	{% endswitch %}
+{% endfor %}
+
+{#---------- Output ----------#}
+{% include "_components/elements/Global/HeaderNavigation/HeaderNavigation" with {
+	variants: variants,
+	theme: theme,
+	items: items,
+} only %}

@@ -1,0 +1,49 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set items = items ?? [] %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-QuoteStandard" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+<div class="{{ classes }}">
+	<div class="grid-container">
+		<div class="row">
+			<div class="column xsmall-12">
+				<div class="{{ baseClass }}__items">
+					<div class="swiper-wrapper">
+						{% for item in items %}
+							{% set itemQuote = item.quote ?? null %}
+							{% set itemAuthor = item.author ?? null %}
+							{% set itemIconSvg = item.iconSvg ?? null %}
+							{% set itemIconSize = item.iconSize ?? null %}
+
+							{% if itemQuote|length and itemAuthor|length %}
+								<div class="{{ baseClass }}__item swiper-slide">
+									{% if itemIconSvg|length %}
+										<div class="{{ baseClass }}__item__icon {{ baseClass }}__item__icon--{{ itemIconSize }}">
+											{{ itemIconSvg }}
+										</div>
+									{% endif %}
+									<h3 class="{{ baseClass }}__item__quote">
+										{{ itemQuote }}
+									</h3>
+									<h6 class="{{ baseClass }}__item__author">
+										{{ itemAuthor }}
+									</h6>
+								</div>
+							{% endif %}
+						{% endfor %}
+					</div>
+				</div>
+				{% if items|length > 1 %}
+					<div class="{{ baseClass }}__dots"></div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>

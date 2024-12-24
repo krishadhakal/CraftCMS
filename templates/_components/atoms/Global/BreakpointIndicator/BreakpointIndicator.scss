@@ -1,0 +1,27 @@
+$base-class: '.atom-BreakpointIndicator';
+
+@mixin useBreakpointIndicatorVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	@include interpolate((bottom, right), 5px, 10px);
+	position: fixed;
+	z-index: 10000;
+
+	&__item {
+		@include interpolate((width, height, line-height), 20px, 30px);
+		@include font-body-small;
+		font-weight: $font-weight-bold;
+		border-radius: 50%;
+		background-color: $color-black;
+		color: $color-white;
+		text-align: center;
+
+		@include breakpoint(small, "max") {
+			font-size: 70%;
+		}
+	}
+}

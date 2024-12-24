@@ -1,0 +1,164 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set size = helpers.getOption(size ?? null, ["medium", "large", "small"]) %}
+{% set label = label ?? null %}
+{% set heading = heading ?? null %}
+{% set copy = copy ?? null %}
+{% set showIntroArrows = showIntroArrows ?? true %}
+{% set carousel = carousel ?? null %}
+
+{#---------- Data Handling ----------#}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-MediaPrimary" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme, size], []) %}
+
+{#---------- Output ----------#}
+{% set carouselMarkup = null %}
+{% set hasIntro = false %}
+{% set intro = null %}
+{% set arrowsNavigation = null %}
+{% set introMarkup = null %}
+
+{% set carouselMarkup %}
+	<div class="{{ baseClass }}__carousel">
+		{{ carousel }}
+	</div>
+{% endset %}
+
+{% if label|length or heading|length or copy|length %}
+	
+	{% set hasIntro = true %}
+
+	{% set intro %}
+
+		{% if label|length %}
+			<h5 class="{{ baseClass }}__label">
+				{{ label }}
+			</h5>
+		{% endif %}
+
+		{% if heading|length %}
+			<h2 class="{{ baseClass }}__heading">
+				{{ heading }}
+			</h2>
+		{% endif %}
+		
+		{% if copy|length %}
+			<div class="{{ baseClass }}__copy">
+				{{ copy|raw }}
+			</div>
+		{% endif %}
+			
+	{% endset %}
+
+	{% if showIntroArrows %}
+	
+		{% set arrowsNavigation %}
+
+			<div class="{{ baseClass }}__arrows">
+
+				<button class="{{ baseClass }}__arrow {{ baseClass }}__arrow--prev">
+					{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+						size: "large",
+						theme: theme,
+						style: "outline",
+						shape: "square",
+						type: "chevron-left",
+					} only %}
+				</button>
+			
+				<button class="{{ baseClass }}__arrow {{ baseClass }}__arrow--next">
+					{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+						size: "large",
+						theme: theme,
+						style: "outline",
+						shape: "square",
+						type: "chevron-right",
+					} only %}
+				</button>
+
+			</div>
+
+		{% endset %}
+	
+	{% endif %}
+	
+	{% if intro|trim|length %}
+
+		{% set introMarkup %}
+
+			<div class="{{ baseClass }}__intro">
+
+				{% switch size %}
+			
+					{% case "small" %}
+
+						<div class="grid-container">
+							<div class="row">
+								<div class="column xsmall-12 medium-9 xlarge-7 offset-xlarge-1 {{ baseClass }}__introContentColumn">
+									{{ intro }}
+								</div>
+								<div class="column xsmall-12 medium-3 xlarge-3 {{ baseClass }}__arrowsColumn">
+									{{ arrowsNavigation }}
+								</div>
+							</div>
+						</div>
+
+					{% default %}
+
+						<div class="grid-container">
+							<div class="row">
+								<div class="column xsmall-12 medium-9 xlarge-7 {{ baseClass }}__introContentColumn">
+									{{ intro }}
+								</div>
+								<div class="column xsmall-12 medium-3 xlarge-5 {{ baseClass }}__arrowsColumn">
+									{{ arrowsNavigation }}
+								</div>
+							</div>
+						</div>
+
+				{% endswitch %}
+
+			</div>
+
+		{% endset %}
+
+	{% endif %}
+
+{% endif %}
+
+{% if carouselMarkup %}
+
+	<div class="{{ classes }} {% if not hasIntro %}{{ baseClass }}--noIntro{% endif %}">
+
+		{% if introMarkup %}
+			{{ introMarkup }}
+		{% endif %}
+		
+		{% switch size %}
+		
+			{% case "small" %}
+		
+				<div class="grid-container {{ baseClass }}__carouselGridContainer">
+					<div class="row">
+						<div class="column xsmall-12 xlarge-10 offset-xlarge-1">
+							{{ carouselMarkup }}
+						</div>
+					</div>
+				</div>
+		
+			{% default %}
+			
+				<div class="grid-container {{ baseClass }}__carouselGridContainer">
+					{{ carouselMarkup }}
+				</div>
+		
+		{% endswitch %}
+
+	</div>
+
+{% endif %}

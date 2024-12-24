@@ -1,0 +1,99 @@
+$base-class: '.mol-QuoteStandard';
+
+@mixin useQuoteStandardVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--background-color: #{$color-base-surface-secondary-light};
+	--quote-color: #{$color-base-text-primary-light};
+	--icon-color: #{$color-base-text-primary-light};
+	--author-color: #{$color-base-text-primary-light};
+	--dots-color: #{rgba($color-button-primary-text-light, .5)};
+	--dots-color-active: #{$color-button-secondary-fill-light};
+	@include interpolate(padding-top, 64px, 234px);
+	@include interpolate(padding-bottom, 64px, 224px);
+	@include useDisableSpacing;
+	background-color: var(--background-color);
+
+	&--dark {
+		--background-color: #{$color-base-surface-secondary-dark};
+		--quote-color: #{$color-base-text-primary-dark};
+		--icon-color: #{$color-base-text-primary-dark};
+		--author-color: #{$color-base-text-primary-dark};
+		--dots-color: #{rgba($color-button-primary-text-dark, .5)};
+		--dots-color-active: #{$color-button-secondary-fill-dark};
+	}
+
+	&__items {
+
+	}
+
+	&__item {
+		text-align: center;
+
+		&__icon {
+			@include interpolate(margin-bottom, 20px, 36px);
+			@include interpolate((width, height), 32px, 60px);
+			margin-left: auto;
+			margin-right: auto;
+
+			&--small {
+				@include interpolate((width, height), 20px, 20px);
+			}
+
+			svg {
+				width: 100%;
+				height: 100%;
+				fill: var(--icon-color);
+
+				* {
+					fill: inherit;
+				}
+
+			}
+
+		}
+
+		&__quote {
+			@include font-h2;
+			@include maxWidth(52rem);
+			color: var(--quote-color);
+		}
+
+		&__author {
+			@include interpolate(margin-top, 15px, 30px);
+			@include font-h6;
+			color: var(--author-color);
+		}
+
+	}
+
+	&__dots {
+		@include interpolate(margin-top, 25px, 50px);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		span {
+			@include interpolate((width, height), 6px, 9px);
+			cursor: pointer;
+			background-color: var(--dots-color);
+			opacity: 1;
+			@include transition((opacity, background-color));
+
+			&.swiper-pagination-bullet-active {
+				background-color: var(--dots-color-active);
+			}
+
+			&:hover {
+				opacity: .6;
+			}
+
+		}
+
+	}
+
+}

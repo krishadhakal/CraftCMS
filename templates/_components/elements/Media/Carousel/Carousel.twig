@@ -1,0 +1,137 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set id = id ?? random() %}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set autoplay = autoplay ?? false %}
+{% set autoplaySpeed = autoplaySpeed ?? 6000 %}
+{% set showNav = showNav ?? false %}
+{% set navPosition = helpers.getOption(navPosition ?? null, ["inline", "overlay"]) %}
+{% set showArrows = showArrows ?? false %}
+{% set arrowsPosition = helpers.getOption(arrowsPosition ?? null, ["sides", "overlay", "inline"]) %}
+{% set arrowsType = helpers.getOption(arrowsType ?? null, ["button", "icon"]) %}
+{% set showDots = showDots ?? false %}
+{% set dotsPosition = helpers.getOption(dotsPosition ?? null, ["overlay", "inline"]) %}
+{% set slides = slides ?? [] %}
+{% set useEmpty = useEmpty ?? false %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "el-Carousel" %}
+{% set variants = variants ?? [] %}
+
+{% if showNav %}
+	{% set variants = variants|merge(["nav-" ~ navPosition, "arrows-" ~ arrowsType]) %}
+{% else %}
+	{% if showArrows %}
+		{% set variants = variants|merge(["arrows-" ~ arrowsPosition, "arrows-" ~ arrowsType]) %}
+	{% endif %}
+	{% if showDots %}
+		{% set variants = variants|merge(["dots-" ~ dotsPosition]) %}
+	{% endif %}
+{% endif %}
+
+{% if slides|length > 1 %}
+	{% set variants = variants|merge(["hasNav"]) %}
+{% endif %}
+
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% if slides|length or useEmpty %}
+<div class="{{ classes }}" data-autoplay="{{ autoplay ? "true" : "false" }}" data-autoplay-speed="{{ autoplaySpeed }}" data-id="{{ id }}">
+
+	<div class="{{ baseClass }}__slides">
+
+		<div class="swiper-wrapper">
+
+			{% for slideMarkup in slides %}
+
+				<div class="{{ baseClass }}__slide swiper-slide">
+					{{ slideMarkup }}
+				</div>
+
+			{% endfor %}
+
+		</div>
+
+	</div>
+
+	{% if slides|length > 1 or useEmpty %}
+
+		{% if arrowsType == "icon" %}
+		
+			{% set arrowPrevMarkup %}
+				<button class="{{ baseClass }}__arrow {{ baseClass }}__arrow--prev">
+					<div class="{{ baseClass }}__arrow__icon">
+						{{ helpers.getIcon("chevron-left") }}
+					</div>
+				</button>
+			{% endset %}
+
+			{% set arrowNextMarkup %}
+				<button class="{{ baseClass }}__arrow {{ baseClass }}__arrow--next">
+					<div class="{{ baseClass }}__arrow__icon">
+						{{ helpers.getIcon("chevron-right") }}
+					</div>
+				</button>
+			{% endset %}
+
+		{% else %}
+
+			{% set arrowButtonsTheme = (showNav and navPosition == "overlay") or (showArrows and arrowsPosition != "inline") ? "dark" : theme %}
+			{% set arrowButtonsSize = showArrows and arrowsPosition == "inline" ? "small" : "large" %}
+
+			{% set arrowPrevMarkup %}
+				<button class="{{ baseClass }}__arrow {{ baseClass }}__arrow--prev">
+					{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+						size: arrowButtonsSize,
+						theme: arrowButtonsTheme,
+						style: "outline",
+						shape: "square",
+						type: "chevron-left",
+					} only %}
+				</button>
+			{% endset %}
+
+			{% set arrowNextMarkup %}
+				<button class="{{ baseClass }}__arrow {{ baseClass }}__arrow--next">
+					{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+						size: arrowButtonsSize,
+						theme: arrowButtonsTheme,
+						style: "outline",
+						shape: "square",
+						type: "chevron-right",
+					} only %}
+				</button>
+			{% endset %}
+
+		{% endif %}
+		
+		{% set dotsMarkup %}
+			<div class="{{ baseClass }}__dotsWrapper">
+				<div class="{{ baseClass }}__dots"></div>
+			</div>
+		{% endset %}
+
+		{% if showNav %}
+			<div class="{{ baseClass }}__nav">
+				{{ arrowPrevMarkup }}
+				{{ dotsMarkup }}
+				{{ arrowNextMarkup }}
+			</div>
+		{% else %}
+			{% if showArrows %}
+				<div class="{{ baseClass }}__arrows">
+					{{ arrowPrevMarkup }}
+					{{ arrowNextMarkup }}
+				</div>
+			{% endif %}
+			{% if showDots %}
+				{{ dotsMarkup }}
+			{% endif %}
+		{% endif %}
+
+	{% endif %}
+	
+</div>
+{% endif %}

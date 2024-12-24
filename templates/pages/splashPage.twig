@@ -1,0 +1,29 @@
+{% import '_macros/helpers' as helpers %}
+{% extends '_layout.twig' %}
+
+{% set entry = entry ?? null %}
+
+{% set style = entry.splashPage_style.value %}
+
+{% set splashPageContent %}
+	{% include "_includes/cached-molecule" with {
+		cacheKey: "splashPageContent",
+		path: "_components/molecules/SplashPages/"~style~"/"~style~".handler",
+		data: {
+			entry: entry,
+		},
+	} only %}
+{% endset %}
+
+{% block content %}
+
+	{% include "_includes/cached-molecule" with {
+		cacheKey: "splashPageLayout",
+		path: "_components/layouts/LayoutSplashPage/LayoutSplashPage.handler",
+		data: {
+			entry: entry,
+			content: splashPageContent,
+		},
+	} only %}
+	
+{% endblock %}

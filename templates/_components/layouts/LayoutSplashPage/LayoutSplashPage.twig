@@ -1,0 +1,21 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+
+{#---------- Data Handling ----------#}
+
+{#---------- Classes ----------#}
+{% set baseClass = "layout-LayoutSplashPage" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [], []) %}
+
+{#---------- Output ----------#}
+{% if content %}
+<div class="{{ classes }}">
+
+	{{ banner }}
+
+	{{ content }}
+
+</div>
+{% endif %}

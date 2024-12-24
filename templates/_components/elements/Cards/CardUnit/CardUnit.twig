@@ -1,0 +1,99 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set imageSizes = imageSizes ?? null %}
+{% set imageSources = imageSources ?? null %}
+{% set imageUrl = imageUrl ?? null %}
+{% set imageAlt = imageAlt ?? null %}
+{% set heading = heading ?? null %}
+{% set labels = labels ?? null %}
+{% set link = link ?? null %}
+
+{#---------- Data Handling ----------#}
+{% set linkText = null %}
+{% set linkUrl = null %}
+{% set linkTarget = null %}
+
+{% if link %}
+	{% set linkText = link.text ?? null %}
+	{% set linkUrl = link.url ?? null %}
+	{% set linkTarget = link.target ?? null %}
+	{% set linkData = link.data ?? null %}
+{% endif %}
+
+{% set dataString = '' %}
+{% if linkData %}
+	{% for key,value in linkData %}
+		{% set dataString = dataString ~ key ~ '="' ~ value ~ '" ' %}
+	{% endfor %}
+{% endif %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "el-CardUnit" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+<a
+	class="{{ classes }}"
+	{% if linkUrl %}href="{{ linkUrl }}"{% endif %}
+	target="{{ linkTarget }}"
+	{% if dataString %}{{ dataString|raw }}{% endif %}
+>
+
+	<div class="{{ baseClass }}__imageWrapper">
+		<div class="{{ baseClass }}__image">
+			{% include "_components/atoms/Media/ResponsiveImage/ResponsiveImage" with {
+				backgroundImage: true,
+				backgroundImageContain: true,
+				sizes: imageSizes,
+				sources: imageSources,
+				url: imageUrl,
+				alt: imageAlt,
+			} only %}
+		</div>
+	</div>
+
+	<div class="{{ baseClass }}__content">
+
+		<h4 class="{{ baseClass }}__heading">
+			{{ heading }}
+		</h4>
+
+		{% if labels|length %}
+			<div class="{{ baseClass }}__labelsWrapper">
+				<ul class="{{ baseClass }}__labels" >
+					{% for label in labels %}
+						{% set labelValue = label.value ?? null %}
+
+						{% if labelValue|length %}
+							<li class="{{ baseClass }}__label" >
+								<span class="{{ baseClass }}__label__copy">
+									{{ labelValue }}
+								</span>
+							</li>
+						{% endif %}
+
+						{% if not loop.last %}
+							<div class="{{ baseClass }}__separator">|</div>
+						{% endif %}
+
+					{% endfor %}
+				</ul>
+			</div>
+		{% endif %}
+		
+		{% if linkText %}
+			<div class="{{ baseClass }}__button">
+				{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+					size: "small",
+					theme: theme,
+					arrow: "none",
+					text: linkText,
+				} only %}
+			</div>
+		{% endif %}
+		
+	</div>
+</a>

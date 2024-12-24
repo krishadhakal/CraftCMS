@@ -1,0 +1,27 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set intro = intro ?? null %}
+{% set carousel = carousel ?? null %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-CarouselCentered" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+<div class="{{ classes }}">
+	{% if intro|trim|length %}
+		{{ intro }}
+	{% endif %}
+	<div class="grid-container">
+		<div class="row">
+			<div class="column xsmall-12">
+				<div class="{{ baseClass }}__carousel">
+					{{ carousel }}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

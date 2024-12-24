@@ -1,0 +1,30 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = theme ?? "light" %}
+{% set scrollToOnOpen = scrollToOnOpen ?? false %}
+{% set data = data ?? null %}
+{% set index = index ?? 0 %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set heading = null %}
+{% set copyLeft = null %}
+{% set copyRight = null %}
+
+{#---------- Data Handling ----------#}
+{% if data|length %}
+	{% set heading = data.heading ?? heading %}
+	{% set copyLeft = data.copyLeft ?? copyLeft %}
+	{% set copyRight = data.copyRight ?? copyRight %}
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/elements/Cards/CardFaq/CardFaq" with {
+	variants: variants,
+	theme: theme,
+	scrollToOnOpen: scrollToOnOpen,
+	heading: heading,
+	copyLeft: copyLeft,
+	copyRight: copyRight,
+} only %}

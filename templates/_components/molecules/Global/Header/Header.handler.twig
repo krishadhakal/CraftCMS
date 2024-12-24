@@ -1,0 +1,91 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set isFloating = true %}
+{% set theme = "light" %}
+{% set logoUrl = null %}
+{% set navigationBar = null %}
+{% set button = null %}
+
+{#---------- Data Handling ----------#}
+{% set buttonField = globalHeader.globalHeader_button ?? null %}
+
+{% if not buttonField.isEmpty() %}
+	{% set button = {
+		text: helpers.generateLinkText(buttonField),
+		url: helpers.generateLinkUrl(buttonField),
+		target: helpers.generateLinkTarget(buttonField),
+	} %}
+{% endif %}
+
+{% set logoDarkUrl = globalLogos.globalLogos_logoPrimaryDark.one().url ?? null %}
+{% set logoLightUrl = globalLogos.globalLogos_logoPrimaryLight.one().url ?? null %}
+
+{% if entry|length %}
+
+	{% set entryType = entry.type.handle %}
+
+	{% switch entryType %}
+
+		{% case 'unitType' %}
+			
+		{% default %}
+
+			{% set hero = entry.common_heroComponents.one() ?? null %}
+
+			{% if hero|length %}
+				{% set heroType = entry.common_heroComponents.one().type.handle ?? null %}
+
+				{% switch heroType %}
+					{% case "heroComplex" %}
+						{% set theme = "dark" %}
+					{% case "heroStandard" %}
+						{% set theme = "dark" %}
+					{% case "heroBasic" %}
+						{% set theme = "light" %}
+					{% default %}
+				{% endswitch %}
+
+			{% else %}
+				{% set isFloating = false %}
+			{% endif %}
+
+	{% endswitch %}
+
+{% endif %}
+
+{% if theme == "dark" %}
+	{% set logoUrl = logoLightUrl %}
+{% else %}
+	{% set logoUrl = logoDarkUrl %}
+{% endif %}
+
+{% set navigationBar %}
+	{% include "_components/elements/Global/HeaderNavigation/HeaderNavigation.handler" with {
+		theme: theme,
+		entry: entry,
+	} only %}
+{% endset %}
+
+{% include "_includes/cached-molecule" with {
+	cacheKey: "modalHeader",
+	path: "_components/molecules/Modals/ModalHeader/ModalHeader.handler",
+	data: {
+		entry: entry,
+	},
+} only %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/Global/Header/Header" with {
+	variants: variants,
+	isFloating: isFloating,
+	theme: theme,
+	logoUrl: logoUrl,
+	navigationBar: navigationBar,
+	button: button,
+} only %}

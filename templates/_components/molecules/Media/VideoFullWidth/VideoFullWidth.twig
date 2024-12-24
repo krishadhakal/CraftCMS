@@ -1,0 +1,29 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set label = label ?? null %}
+{% set heading = heading ?? null %}
+{% set copy = copy ?? null %}
+{% set button = button ?? null %}
+{% set video = video ?? null %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-VideoFullWidth" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% if video|length %}
+<div class="{{ classes }}">
+
+	{% if intro|trim|length %}
+		{{ intro }}
+	{% endif %}
+
+	<div class="grid-container no-padding">
+		{{ video }}
+	</div>
+
+</div>
+{% endif %}

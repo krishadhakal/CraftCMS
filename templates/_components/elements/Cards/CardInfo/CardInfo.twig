@@ -1,0 +1,75 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set link = link ?? null %}
+{% set imageSizes = imageSizes ?? null %}
+{% set imageSources = imageSources ?? null %}
+{% set imageUrl = imageUrl ?? null %}
+{% set imageAlt = imageAlt ?? null %}
+{% set heading = heading ?? null %}
+{% set copy = copy ?? null %}
+
+{#---------- Data Handling ----------#}
+{% set linkText = null %}
+{% set linkUrl = null %}
+{% set linkTarget = null %}
+
+{% if link %}
+	{% set linkText = link.text ?? null %}
+	{% set linkUrl = link.url ?? null %}
+	{% set linkTarget = link.target ?? null %}
+{% endif %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "el-CardInfo" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% if heading|length and imageUrl|length %}
+	{% set markup %}
+		<div class="{{ baseClass }}__imageWrapper">
+			<div class="{{ baseClass }}__image">
+				{% include "_components/atoms/Media/ResponsiveImage/ResponsiveImage" with {
+					sizes: imageSizes,
+					sources: imageSources,
+					url: imageUrl,
+					alt: imageAlt,
+				} only %}
+			</div>
+		</div>
+		<div class="{{ baseClass }}__content">
+			<h4 class="{{ baseClass }}__heading">
+				{{ heading }}
+			</h4>
+			{% if copy|length %}
+				<div class="{{ baseClass }}__copy">
+					{{ copy }}
+				</div>
+			{% endif %}
+			{% if linkText and linkUrl %}
+				<div class="{{ baseClass }}__button">
+					{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+						size: "small",
+						theme: theme,
+						arrow: "none",
+						target: linkTarget,
+						url: linkUrl,
+						text: linkText,
+					} only %}
+				</div>
+			{% endif %}
+		</div>
+	{% endset %}
+
+	{% if linkUrl and not linkText %}
+		<a href="{{ linkUrl }}" target="{{ linkTarget }}" class="{{ classes }}">
+			{{ markup }}
+		</a>
+	{% else %}
+		<div class="{{ classes }}">
+			{{ markup }}
+		</div>
+	{% endif %}
+{% endif %}

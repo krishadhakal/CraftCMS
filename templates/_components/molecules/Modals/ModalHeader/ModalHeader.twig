@@ -1,0 +1,77 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["dark", "light"]) %}
+{% set navigationPrimaryItems = navigationPrimaryItems ?? [] %}
+{% set navigationSecondaryItems = navigationSecondaryItems ?? [] %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-ModalHeader" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% if navigationPrimaryItems|length %}
+<div class="{{ classes }}">
+	<div class="{{ baseClass }}__inner">
+		<div class="grid-container">
+			<div class="{{ baseClass }}__navigation row">
+				<div class="column xsmall-12 medium-8 large-7 offset-large-1 xlarge-5 offset-xlarge-2 {{ baseClass }}__navigation-primary">
+					<ul class="{{ baseClass }}__navigation-primary__items">
+						{% for item in navigationPrimaryItems %}
+							{% set itemText = item.text ?? null %}
+							{% set itemUrl = item.url ?? null %}
+							{% set itemTarget = item.target ?? null %}
+							{% set itemSubitems = item.subitems ?? [] %}
+
+							{% if itemText|length and itemUrl|length %}
+								<li class="{{ baseClass }}__navigation-primary__item">
+									<a class="{{ baseClass }}__navigation-primary__item__link" href="{{ itemUrl }}" target="{{ itemTarget }}">
+										{{ itemText }}
+									</a>
+									{% if itemSubitems|length %}
+										<ul class="{{ baseClass }}__navigation-primary__item__subitems">
+											{% for subitem in itemSubitems %}
+												{% set subitemText = subitem.text ?? null %}
+												{% set subitemUrl = subitem.url ?? null %}
+												{% set subitemTarget = subitem.target ?? null %}
+
+												{% if subitemText|length and subitemUrl|length %}
+													<li class="{{ baseClass }}__navigation-primary__item__subitem">
+														<a class="{{ baseClass }}__navigation-primary__item__subitem__link" href="{{ subitemUrl }}" target="{{ subitemTarget }}">
+															{{ subitemText }}
+														</a>
+													</li>
+												{% endif %}
+											{% endfor %}
+										</ul>
+									{% endif %}
+								</li>
+							{% endif %}
+						{% endfor %}
+					</ul>
+				</div>
+				{% if navigationSecondaryItems|length %}
+					<div class="column xsmall-12 medium-4 large-3 xlarge-3 {{ baseClass }}__navigation-secondary">
+						<ul class="{{ baseClass }}__navigation-secondary__items">
+							{% for item in navigationSecondaryItems %}
+								{% set itemText = item.text ?? null %}
+								{% set itemUrl = item.url ?? null %}
+								{% set itemTarget = item.target ?? null %}
+
+								{% if itemText|length and itemUrl|length %}
+									<li class="{{ baseClass }}__navigation-secondary__item">
+										<a class="{{ baseClass }}__navigation-secondary__item__link" href="{{ itemUrl }}" target="{{ itemTarget }}">
+											{{ itemText }}
+										</a>
+									</li>
+								{% endif %}
+							{% endfor %}
+						</ul>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %}

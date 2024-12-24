@@ -1,0 +1,31 @@
+
+{% import '_macros/helpers' as helpers %}
+{% extends '_layout.twig' %}
+
+{% block content %}
+	{% set entry = entry ?? null %}
+	{% set entryComponents = entry.common_contentComponents.level(1) ?? [] %}
+
+	{% include "_includes/hero-components" with {
+		componentHandle: "heroBasic",
+		entry: entry,
+	} only %}
+
+	{% include "_includes/content-components" with {
+		componentHandle: "unitTypeInformation",
+		entry: entry,
+	} only %}
+
+	{% include "_includes/content-components" with {
+		componentHandle: "listingUnitTable",
+		entry: entry,
+	} only %}
+
+	{% if entryComponents|length %}
+		{% include "_includes/content-components" with {
+			components: entryComponents,
+			entry: entry,
+		} only %}
+	{% endif %}
+	
+{% endblock %}

@@ -1,0 +1,51 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["dark", "light"]) %}
+{% set formieForm = formieForm ?? false %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "el-Form" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% if formieForm|length %}
+
+	{% set formieFormMarkup = craft.formie.renderForm(formieForm, {
+		themeConfig: {
+			form: {
+				attributes: {
+					class: baseClass ~ "__form",
+				},
+			},
+		},
+	}) ?? false %}
+
+	{% if formieFormMarkup|length %}
+		<div class="{{ classes }}">
+			{{ formieFormMarkup }}
+			<button class="{{ baseClass }}__form__submit" type="button">
+				{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+					theme: theme,
+					arrow: "right",
+					text: "Submit",
+				} only %}
+			</button>
+		</div>
+	{% endif %}
+
+	{# Ensure we load polyfills for older browsers that don't support `fetch()` #}
+	{% js "https://cdn.polyfill.io/v2/polyfill.js?features=fetch,Promise" %}
+	{% js %}
+		// Formie Cache Busting
+		document.addEventListener('onFormieInit', (event) => {
+			// Fetch the Form Factory once it's been loaded
+			let Formie = event.detail.formie;
+
+			// Refresh the necessary bits that are statically cached (CSRF inputs, captchas, etc)
+			Formie.refreshForCache('{{ formieForm.formId }}');
+		});
+	{% endjs %}
+
+{% endif %}

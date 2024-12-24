@@ -1,0 +1,137 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["dark", "light"]) %}
+{% set logoUrl = logoUrl ?? null %}
+{% set navigationBar = navigationBar ?? null %}
+{% set items = items ?? [] %}
+{% set socialNetworks = socialNetworks ?? [] %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-Footer" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+<div class="{{ classes }}">
+
+	<div class="grid-container">
+
+		{% if logoUrl|length or navigationBar|length or items|length or socialNetworks|length %}
+
+			<div class="row {{ baseClass }}__contentRow">
+
+				{% if logoUrl|length or navigationBar|length %}
+
+					<div class="column xsmall-12 large-4 xlarge-6">
+
+						<div class="row">
+
+							{% if logoUrl|length %}
+								<div class="column xsmall-12 xlarge-6">
+									<div class="{{ baseClass }}__logo">
+										<a href="/" class="{{ baseClass }}__logo__link">
+											<div class="{{ baseClass }}__logo__image">
+												{% include "_components/atoms/Media/ResponsiveImage/ResponsiveImage" with {
+													url: logoUrl,
+													alt: currentSite.name,
+												} only %}
+											</div>
+										</a>
+									</div>
+								</div>
+							{% endif %}
+
+							{% if navigationBar|length %}
+								<div class="column xsmall-12 xlarge-6 {{ baseClass }}__navigationColumn">
+									<div class="{{ baseClass }}__navigation">
+										{{ navigationBar }}
+									</div>
+								</div>
+							{% endif %}
+
+						</div>
+
+					</div>
+
+				{% endif %}
+
+				{% if items|length or socialNetworks|length %}
+
+					<div class="column xsmall-12 large-8 xlarge-6 {{ baseClass }}__rightColumn">
+
+						<div class="row">
+
+							{% for item in items %}
+								{% set itemHeading = item.heading ?? null %}
+								{% set itemCopy = item.copy ?? null %}
+
+								{% if itemHeading|length and itemCopy|length %}
+									<div class="column xsmall-12 medium-6 {{ baseClass }}__itemColumn">
+										<div class="{{ baseClass }}__item">
+											<h5 class="{{ baseClass }}__item__heading">
+												{{ itemHeading }}
+											</h5>
+											<div class="{{ baseClass }}__item__copy">
+												{{ itemCopy }}
+											</div>
+										</div>
+									</div>
+								{% endif %}
+							{% endfor %}
+
+							{% if socialNetworks|length %}
+								<div class="column xsmall-12 medium-6 {{ baseClass }}__itemColumn">
+									<div class="{{ baseClass }}__item {{ baseClass }}__item--socialNetworks">
+										<h5 class="{{ baseClass }}__item__heading">
+											Social Media
+										</h5>
+										<div class="{{ baseClass }}__item__links">
+											{% for item in socialNetworks %}
+												{% set itemType = item.type ?? null %}
+												{% set itemUrl = item.url ?? null %}
+		
+												{% if itemType|length and itemUrl|length %}
+													<div class="{{ baseClass }}__item__link">
+														{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+															size: "small",
+															theme: theme,
+															url: itemUrl,
+															target: "_blank",
+															type: itemType,
+														} only %}
+													</div>
+												{% endif %}
+											{% endfor %}
+										</div>
+									</div>
+								</div>
+							{% endif %}
+
+						</div>
+
+					</div>
+
+				{% endif %}
+
+			</div>
+
+		{% endif %}
+
+		<div class="row {{ baseClass }}__authenticffCreditRow">
+
+			<div class="column xsmall-12 xlarge-6 offset-xlarge-6">
+
+				<div class="{{ baseClass }}__authenticffCredit">
+					<a href="https://authenticff.com" target="_blank" class="{{ baseClass }}__authenticffCredit__link">
+						{{ helpers.getIcon("built-with-authentic") }}
+					</a>
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</div>

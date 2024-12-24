@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="HandheldFriendly" content="true" />
+		<meta http-equiv="x-ua-compatible" content="ie=edge">
+	</head>
+
+	<body>
+
+		{% if craft.app.config.general.devMode %}
+			<div class="dev-breakpoint-indicator" style="position:fixed; z-index:1000000; bottom:0; right:0;">
+				<div class="hide show-for-xsmall-only">
+					XSmall
+				</div>
+				<div class="hide show-for-small-only">
+					Small
+				</div>
+				<div class="hide show-for-medium-only">
+					Medium
+				</div>
+				<div class="hide show-for-large-only">
+					Large
+				</div>
+				<div class="hide show-for-xlarge-only">
+					XLarge
+				</div>
+			</div>
+		{% endif %}
+
+		{% block content %}{% endblock %}
+
+		{% if craft.app.config.general.devMode %}
+			{% js "https://localhost:3000/browser-sync/browser-sync-client.js?v=2.26.3" %}
+		{% endif %}
+
+	</body>
+</html>

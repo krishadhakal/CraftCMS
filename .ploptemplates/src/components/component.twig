@@ -1,0 +1,15 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+
+{#---------- Data Handling ----------#}
+
+{#---------- Classes ----------#}
+{% set baseClass = "{{lowerCase typeShortname}}-{{properCase name}}" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [], []) %}
+
+{#---------- Output ----------#}
+<div class="\{{ classes }}">
+
+</div>

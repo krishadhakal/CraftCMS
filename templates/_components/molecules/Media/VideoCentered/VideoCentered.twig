@@ -1,0 +1,27 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set intro = intro ?? null %}
+{% set video = video ?? null %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-VideoCentered" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% if video|length %}
+<div class="{{ classes }}">
+	{% if intro|trim|length %}
+		{{ intro }}
+	{% endif %}
+	<div class="grid-container">
+		<div class="row">
+			<div class="column xsmall-12 medium-10 offset-medium-1">
+				{{ video }}
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %}

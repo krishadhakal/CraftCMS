@@ -1,0 +1,77 @@
+$base-class: '.el-CardInfo';
+
+@mixin useCardInfoVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--content-bg-color: #{$color-base-surface-tertiary-light};
+	--color: #{$color-base-text-primary-light};
+	--hover-color: #{rgba($color-base-text-primary-light, 0.6)};
+	display: block;
+	color: var(--color);
+
+	&--dark {
+		--content-bg-color: #{$color-base-surface-tertiary-dark};
+		--color: #{$color-base-text-primary-dark};
+		--hover-color: #{rgba($color-base-text-primary-dark, 0.6)};
+	}
+
+	&__imageWrapper {
+		overflow: hidden;
+	}
+
+	&__image {
+		@include transition(transform);
+	}
+
+	&__content {
+		@include interpolate(padding, 20px, 24px);
+		background-color: var(--content-bg-color);
+	}
+
+	&__heading {
+		@include transition(color);
+		@include font-h5;
+	}
+
+	&__copy {
+		@include richText();
+
+		p {
+			@include font-body-small;
+		}
+
+	}
+
+	* + &__copy {
+		@include interpolate(margin-top, 8px, 8px);
+	}
+
+	&__button {
+
+	}
+
+	* + &__button {
+		@include interpolate(margin-top, 12px, 16px);
+	}
+
+}
+
+a#{$base-class} {
+
+	&:hover {
+
+		#{$base-class}__heading {
+			color: var(--hover-color);
+		}
+
+		#{$base-class}__image {
+			transform: scale(1.1);
+		}
+
+	}
+
+}

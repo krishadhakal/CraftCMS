@@ -1,0 +1,18 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set iframe = iframe ?? null %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "el-IframeEmbed" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [], []) %}
+
+{#---------- Output ----------#}
+{% if iframe|length %}
+<div class="{{ classes }}">
+	<div class="{{ baseClass }}__embed">
+		{{ iframe|raw }}
+	</div>
+</div>
+{% endif %}

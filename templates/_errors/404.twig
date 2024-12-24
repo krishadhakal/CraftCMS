@@ -1,0 +1,20 @@
+{% extends '_layout.twig' %}
+
+{% block content %}
+	{% set entryHeros = entry.common_heroComponents.level(1) ?? [] %}
+	{% set entryComponents = entry.common_contentComponents.level(1) ?? [] %}
+
+	{% if entryHeros|length %}
+		{% include "_includes/hero-components" with {
+			components: entryHeros,
+			entry: entry,
+		} only %}
+	{% endif %}
+
+	{% if entryComponents|length %}
+		{% include "_includes/content-components" with {
+			components: entryComponents,
+			entry: entry,
+		} only %}
+	{% endif %}
+{% endblock %}

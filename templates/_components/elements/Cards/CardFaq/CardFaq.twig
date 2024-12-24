@@ -1,0 +1,46 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set scrollToOnOpen = scrollToOnOpen ?? false %}
+{% set heading = heading ?? null %}
+{% set copyLeft = copyLeft ?? null %}
+{% set copyRight = copyRight ?? null %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "el-CardFaq" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% if heading|length and copyLeft|length %}
+	<div class="{{ classes }}" data-scroll-to-on-open="{{ scrollToOnOpen ? "true" : "false" }}">
+		<div class="{{ baseClass }}__toggle">
+			<h3 class="{{ baseClass }}__toggle__heading">
+				{{ heading }}
+			</h3>
+			<div class="{{ baseClass }}__toggle__button">
+				{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+					size: "large",
+					theme: theme,
+					hoverStyle: false,
+					style: "outline",
+					shape: "square",
+					type: "chevron-down",
+				} only %}
+			</div>
+		</div>
+		<div class="{{ baseClass }}__copy">
+			<div class="{{ baseClass }}__copy__inner">
+				<div class="{{ baseClass }}__copy__block">
+					{{ copyLeft }}
+				</div>
+				{% if copyRight|length %}
+					<div class="{{ baseClass }}__copy__block">
+						{{ copyRight }}
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+{% endif %}

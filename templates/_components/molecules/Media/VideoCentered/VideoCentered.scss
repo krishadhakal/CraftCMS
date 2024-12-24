@@ -1,0 +1,19 @@
+$base-class: '.mol-VideoCentered';
+
+@mixin useVideoCenteredVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--background-color: #{$color-base-surface-primary-light};
+	@include sectionSpacing;
+	@include useDisableSpacing;
+	background-color: var(--background-color);
+
+	&--dark {
+		--background-color: #{$color-base-surface-primary-dark};
+	}
+
+}

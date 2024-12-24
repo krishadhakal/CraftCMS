@@ -1,0 +1,80 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = "light" %}
+{% set intro = null %}
+{% set items = [] %}
+
+{#---------- Data Handling ----------#}
+{% set cardImageSizes = "(min-width: 1024px) 25vw, (min-width: 560px) 50vw, 100vw" %}
+{% set cardImageOptions = [
+	{
+		width: 480,
+	},
+	{
+		width: 640,
+	},
+	{
+		width: 800,
+	},
+	{
+		width: 1200,
+	},
+] %}
+{% set cardImageDefaultOptions = imageDefaultOptions ?? { fit: 'fit', ar: "290:330" } %}
+
+{% if block|length %}
+	{% set disableTopSpacing = block.common_disableTopSpacing ?? false %}
+	{% set disableBottomSpacing = block.common_disableBottomSpacing ?? false %}
+	{% set variants = variants|merge([disableTopSpacing ? "disableTopSpacing", disableBottomSpacing ? "disableBottomSpacing"]) %}
+
+	{% set selectedEntries = block.molListingUnitTypes_entries.all() ?? null %}
+	{% set entries = [] %}
+
+	{% set intro %}
+		{% apply spaceless %}
+			{% include "_components/elements/Global/Intro/Intro.handler" with {
+				theme: theme,
+				block: block,
+			} only %}
+		{% endapply %}
+	{% endset %}
+
+	{% if selectedEntries|length %}
+		{% set entries = selectedEntries %}
+	{% else %}
+		{% set entries = craft.entries({
+			type: "unitType",
+		}).all() %}
+	{% endif %}
+
+	{% for unitType in entries %}
+		{% set itemMarkup %}
+			{% apply spaceless %}
+				{% include "_components/elements/Cards/CardUnit/CardUnit.handler" with {
+					theme: theme,
+					imageSizes: cardImageSizes,
+					imageOptions: cardImageOptions,
+					imageDefaultOptions: cardImageDefaultOptions,
+					entry: unitType,
+				} only %}
+			{% endapply %}
+		{% endset %}
+
+		{% set items = items|merge([itemMarkup]) %}
+	{% endfor %}
+
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/Listings/ListingUnitTypes/ListingUnitTypes" with {
+	variants: variants,
+	theme: theme,
+	intro: intro,
+	items: items,
+} only %}

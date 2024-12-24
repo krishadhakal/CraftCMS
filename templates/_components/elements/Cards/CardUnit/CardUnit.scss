@@ -1,0 +1,169 @@
+$base-class: '.el-CardUnit';
+
+@mixin useCardUnitVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--image-bg-color: #{$color-base-surface-secondary-light};
+	--content-bg-color: #{$color-base-surface-tertiary-light};
+	--heading-color: #{$color-base-text-primary-light};
+	--color: #{$color-base-text-primary-light};
+
+	--content-bg-hover-color: #{$color-base-surface-tertiary-light};
+	--hover-color: #{$color-base-text-primary-light};
+
+	display: flex;
+	flex-direction: column;
+	aspect-ratio: 291/446;
+	cursor: pointer;
+
+	&--dark {
+		--image-bg-color: #{$color-base-surface-secondary-dark};
+		--content-bg-color: #{$color-base-surface-tertiary-dark};
+		--heading-color: #{$color-base-text-primary-dark};
+		--color: #{$color-base-text-primary-dark};
+
+		--content-bg-hover-color: #{$color-base-surface-tertiary-dark};
+		--hover-color: #{$color-base-text-primary-dark};
+	}
+
+	&__imageWrapper {
+		overflow: hidden;
+		background-color: var(--image-bg-color);
+		@include interpolate((padding-top, padding-bottom), 24px, 32px);
+		@include interpolate((padding-left, padding-right), 24px, 32px);
+		flex-grow: 1;
+		flex-shrink: 1;
+	}
+
+	&__image {
+		position: relative;
+		width: 100%;
+		height: 100%;
+	}
+
+	&__content {
+		background-color: var(--content-bg-color);
+		@include transition(background-color, 0.3s);
+		@include interpolate((padding-top, padding-bottom), 20px, 24px);
+		@include interpolate((padding-left, padding-right), 20px, 24px);
+		flex-shrink: 0;
+		overflow: hidden;
+	}
+
+	&__heading {
+		@include transition(color, 0.3s);
+		@include font-h5;
+		color: var(--heading-color);
+	}
+
+	&__labelsWrapper {
+
+	}
+
+	* + &__labelsWrapper {
+		@include interpolate(margin-top, 8px, 12px);
+	}
+
+	&__labels {
+		@include interpolate((margin-top, margin-bottom), -2px, -2px);
+		@include interpolate((margin-left, margin-right), -5px, -8px);
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+	}
+
+	&__label,
+	&__separator {
+		@include font-body;
+		color: var(--color);
+		@include transition(color, 0.3s);
+	}
+
+	&__label {
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		@include interpolate((margin-top, margin-bottom), 2px, 2px);
+		@include interpolate((margin-left, margin-right), 5px, 8px);
+
+		&__icon {
+			@include interpolate(margin-right, 5px, 8px);
+			@include interpolate(width, 12px, 20px);
+			height: auto;
+			display: block;
+
+			svg {
+				fill: var(--label-icon-color);
+				width: 100%;
+				height: auto;
+				display: block;
+
+				* {
+					fill: inherit;
+				}
+			}
+		}
+
+		&__text {
+			display: block;
+		}
+	}
+
+	&__separator {
+
+	}
+
+	&__copy {
+		@include richText();
+
+		p {
+			@include font-body-small;
+		}
+
+	}
+
+	* + &__copy {
+		@include interpolate(margin-top, 8px, 8px);
+	}
+
+	&__button {
+		opacity: 0;
+		display: none;
+	}
+
+	* + &__button {
+		@include interpolate(margin-top, 12px, 20px);
+	}
+
+	&:hover {
+
+		#{$base-class}__content {
+			background-color: var(--content-bg-hover-color);
+		}
+
+		#{$base-class}__heading,
+		#{$base-class}__label,
+		#{$base-class}__separator {
+			color: var(--hover-color);
+		}
+
+		#{$base-class}__button {
+
+			.atom-ButtonSecondary {
+				color: var(--hover-color);
+
+				&--underline {
+					border-color: var(--hover-color);
+				}
+
+			}
+
+		}
+
+	}
+
+}

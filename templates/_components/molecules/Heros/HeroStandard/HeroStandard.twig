@@ -1,0 +1,58 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["dark", "light"]) %}
+{% set media = media ?? null %}
+{% set breadcrumbs = breadcrumbs ?? null %}
+{% set heading = heading ?? null %}
+{% set copy = copy ?? null %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-HeroStandard" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% if heading|length %}
+<div class="{{ classes }}">
+	{% if media|length %}
+		<div class="{{ baseClass }}__media">
+			<div class="{{ baseClass }}__media__inner">
+				{{ media }}
+			</div>
+		</div>
+	{% endif %}
+	<div class="{{ baseClass }}__wrapper">
+		<div class="{{ baseClass }}__inner">
+			<div class="grid-container">
+				{% if showBreadcrumb %}
+					<div class="row">
+						<div class="{{ baseClass }}__breadcrumbs column xsmall-12">
+							{{ breadcrumbs }}
+						</div>
+					</div>
+				{% endif %}
+				<div class="row">
+					<div class="{{ baseClass }}__content column xsmall-12">
+						<div class="{{ baseClass }}__content__inner">
+							{% if label %}
+								<h5 class="{{ baseClass }}__label">
+									{{ label }}
+								</h5>
+							{% endif %}
+							<h1 class="{{ baseClass }}__heading">
+								{{ heading }}
+							</h1>
+							{% if copy %}
+								<div class="{{ baseClass }}__copy">
+									{{ copy }}
+								</div>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %}

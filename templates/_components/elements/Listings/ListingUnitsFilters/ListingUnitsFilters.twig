@@ -1,0 +1,26 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set form = form ?? null %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "el-ListingUnitsFilters" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+<div class="{{ classes }}">
+	<form action="" role="search" class="{{ baseClass }}__form">
+		<div class="{{ baseClass }}__form__markup">
+			{{ formMarkup }}
+		</div>
+		<button class="{{ baseClass }}__form__submit" type="submit">
+			{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+				theme: theme,
+				arrow: "right",
+				text: "Submit",
+			} only %}
+		</button>
+	</form>
+</div>

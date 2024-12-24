@@ -1,0 +1,53 @@
+{% set components = components.all() ?? components ?? [] %}
+{% set componentHandle = componentHandle ?? null %}
+{% set componentData = componentData ?? null %}
+{% set entry = entry ?? null %}
+{% set noBlock = false %}
+
+{% if not components|length and componentHandle|length %}
+	{% set noBlock = true %}
+
+	{% set components = [{
+		type: {
+			handle: componentHandle
+		},
+	}] %}
+{% endif %}
+
+{% for block in components %}
+	{% set blockType = block.type.handle ?? null %}
+	{% set blockId = block.id ?? null %}
+	{% set blockIndex = loop.index %}
+	{% set blockData = componentData ?? {} %}
+	{% set noCacheBlockTypes = [] %}
+
+	{% set blockPath = "" %}
+	{% set blockData = blockData|merge({
+		entry,
+		block: not noBlock ? block,
+		blockIndex
+	}) %}
+
+	{% switch blockType %}
+		{% case "heroBasic" %}
+			{% set blockPath = "_components/molecules/Heros/HeroBasic/HeroBasic.handler" %}
+		{% case "heroStandard" %}
+			{% set blockPath = "_components/molecules/Heros/HeroStandard/HeroStandard.handler" %}
+		{% case "heroComplex" %}
+			{% set blockPath = "_components/molecules/Heros/HeroComplex/HeroComplex.handler" %}
+
+		{% default %}
+	{% endswitch %}
+
+	{% if blockPath|length %}
+		{% if blockType in noCacheBlockTypes %}
+			{% include blockPath with blockData %}
+		{% else %}
+			{% include "_includes/cached-molecule" with {
+				cacheKey: blockType ~ blockId,
+				path: blockPath,
+				data: blockData,
+			} only %}
+		{% endif %}
+	{% endif %}
+{% endfor %}

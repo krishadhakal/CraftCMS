@@ -1,0 +1,208 @@
+$base-class: '.mol-ContentTextMediaTypeTwo';
+
+@mixin useContentTextMediaTypeTwoVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--background-color: #{$color-base-surface-secondary-light};
+	--color: #{$color-base-text-primary-light};
+	@include sectionSpacing;
+	@include useDisableSpacing;
+	$self: &;
+	background-color: var(--background-color);
+	color: var(--color);
+
+	&--dark {
+		--background-color: #{$color-base-surface-secondary-dark};
+		--color: #{$color-base-text-primary-dark};
+	}
+
+	&__wrapper {
+
+		@include breakpoint(medium) {
+			display: flex;
+		}
+		
+	}
+
+	&__mediaWrapper {
+
+		@include breakpoint(medium) {
+			flex-shrink: 0;
+			flex-grow: 0;
+			flex-basis: 50%;
+		}
+
+		@include useContentTextMediaTypeTwoVariants(carouselSideRight) {
+
+			@include breakpoint(medium) {
+				order: 2;
+			}
+
+		}
+
+	}
+
+	&__media {
+		position: relative;
+		aspect-ratio: 4/3;
+		max-height: 1050px;
+		min-height: 100%;
+		width: 100%;
+
+		@include breakpoint(medium) {
+			aspect-ratio: 4/5;
+		}
+
+	}
+
+	&__carousel {
+		@include overlayCarousel();
+		@include gridPaddingLeft;
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		right: 0;
+		width: 100%;
+
+		@include breakpoint(small, "max") {
+			padding-left: 0;
+		}
+	}
+
+	&__content {
+		@include sectionSpacing;
+		align-self: center;
+		
+		@include breakpoint(medium) {
+			flex-grow: 1;
+			@include interpolate((padding-left, padding-right), 32px, 80px);
+		}
+
+		@include useContentTextMediaTypeTwoVariants(carouselSideRight) {
+
+			@include breakpoint(medium) {
+				order: 1;
+			}
+			
+		}
+
+		&__inner {
+			@include gridPaddingLeft;
+			@include gridPaddingRight;
+			text-align: center;
+
+			@include useContentTextMediaTypeTwoVariants(alignContentLeft) {
+				text-align: left;
+			}
+
+			@include breakpoint(medium) {
+				padding-left: 0;
+				padding-right: 0;
+			}
+		}
+	}
+
+	&__imageWrapper {
+		@include maxWidth(72%);
+	}
+
+	&__label {
+		@include font-h6;
+	}
+
+	&__heading {
+		@include font-h2;
+
+		@include useContentTextMediaTypeTwoVariants(alignContentCenter) {
+			@include maxWidth(34.5rem);
+		}
+
+	}
+
+	&__copy {
+		@include richText;
+
+		@include useContentTextMediaTypeTwoVariants(alignContentCenter) {
+			@include maxWidth(34.5rem);
+		}
+
+	}
+
+	&__infoIconItems {
+		@include interpolate(margin-bottom, -20px, -28px);
+		margin-left: -12px;
+		margin-right: -12px;
+		display: flex;
+		flex-wrap: wrap;
+
+		@include breakpoint(large) {
+			margin-left: -16px;
+			margin-right: -16px;
+		}
+
+		@include breakpoint(xlarge) {
+			margin-left: -20px;
+			margin-right: -20px;
+		}
+
+	}
+
+	&__infoIconItem {
+		@include interpolate(margin-bottom, 20px, 28px);
+		margin-left: 12px;
+		margin-right: 12px;
+		flex-shrink: 0;
+		flex-grow: 0;
+		flex-basis: calc(50% - 24px);
+
+		@include breakpoint(xlarge) {
+			margin-left: 16px;
+			margin-right: 16px;
+			flex-basis: calc(50% - 32px);
+		}
+
+		@include breakpoint(xlarge) {
+			margin-left: 20px;
+			margin-right: 20px;
+			flex-basis: calc(50% - 40px);
+		}
+
+	}
+
+	&__button {
+		
+	}
+
+	&__label,
+	&__heading,
+	&__imageWrapper,
+	&__copy,
+	&__infoIconItems {
+
+		& + #{$self}__heading {
+			@include interpolate(margin-top, $spacing-subheading-heading);
+		}
+
+		& + #{$self}__imageWrapper {
+			@include interpolate(margin-top, $spacing-heading-body);
+		}
+
+		& + #{$self}__copy {
+			@include interpolate(margin-top, $spacing-heading-body);
+		}
+
+		& + #{$self}__infoIconItems {
+			@include interpolate(margin-top, $spacing-heading-body);
+		}
+
+		& + #{$self}__button {
+			@include interpolate(margin-top, $spacing-body-button);
+		}
+
+	}
+
+}

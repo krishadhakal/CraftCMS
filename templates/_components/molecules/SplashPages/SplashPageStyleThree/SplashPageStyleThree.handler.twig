@@ -1,0 +1,132 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set blockIndex = blockIndex ?? random() %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = "light" %}
+{% set backgroundMedia = null %}
+{% set showLogo = true %}
+{% set logoUrl = null %}
+{% set heading = null %}
+{% set copy = null %}
+{% set form = null %}
+{% set carousel = null %}
+
+{#---------- Data Handling ----------#}
+{% set backgroundImageAspectRatio = "1440:950" %}
+{% set backgroundImageSizes = "100vw" %}
+{% set backgroundImageOptions = [
+	{
+        width: 480,
+    },
+    {
+        width: 640,
+    },
+    {
+        width: 1000,
+    },
+    {
+        width: 1600,
+    },
+    {
+        width: 2400,
+    },
+    {
+        width: 3200,
+    },
+] %}
+
+{% set carouselImageSizes = "(min-width: 1024px) 580px, 90vw" %}
+{% set carouselImageOptions = [
+	{
+        width: 480,
+    },
+    {
+        width: 640,
+    },
+    {
+        width: 1000,
+    },
+    {
+        width: 1600,
+    },
+    {
+        width: 2000,
+    },
+] %}
+
+{% if entry %}
+
+	{% set theme = entry.common_theme %}
+
+	{% set showLogo = entry.splashPage_showLogo %}
+
+	{% if theme == "dark" %}
+		{% set logoUrl = globalLogos.globalLogos_logoPrimaryLight.one().url ?? null %}
+	{% else %}
+		{% set logoUrl = globalLogos.globalLogos_logoPrimaryDark.one().url ?? null %}
+	{% endif %}
+
+	{% set backgroundMediaAsset = entry.splashPage_backgroundMedia.one().elMedia_media.one() ?? null %}
+
+	{% if backgroundMediaAsset|length %}
+		{% set backgroundMedia %}
+			{% apply spaceless %}
+				{% include "_components/elements/Media/MediaTakeover/MediaTakeover.handler" with {
+					mediaAsset: backgroundMediaAsset,
+					imageAspectRatio: backgroundImageAspectRatio,
+					imageSizes: backgroundImageSizes,
+					imageOptions: backgroundImageOptions,
+				} only %}
+			{% endapply %}
+		{% endset %}
+	{% endif %}
+
+	{% set heading = entry.splashPage_heading ?? heading %}
+	{% set copy = helpers.getRawText(entry.splashPage_copy, copy) %}
+
+	{% set formieForm = entry.splashPage_form.one() ?? null %}
+	{% if formieForm|length %}
+		{% set form %}
+			{% apply spaceless %}
+				{% include "_components/elements/Forms/Form/Form.handler" with {
+					variants: ['buttonFullWidth'],
+					theme: theme,
+					formieForm: formieForm,
+				} only %}
+			{% endapply %}
+		{% endset %}
+	{% endif %}
+
+	{% set carousel %}
+		{% apply spaceless %}
+			{% include "_components/elements/Media/Carousel/Carousel.handler" with {
+				block: entry.splashPage_carousel.one() ?? null,
+				theme: theme,
+				showArrows: true,
+				arrowsPosition: "sides",
+				carouselAspectRatio: "570:426",
+				imageSizes: carouselImageSizes,
+				imageOptions: carouselImageOptions,
+			} only %}
+		{% endapply %}
+	{% endset %}
+
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/SplashPages/SplashPageStyleThree/SplashPageStyleThree" with {
+	variants: variants,
+	theme: theme,
+	backgroundMedia: backgroundMedia,
+	showLogo: showLogo,
+	logoUrl: logoUrl,
+	heading: heading,
+	copy: copy,
+	form: form,
+	carousel: carousel,
+} only %}

@@ -1,0 +1,88 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set blockIndex = blockIndex ?? random() %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = "light" %}
+{% set size = "medium" %}
+{% set label = null %}
+{% set heading = null %}
+{% set copy = null %}
+{% set carousel = null %}
+
+{#---------- Data Handling ----------#}
+{% set imageSizes = "100vw" %}
+{% set imageOptions = [
+	{
+        width: 480,
+    },
+    {
+        width: 640,
+    },
+    {
+        width: 1000,
+    },
+    {
+        width: 1600,
+    },
+    {
+        width: 2400,
+    },
+    {
+        width: 3200,
+    },
+] %}
+
+{% if block|length %}
+	{% set disableTopSpacing = block.common_disableTopSpacing ?? false %}
+	{% set disableBottomSpacing = block.common_disableBottomSpacing ?? false %}
+	{% set variants = variants|merge([disableTopSpacing ? "disableTopSpacing", disableBottomSpacing ? "disableBottomSpacing"]) %}
+
+	{% set size = block.molMediaPrimary_size %}
+
+	{% set label = block.commonIntro_label ?? null %}
+	{% set heading = block.commonIntro_heading ?? null %}
+	{% set copy = block.commonIntro_copy ?? null %}
+
+	{% set showIntroArrows = false %}
+	{% set showCarouselArrows = true %}
+	{% if label|length or heading|length or copy|length %}
+		{% set showIntroArrows = true %}
+		{% set showCarouselArrows = false %}
+	{% endif %}
+	{% if block.children.one().elCarouselComplex_slides|length < 2 %}
+		{% set showIntroArrows = false %}
+		{% set showCarouselArrows = false %}
+	{% endif %}
+
+	{% set carousel %}
+		{% apply spaceless %}
+			{% include "_components/elements/Media/Carousel/Carousel.handler" with {
+				block: block.children.one() ?? null,
+				theme: theme,
+				showArrows: showCarouselArrows,
+				arrowsPosition: "sides",
+				arrowsType: "button",
+				carouselAspectRatio: "16:9",
+				imageSizes: imageSizes,
+				imageOptions: imageOptions,
+			} only %}
+		{% endapply %}
+	{% endset %}
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/Media/MediaPrimary/MediaPrimary" with {
+	variants: variants,
+	theme: theme,
+	size: size,
+	label: label,
+	heading: heading,
+	copy: copy,
+	showIntroArrows: showIntroArrows,
+	carousel: carousel,
+} only %}

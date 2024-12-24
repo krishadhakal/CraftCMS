@@ -1,0 +1,122 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set blockIndex = blockIndex ?? random() %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = "light" %}
+{% set componentId = 'poiMap_' ~ blockIndex %}
+{% set heading = null %}
+{% set allFeatures = [] %}
+{% set primaryFeatures = [] %}
+{% set poiFeatures = [] %}
+{% set poiListGroups = [] %}
+
+{#---------- Data Handling ----------#}
+{% if block|length %}
+
+	{% set disableTopSpacing = block.common_disableTopSpacing ?? false %}
+	{% set disableBottomSpacing = block.common_disableBottomSpacing ?? false %}
+	{% set variants = variants|merge([disableTopSpacing ? "disableTopSpacing", disableBottomSpacing ? "disableBottomSpacing"]) %}
+
+	{% set heading = block.molMapWithPoiList_heading ?? heading %}
+
+	{% for point in block.molMapWithPoiList_pointsOfInterest.type('primaryLocation').all %}
+
+		{% set markerLocation = point.location ?? null %}
+		{% set markerLongitude = markerLocation.lng ?? null %}
+		{% set markerLatitude = markerLocation.lat ?? null %}
+
+		{% set primaryFeatures = primaryFeatures|merge([{
+			type: "Feature",
+			geometry: {
+				type: "Point",
+				coordinates: [markerLongitude, markerLatitude],
+			},
+			properties: {
+				type: 'primaryLocation',
+				icon: {
+					title: point.icon.one().title,
+					path: point.icon.one().path,
+					url: point.icon.one().url,
+				},
+			}
+		}]) %}
+
+		{% set allFeatures = allFeatures|merge([{
+			type: "Feature",
+			geometry: {
+				type: "Point",
+				coordinates: [markerLongitude, markerLatitude],
+			}
+		}]) %}
+
+	{% endfor %}
+
+	{% set poiCounter = 1 %}
+
+	{% for poiType in craft.entries.section('pointOfInterestTypes').all() %}
+		
+		{% set points = [] %}
+
+		{% for point in block.molMapWithPoiList_pointsOfInterest.relatedTo(poiType).all %}
+			
+			{% set markerLocation = point.location ?? null %}
+			{% set markerLongitude = markerLocation.lng ?? null %}
+			{% set markerLatitude = markerLocation.lat ?? null %}
+
+			{% set feature = {
+				type: "Feature",
+				id: poiCounter,
+				geometry: {
+					type: "Point",
+					coordinates: [markerLongitude, markerLatitude],
+				},
+				properties: {
+					type: 'pointOfInterest',
+					number: poiCounter,
+				}
+			} %}
+
+			{% set poiFeatures = poiFeatures|merge([feature]) %}
+			{% set allFeatures = allFeatures|merge([feature]) %}
+			
+			{% set points = points|merge([
+				{
+					id: poiCounter,
+					number: poiCounter,
+					name: point.locationName,
+				}
+			]) %}
+
+			{% set poiCounter = poiCounter + 1 %}
+
+		{% endfor %}
+
+		{% if points|length %}
+			{% set poiListGroups = poiListGroups|merge([
+				{
+					type: poiType.title,
+					points: points,
+				}
+			]) %}
+		{% endif %}
+		
+	{% endfor %}
+
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/Maps/MapWithPoiList/MapWithPoiList" with {
+	variants: variants,
+	theme: theme,
+	componentId: componentId,
+	heading: heading,
+	allFeatures: allFeatures,
+	primaryFeatures: primaryFeatures,
+	poiFeatures: poiFeatures,
+	poiListGroups: poiListGroups,
+} only %}

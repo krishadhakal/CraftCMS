@@ -1,0 +1,126 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set formCopy = formCopy ?? null %}
+{% set form = form ?? null %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-ModalUnit" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+<div class="{{ classes }}">
+	<div class="{{ baseClass }}__wrapper">
+		<div class="{{ baseClass }}__overlay" data-modal-unit-hide></div>
+		<button class="{{ baseClass }}__close" data-modal-unit-hide>
+			{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+				theme: theme,
+				type: "x",
+			} only %}
+		</button>
+		<div class="{{ baseClass }}__outer">
+			<div class="{{ baseClass }}__loader">
+				<div class="{{ baseClass }}__loader__icon">
+					{{ helpers.getIcon("loader") }}
+				</div>
+			</div>
+			<div class="{{ baseClass }}__inner">
+				<div class="{{ baseClass }}__error" data-modal-unit-data-container="">
+					<div class="{{ baseClass }}__error__inner">
+						<h2 class="{{ baseClass }}__error__heading">
+							Something went wrong!
+						</h2>
+						<div class="{{ baseClass }}__error__copy">There was a problem loading unit data. Close the modal and try again.</div>
+						<button class="{{ baseClass }}__error__button" data-modal-unit-hide>
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								theme: theme,
+								text: "Close",
+							} only %}
+						</button>
+					</div>
+				</div>
+				<div class="{{ baseClass }}__container" data-modal-unit-data-container="inactive">
+					<aside class="{{ baseClass }}__aside">
+						<ul class="{{ baseClass }}__labels" data-modal-unit-data-container="inactive">
+							<li class="{{ baseClass }}__label {{ baseClass }}__label--bedrooms" data-modal-unit-data-container="inactive">
+								<span class="{{ baseClass }}__label__icon">
+									{{ helpers.getIcon("unit-bedrooms") }}
+								</span>
+								<span class="{{ baseClass }}__label__copy" data-modal-unit-bedrooms></span>
+							</li>
+							<li class="{{ baseClass }}__label {{ baseClass }}__label--bathrooms" data-modal-unit-data-container="inactive">
+								<span class="{{ baseClass }}__label__icon">
+									{{ helpers.getIcon("unit-bathrooms") }}
+								</span>
+								<span class="{{ baseClass }}__label__copy" data-modal-unit-bathrooms></span>
+							</li>
+							<li class="{{ baseClass }}__label {{ baseClass }}__label" data-modal-unit-data-container="inactive">
+								<span class="{{ baseClass }}__label__icon">
+									{{ helpers.getIcon("unit-squareFeet") }}
+								</span>
+								<span class="{{ baseClass }}__label__copy" data-modal-unit-squareFeet></span>
+							</li>
+						</ul>
+						<h2 class="{{ baseClass }}__heading" data-modal-unit-data-container="inactive" data-modal-unit-heading></h2>
+						<h2 class="{{ baseClass }}__subheading" data-modal-unit-data-container="inactive" data-modal-unit-subheading></h2>
+						<ul class="{{ baseClass }}__details" data-modal-unit-data-container="inactive">
+							<li class="{{ baseClass }}__details__item" data-modal-unit-data-container="inactive" data-modal-unit-availability></li>
+							<li class="{{ baseClass }}__details__item" data-modal-unit-data-container="inactive" data-modal-unit-cost></li>
+						</ul>
+						{% if form|length %}
+							<div class="{{ baseClass }}__form-wrapper"	data-modal-unit-data-container="inactive">
+								{% if formCopy|length %}
+									<div class="{{ baseClass }}__form-copy">
+										{{ formCopy }}
+									</div>
+								{% endif %}
+								<div class="{{ baseClass }}__form" data-modal-unit-form>
+									{{ form }}
+								</div>
+							</div>
+						{% endif %}
+					</aside>
+					<main class="{{ baseClass }}__main">
+						<div class="{{ baseClass }}__carousel" data-modal-unit-data-container="inactive" data-modal-unit-images>
+							<div class="{{ baseClass }}__carousel__inner">
+								{% include "_components/elements/Media/Carousel/Carousel" with {
+									theme: theme,
+									useEmpty: true,
+									showArrows: true,
+									arrowsPosition: "inline",
+								} only %}
+							</div>
+						</div>
+						<div class="{{ baseClass }}__floorplan-image" data-modal-unit-data-container="inactive" data-modal-unit-floorplan-image>
+						</div>
+						<div class="{{ baseClass }}__info">
+							<div class="{{ baseClass }}__info__item" data-modal-unit-data-container="inactive">
+								<h4 class="{{ baseClass }}__info__item__heading">Unit Overview</h4>
+								<div class="{{ baseClass }}__info__item__intro" data-modal-unit-data-container="inactive" data-modal-unit-intro></div>
+								<div class="{{ baseClass }}__info__item__description" data-modal-unit-data-container="inactive" data-modal-unit-description></div>
+							</div>
+							<div class="{{ baseClass }}__info__item" data-modal-unit-data-container="inactive">
+								<h4 class="{{ baseClass }}__info__item__heading">Amenities</h4>
+								<ul class="{{ baseClass }}__info__item__list" data-modal-unit-data-container="inactive" data-modal-unit-amenities></ul>
+							</div>
+							<div class="{{ baseClass }}__info__item" data-modal-unit-data-container="inactive">
+								<h4 class="{{ baseClass }}__info__item__heading">Pet Policies</h4>
+								<ul class="{{ baseClass }}__info__item__list" data-modal-unit-data-container="inactive" data-modal-unit-petPolicies></ul>
+							</div>
+						</div>
+						<div class="{{ baseClass }}__download-pdf" data-modal-unit-data-container="inactive" data-modal-unit-pdf>
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								theme: theme,
+								text: "Download PDF",
+								url: " ",
+								target: "_blank",
+							} only %}
+						</div>
+					</main>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

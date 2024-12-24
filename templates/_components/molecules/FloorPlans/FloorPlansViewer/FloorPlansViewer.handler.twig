@@ -1,0 +1,178 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = "light" %}
+{% set carousel = null %}
+{% set heading = null %}
+{% set subheading = null %}
+{% set copy = null %}
+{% set unitCategories = [] %}
+{% set floorPlans = [] %}
+
+{#---------- Data Handling ----------#}
+{% set carouselImageSizes = "(min-width: 1024px) 29vw, (min-width: 560px) 40vw, 100vw" %}
+{% set carouselImageOptions = [
+	{
+		width: 480,
+	},
+	{
+		width: 720,
+	},
+	{
+		width: 940,
+	},
+] %}
+
+{% set floorPlanImageDefaultOptions = { fit: 'clip' } %}
+{% set floorPlanImageSizes = "(min-width: 1024px) 71vw, 100vw" %}
+{% set floorPlanImageOptions = [
+	{
+		width: 480,
+	},
+	{
+		width: 640,
+	},
+	{
+		width: 800,
+	},
+	{
+		width: 1200,
+	},
+	{
+		width: 1600,
+	},
+	{
+		width: 2100,
+	},
+] %}
+
+{% set floorPlansViewer = globalUnits.globalUnits_floorPlansViewer.level(1).one() ?? null %}
+
+{% if block|length %}
+	{% set disableTopSpacing = block.common_disableTopSpacing ?? false %}
+	{% set disableBottomSpacing = block.common_disableBottomSpacing ?? false %}
+	{% set variants = variants|merge([disableTopSpacing ? "disableTopSpacing", disableBottomSpacing ? "disableBottomSpacing"]) %}
+{% endif %}
+
+{% if floorPlansViewer|length %}
+	{% set heading = floorPlansViewer.molFloorPlansViewer_heading ?? null %}
+	{% set subheading = floorPlansViewer.molFloorPlansViewer_subheading ?? null %}
+	{% set copy = floorPlansViewer.molFloorPlansViewer_copy ?? null %}
+
+	{% set unitTypesEntriesIds = [] %}
+
+	{% for child in floorPlansViewer.children.all() %}
+		{% set childType = child.type.handle ?? null %}
+
+		{% switch childType %}
+			{% case "carouselSimple" %}
+				{% set carousel %}
+					{% apply spaceless %}
+						{% include "_components/elements/Media/Carousel/Carousel.handler" with {
+							block: child,
+							theme: theme,
+							showArrows: true,
+							arrowsPosition: "sides",
+							carouselAspectRatio: "4:3",
+							imageSizes: carouselImageSizes,
+							imageOptions: carouselImageOptions,
+						} only %}
+					{% endapply %}
+				{% endset %}
+			{% case "floorPlansViewerItem" %}
+				{% set floorPlanName = child.elFloorPlansViewerItem_name ?? null %}
+				{% set floorPlanImageAsset = child.elFloorPlansViewerItem_image.one() ?? null %}
+				{% set floorPlanImageUrl = null %}
+				{% set floorPlanUnits = [] %}
+
+				{% set floorPlanImageSources = null %}
+				{% set floorPlanImageUrl = null %}
+				{% set floorPlanImageAlt = null %}
+
+				{% if floorPlanImageAsset|length %}
+					{% set floorPlanImageSources = helpers.imageSources(floorPlanImageAsset, floorPlanImageOptions, floorPlanImageDefaultOptions)|spaceless %}
+					{% set floorPlanImageUrl = helpers.imageDefaultSource(floorPlanImageAsset, floorPlanImageOptions, floorPlanImageDefaultOptions)|spaceless %}
+					{% set floorPlanImageAlt = floorPlanImageAsset.title ?? null %}
+				{% endif %}
+
+				{% for unit in child.elFloorPlansViewerItem_units.with(["unit:unit_entry", "unit:unit_entry.unit_unitType"]).all() ?? [] %}
+					{% set unitEntry = unit.unit_entry[0] ?? null %}
+					{% set unitUnitTypeId = unitEntry.unit_unitType.one().id ?? null %}
+					{% set unitPosition = unit.unit_position ?? null %}
+					{% set unitUnitCategory = unitEntry.unit_unitType.one().unitType_unitCategory.one() ?? null %}
+					{% set unitUnitCategorySlug = unitUnitCategory.slug ?? null %}
+					{% set unitUnitCategoryId = unitUnitCategory.id ?? null %}
+
+					{% if unitUnitTypeId|length %}
+						{% set unitTypesEntriesIds = unitTypesEntriesIds|merge([unitUnitTypeId]) %}
+					{% endif %}
+
+					{% if unitEntry|length and unitPosition|length %}
+						{% set unitId = unitEntry.id ?? null %}
+						{% set unitIsAvailable = unitEntry.unit_isAvailable ?? false %}
+						{% set unitPositionX = unitPosition.x ?? null %}
+						{% set unitPositionY = unitPosition.y ?? null %}
+
+						{% if unitId|length and unitPositionX|length and unitPositionY|length %}
+							{% set floorPlanUnits = floorPlanUnits|merge([{
+								id: unitId,
+								isAvailable: unitIsAvailable,
+								x: unitPositionX * 100,
+								y: unitPositionY * 100,
+								unitCategory: unitUnitCategorySlug,
+							}]) %}
+						{% endif %}
+
+					{% endif %}
+				{% endfor %}
+
+				{% if floorPlanName|length and floorPlanImageUrl|length %}
+					{% set floorPlans = floorPlans|merge([{
+						id: loop.index,
+						name: floorPlanName,
+						sizes: floorPlanImageSizes,
+						sources: floorPlanImageSources,
+						url: floorPlanImageUrl,
+						alt: floorPlanImageAlt,
+						units: floorPlanUnits,
+					}]) %}
+				{% endif %}
+			{% default %}
+		{% endswitch %}
+	{% endfor %}
+
+	{% set unitCategoriesEntries = craft.entries({
+		type: "unitCategory",
+		relatedTo: unitTypesEntriesIds,
+	}).all() %}
+
+	{% for unitCategory in unitCategoriesEntries %}
+		{% set unitCategoryTitle = unitCategory.title ?? null %}
+		{% set unitCategorySlug = unitCategory.slug ?? null %}
+
+		{% if unitCategoryTitle|length and unitCategorySlug|length %}
+
+			{% set unitCategories = unitCategories|merge([{
+				label: unitCategoryTitle,
+				value: unitCategorySlug,
+			}]) %}
+		{% endif %}
+	{% endfor %}
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/FloorPlans/FloorPlansViewer/FloorPlansViewer" with {
+	variants: variants,
+	theme: theme,
+	carousel: carousel,
+	heading: heading,
+	subheading: subheading,
+	copy: copy,
+	unitCategories: unitCategories,
+	floorPlans: floorPlans,
+} only %}

@@ -1,0 +1,26 @@
+$base-class: '.mol-ListingInfo';
+
+@mixin useListingInfoVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--background-color: #{$color-base-surface-primary-light};
+	@include sectionSpacing;
+	@include useDisableSpacing;
+	background-color: var(--background-color);
+
+	&--dark {
+		--background-color: #{$color-base-surface-primary-dark};
+	}
+
+	&__items {
+		@include interpolate(margin-top, -32px, -50px);
+	}
+
+	&__item {
+		@include interpolate(margin-top, 32px, 50px);
+	}
+}

@@ -1,0 +1,86 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set blockIndex = blockIndex ?? random() %}
+{% set entry = entry ?? null %}
+
+{#
+	- When centerSlides is set to false, the first slide will be aligned with the left side of the grid container.
+	- When centerSlides is set to true, the first slide will be centered.	
+#}
+{% set centerSlides = true %}
+{% set theme = "light" %}
+{% set label = null %}
+{% set heading = null %}
+{% set cards = [] %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+
+{#---------- Data Handling ----------#}
+{% set cardImageSizes = "(min-width: 420px) 366px, 280px" %}
+{% set cardImageOptions = [
+	{
+		width: 480,
+	},
+	{
+		width: 640,
+	},
+	{
+		width: 732,
+	},
+] %}
+
+{% if block|length %}
+	{% set disableTopSpacing = block.common_disableTopSpacing ?? false %}
+	{% set disableBottomSpacing = block.common_disableBottomSpacing ?? false %}
+	{% set variants = variants|merge([disableTopSpacing ? "disableTopSpacing", disableBottomSpacing ? "disableBottomSpacing"]) %}
+
+	{% set label = block.molListingBgImageCardsSlider_label %}
+	{% set heading = block.molListingBgImageCardsSlider_heading %}
+
+	{% for card in block.molListingBgImageCardsSlider_cards.all() %}
+		
+		{% set imageAsset = card.backgroundImage.one() ?? null %}
+
+		{% set button = null %}
+		{% set buttonField = card.button ?? null %}
+		
+		{% if not buttonField.isEmpty() %}
+			{% set button = {
+				text: helpers.generateLinkText(buttonField),
+				url: helpers.generateLinkUrl(buttonField),
+				target: helpers.generateLinkTarget(buttonField),
+			} %}
+		{% endif %}
+
+		{% set itemMarkup %}
+			{% apply spaceless %}
+				{% include "_components/elements/Cards/CardBgImage/CardBgImage.handler" with {
+					theme: theme == "light" ? "dark" : "light",
+					imageSizes: cardImageSizes,
+					imageOptions: cardImageOptions,
+					imageAsset: imageAsset,
+					heading: card.heading,
+					copy: card.copy,
+					button: button,
+				} %}
+			{% endapply %}
+		{% endset %}
+
+		{% set cards = cards|merge([itemMarkup]) %}
+
+	{% endfor %}
+
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/Listings/ListingBgImageCardsSlider/ListingBgImageCardsSlider" with {
+	variants: variants,
+	centerSlides: centerSlides,
+	theme: theme,
+	label: label,
+	heading: heading,
+	cards: cards,
+} only %}

@@ -1,0 +1,27 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set intro = intro ?? null %}
+{% set iframe = iframe ?? null %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-IframeCentered" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% if iframe|length %}
+<div class="{{ classes }}">
+	{% if intro|trim|length %}
+		{{ intro }}
+	{% endif %}
+	<div class="grid-container">
+		<div class="row">
+			<div class="column xsmall-12 medium-10 offset-medium-1">
+				{{ iframe }}
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %}

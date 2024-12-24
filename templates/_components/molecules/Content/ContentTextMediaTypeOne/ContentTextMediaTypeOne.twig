@@ -1,0 +1,93 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set mediaAspectRatio = helpers.getOption(mediaAspectRatio ?? null, ["square", "portrait", "landscape"])|t %}
+{% set mediaPosition = helpers.getOption(mediaPosition ?? null, ["left", "right"]) %}
+{% set label = label ?? null %}
+{% set heading = heading ?? null %}
+{% set copy = copy ?? null %}
+{% set iconInfoItems = iconInfoItems ?? [] %}
+{% set button = button ?? null %}
+{% set carousel = carousel ?? null %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-ContentTextMediaTypeOne" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme, mediaAspectRatio|length ? "media-" ~ mediaAspectRatio, mediaPosition|length ? "media-" ~ mediaPosition], []) %}
+
+{#---------- Output ----------#}
+<div class="{{ classes }}">
+	<div class="grid-container">
+		<div class="{{ baseClass }}__inner row">
+			{% set contentColumnClassesMap = {
+				square: "small-12 medium-6",
+				portrait: "small-12 medium-6",
+				landscape: "small-12 medium-5 large-4",
+			} %}
+			{% set mediaColumnClassesMap = {
+				square: "medium-6",
+				portrait: "medium-6",
+				landscape: "medium-7 large-8",
+			} %}
+			{% set contentMarkup %}
+				<div class="{{ baseClass }}__content column xsmall-12 {{ attribute(contentColumnClassesMap, mediaAspectRatio) }}">
+					{% if label|length %}
+						<h5 class="{{ baseClass }}__label">
+							{{ label }}
+						</h5>
+					{% endif %}
+					<h2 class="{{ baseClass }}__heading">
+						{{ heading }}
+					</h2>
+					<div class="{{ baseClass }}__copy">
+						{{ copy }}
+					</div>
+					{% if iconInfoItems|length %}
+						<div class="{{ baseClass }}__infoIconItems">
+							{% for item in iconInfoItems %}
+								<div class="{{ baseClass }}__infoIconItem">
+									{{ item }}
+								</div>
+							{% endfor %}
+						</div>
+					{% endif %}
+					{% if button %}
+						{% set buttonText = button.text ?? null %}
+						{% set buttonUrl = button.url ?? null %}
+						{% set buttonTarget = button.target ?? null %}
+
+						{% if buttonText|length and buttonUrl|length %}
+							<div class="{{ baseClass }}__button">
+								{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+									theme: theme,
+									style: "outline",
+									arrow: "right",
+									target: buttonTarget,
+									url: buttonUrl,
+									text: buttonText,
+								} only %}
+							</div>
+						{% endif %}
+					{% endif %}
+				</div>
+			{% endset %}
+			{% set mediaMarkup %}
+				<div class="{{ baseClass }}__media column xsmall-12 {{ attribute(mediaColumnClassesMap, mediaAspectRatio) }}">
+					<div class="{{ baseClass }}__carousel">
+						{{ carousel }}
+					</div>
+				</div>
+			{% endset %}
+
+			{% if mediaPosition == "left" %}
+				{{ mediaMarkup }}
+				{{ contentMarkup }}
+			{% else %}
+				{{ contentMarkup }}
+				{{ mediaMarkup }}
+			{% endif %}
+			
+		</div>
+	</div>
+</div>

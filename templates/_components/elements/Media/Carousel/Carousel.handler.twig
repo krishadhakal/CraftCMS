@@ -1,0 +1,183 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+{% set slidesToParse = slidesToParse ?? null %}
+
+{% set variants = variants ?? [] %}
+{% set theme = theme ?? "light" %}
+{% set id = id ?? random() %}
+{% set autoplay = autoplay ?? false %}
+{% set autoplaySpeed = autoplaySpeed ?? 6000 %}
+{% set showNav = showNav ?? false %}
+{% set navPosition = navPosition ?? null %}
+{% set showArrows = showArrows ?? false %}
+{% set arrowsPosition = arrowsPosition ?? null %}
+{% set arrowsType = arrowsType ?? null %}
+{% set showDots = showDots ?? false %}
+{% set dotsPosition = dotsPosition ?? null %}
+{% set slides = slides ?? [] %}
+{% set carouselAspectRatio = carouselAspectRatio ?? "16:9" %}
+{% set imageSizes = imageSizes ?? "100vw" %}
+{% set imageOptions = imageOptions ?? [
+	{
+        width: 480,
+    },
+    {
+        width: 640,
+    },
+    {
+        width: 1000,
+    },
+    {
+        width: 1600,
+    },
+    {
+        width: 2400,
+    },
+    {
+        width: 3200,
+    },
+] %}
+
+{#---------- Data Handling ----------#}
+{% set imageDefaultOptions = { fit: 'crop', ar: carouselAspectRatio } %}
+
+{% if block|length %}
+	{% set slidesToParse = block.elCarouselSimple_slides.all() ?? block.elCarouselComplex_slides.all() ?? [] %}
+{% endif %}
+
+{% for slide in slidesToParse %}
+
+	{% set slideType = slide.type.handle %}
+	{% set slideMarkup = null %}
+
+	{% switch slideType %}
+
+		{% case "image" %}
+
+			{% set imageAsset = slide.image_image.one() ?? null %}
+			
+			{% set imageSources = null %}
+			{% set imageUrl = null %}
+			{% set imageAlt = null %}
+
+			{% if imageAsset|length %}
+				{% set imageSources = helpers.imageSources(imageAsset, imageOptions, imageDefaultOptions)|spaceless %}
+				{% set imageUrl = helpers.imageDefaultSource(imageAsset, imageOptions, imageDefaultOptions)|spaceless %}
+				{% set imageAlt = imageAsset.title ?? null %}
+			{% endif %}
+
+			{% if imageUrl|length %}
+				{% set slideMarkup %}
+					{% apply spaceless %}
+						{% include "_components/atoms/Media/ResponsiveImage/ResponsiveImage" with {
+							backgroundImage: true,
+							sizes: imageSizes,
+							sources: imageSources,
+							url: imageUrl,
+							alt: imageAlt,
+						} only %}
+					{% endapply %}
+				{% endset %}
+			{% endif %}
+
+		{% case "videoFile" %}
+
+			{% set videoSources = [] %}
+
+			{% for source in slide.videoFile_videoFiles.all() ?? [] %}
+				{% set videoSources = videoSources|merge([{
+					url: source.url,
+					type: source.mimeType
+				}]) %}
+			{% endfor %}
+
+			{% if videoSources|length %}
+				{% set slideMarkup %}
+					{% apply spaceless %}
+						{% include "_components/atoms/Media/VideoLoop/VideoLoop" with {
+							sources: videoSources,
+						} only %}
+					{% endapply %}
+				{% endset %}
+			{% endif %}
+
+		{% case "videoPlayerFile" or "videoPlayerYT" or "videoPlayerVimeo" %}
+
+			{% if slideType == "videoPlayerFile" and slide.videoPlayerFile_autoplayLoop %}
+			
+				{% set videoSources = [] %}
+
+				{% for source in slide.videoPlayerFile_videoFiles.all() ?? [] %}
+					{% set videoSources = videoSources|merge([{
+						url: source.url,
+						type: source.mimeType
+					}]) %}
+				{% endfor %}
+
+				{% if videoSources|length %}
+					{% set slideMarkup %}
+						{% apply spaceless %}
+							{% include "_components/atoms/Media/VideoLoop/VideoLoop" with {
+								videoFit: "contain",
+								sources: videoSources,
+							} only %}
+						{% endapply %}
+					{% endset %}
+				{% endif %}
+
+			{% else %}
+
+				{% set slideMarkup %}
+					{% apply spaceless %}
+						{% include "_components/elements/Media/VideoPlayer/VideoPlayer.handler" with {
+							block: slide,
+							aspectRatio: carouselAspectRatio,
+							theme: theme,
+							coverImageSizes: imageSizes,
+							coverImageOptions: imageOptions,
+						} only %}
+					{% endapply %}
+				{% endset %}
+
+			{% endif %}
+			
+		{% case "iframe" %}
+
+			{% set slideMarkup %}
+				{% apply spaceless %}
+					{% include "_components/elements/Media/IframeEmbed/IframeEmbed.handler" with {
+						constrainToParent: true,
+						block: slide,
+					} only %}
+				{% endapply %}
+			{% endset %}
+
+		{% default %}
+
+	{% endswitch %}
+
+	{% if slideMarkup|length %}
+		{% set slides = slides|merge([slideMarkup]) %}
+	{% endif %}
+
+{% endfor %}
+
+{#---------- Output ----------#}
+{% include "_components/elements/Media/Carousel/Carousel" with {
+	variants: variants,
+	id: id,
+	theme: theme,
+	autoplay: autoplay,
+	autoplaySpeed: autoplaySpeed,
+	showNav: showNav,
+	navPosition: navPosition,
+	showArrows: showArrows,
+	arrowsPosition: arrowsPosition,
+	arrowsType: arrowsType,
+	showDots: showDots,
+	dotsPosition: dotsPosition,
+	slides: slides,
+} only %}

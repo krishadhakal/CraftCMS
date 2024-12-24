@@ -1,0 +1,35 @@
+$base-class: '.el-FooterNavigation';
+
+@mixin useFooterNavigationVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--color: #{$color-base-text-primary-light};
+	--color-hover: #{rgba($color-base-text-primary-light, 0.6)};
+
+	&--dark {
+		--color: #{$color-base-text-primary-dark};
+		--color-hover: #{rgba($color-base-text-primary-dark, 0.6)};
+	}
+
+	&__items {
+		@include interpolate(margin-top, -6px, -8px);
+	}
+
+	&__item {
+		@include interpolate(margin-top, 6px, 8px);
+
+		&__link {
+			@include font-h5;
+			@include transition(color);
+			color: var(--color);
+
+			&:hover {
+				color: var(--color-hover);
+			}
+		}
+	}
+}

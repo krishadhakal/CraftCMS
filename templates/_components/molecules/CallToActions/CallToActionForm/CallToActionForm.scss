@@ -1,0 +1,56 @@
+$base-class: '.mol-CallToActionForm';
+
+@mixin useCallToActionFormVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--background-color: #{$color-base-surface-secondary-dark};
+	--color: #{$color-base-text-primary-dark};
+	@include sectionSpacing();
+	@include useDisableSpacing;
+	background-color: var(--background-color);
+
+	&--light {
+		--background-color: #{$color-base-surface-secondary-light};
+		--color: #{$color-base-text-primary-light};
+	}
+
+	&__inner {
+		color: var(--color);
+	}
+
+	&__content {
+
+		@include breakpoint(medium) {
+			@include interpolate(padding-right, 32px, 72px);
+		}
+		
+	}
+
+	@include useContentSpacing;
+
+	&__label {
+		@include font-h6;
+	}
+
+	&__heading {
+		@include font-h2;
+		max-width: 15em
+	}
+
+	&__copy {
+		@include richText;
+		max-width: 40em;
+	}
+
+	&__form {
+		@include interpolate(margin-top, $spacing-content-media);
+
+		@include breakpoint(medium) {
+			margin-top: 0;
+		}
+	}
+}

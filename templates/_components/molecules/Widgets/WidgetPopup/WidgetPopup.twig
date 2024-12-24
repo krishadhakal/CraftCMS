@@ -1,0 +1,144 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set hideDuration = hideDuration ?? null %}
+{% set theme = helpers.getOption(theme ?? null, ["dark", "light"]) %}
+{% set media = media ?? null %}
+{% set heading = heading ?? null %}
+{% set introductionHeading = introductionHeading ?? null %}
+{% set items = items ?? [] %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-WidgetPopup" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% if heading|length and introductionHeading|length and items|length %}
+<div class="{{ classes }}" data-widget-popup-hide-duration="{{ hideDuration }}">
+	<div class="{{ baseClass }}__button">
+		<div class="{{ baseClass }}__button--close" data-active="true">
+			{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+				type: "x",
+				theme: theme,
+			} only %}
+		</div>
+		<div class="{{ baseClass }}__button--collapse" data-active="false">
+			{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+				type: "chevron-down",
+				theme: theme,
+			} only %}
+		</div>
+	</div>
+	<div class="{{ baseClass }}__wrapper">
+		<div class="{{ baseClass }}__toggle" data-active="true">
+			{% if media|length %}
+				<div class="{{ baseClass }}__toggle__media">
+					<div class="{{ baseClass }}__toggle__media__inner">
+						{{ media }}
+					</div>
+				</div>
+			{% endif %}
+			<div class="{{ baseClass }}__toggle__content">
+				<h3 class="{{ baseClass }}__toggle__heading">
+					{{ heading }}
+				</h3>
+			</div>
+		</div>
+		<div class="{{ baseClass }}__content" data-active="false">
+			<div class="{{ baseClass }}__introduction" data-active="true">
+				<div class="{{ baseClass }}__introduction__inner">
+					<h4 class="{{ baseClass }}__introduction__heading">
+						{{ introductionHeading }}
+					</h4>
+					<div class="{{ baseClass }}__introduction__buttons">
+						{% for item in items %}
+							{% set itemLabel = item.label ?? null %}
+							{% set itemHandle = item.handle ?? null %}
+
+							{% if itemLabel|length and itemHandle|length %}
+								<button class="{{ baseClass }}__introduction__button" data-target-item-handle="{{ itemHandle }}">
+									{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+										text: itemLabel,
+										theme: theme,
+									} only %}
+								</button>
+							{% endif %}
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+			<div class="{{ baseClass }}__items" data-active="false">
+			{% for item in items %}
+				{% set itemType = item.type ?? null %}
+				{% set itemHandle = item.handle ?? null %}
+				{% set itemData = item.data ?? null %}
+
+				{% if itemHandle|length and itemType|length and itemData|length %}
+					<div class="{{ baseClass }}__item {{ baseClass }}__item--{{ itemType }}" data-item-handle="{{ itemHandle }}" data-active="false">
+						{% switch itemType %}
+							{% case "itemForm" %}
+								{% set itemHeading = itemData.heading ?? null %}
+								{% set itemForm = itemData.form ?? null %}
+								{% set itemMedia = itemData.media ?? null %}
+
+								{% if itemForm|length %}
+									{% if itemMedia|length %}
+										<div class="{{ baseClass }}__item__media">
+											<div class="{{ baseClass }}__item__media__inner">
+												{{ itemMedia }}
+											</div>
+										</div>
+									{% endif %}
+									<div class="{{ baseClass }}__item__content">
+										<div class="{{ baseClass }}__item__content__inner">
+											{% if itemHeading|length %}
+												<h4 class="{{ baseClass }}__item__heading">
+													{{ itemHeading }}
+												</h4>
+											{% endif %}
+											<div class="{{ baseClass }}__item__form">
+												{{ itemForm }}
+											</div>
+										</div>
+									</div>
+								{% endif %}
+							{% case "itemCalendar" %}
+								{% set itemHeading = itemData.heading ?? null %}
+								{% set itemButton = itemData.button ?? null %}
+								{% set itemButtonText = itemButton.text ?? null %}
+								{% set itemButtonUrl = itemButton.url ?? null %}
+								{% set itemButtonTarget = itemButton.target ?? null %}
+
+								{% if itemButtonText|length and itemButtonUrl|length %}
+									<div class="{{ baseClass }}__item__content">
+										<div class="{{ baseClass }}__item__content__inner">
+											{% if itemHeading|length %}
+												<h4 class="{{ baseClass }}__item__heading">
+													{{ itemHeading }}
+												</h4>
+											{% endif %}
+											<div class="{{ baseClass }}__item__calendar">
+												<div class="{{ baseClass }}__item__calendar__image"></div>
+												<div class="{{ baseClass }}__item__calendar__button">
+													{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+														text: itemButtonText,
+														url: itemButtonUrl,
+														target: itemButtonTarget,
+														theme: theme,
+													} only %}
+												</div>
+											</div>
+										</div>
+									</div>
+								{% endif %}
+							{% default %}
+						{% endswitch %}
+					</div>
+				{% endif %}
+			{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %}

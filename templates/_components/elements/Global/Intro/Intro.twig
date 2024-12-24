@@ -1,0 +1,85 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set buttonPosition = helpers.getOption(buttonPosition ?? null, ["right", "inline"]) %}
+{% set label = label ?? null %}
+{% set heading = heading ?? null %}
+{% set copy = copy ?? null %}
+{% set button = button ?? null %}
+
+{#---------- Data Handling ----------#}
+{% set buttonText = null %}
+{% set buttonUrl = null %}
+{% set buttonTarget = null %}
+
+{% if button %}
+	{% set buttonText = button.text ?? buttonText %}
+	{% set buttonUrl = button.url ?? buttonUrl %}
+	{% set buttonTarget = button.target ?? buttonTarget %}
+{% endif %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "el-Intro" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme, 'button'~buttonPosition|capitalize], []) %}
+
+{#---------- Output ----------#}
+{% set buttonMarkup = null %}
+{% if buttonText|length and buttonUrl|length %}
+	{% set buttonMarkup %}
+		<div class="{{ baseClass }}__button">
+			{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+				theme: theme,
+				arrow: "right",
+				target: buttonTarget,
+				url: buttonUrl,
+				text: buttonText,
+			} only %}
+		</div>
+	{% endset %}
+{% endif %}
+
+{% if heading %}
+<div class="{{ classes }}">
+
+	<div class="grid-container">
+
+		<div class="row">
+
+			<div class="column xsmall-12 medium-9 xlarge-7">
+
+				{% if label|length %}
+					<h5 class="{{ baseClass }}__label">
+						{{ label }}
+					</h5>
+				{% endif %}
+
+				<h2 class="{{ baseClass }}__heading">
+					{{ heading }}
+				</h2>
+
+				{% if copy|length %}
+					<div class="{{ baseClass }}__copy">
+						{{ copy|raw }}
+					</div>
+				{% endif %}
+
+				{% if buttonPosition == "inline" and buttonMarkup %}
+					{{ buttonMarkup }}
+				{% endif %}
+				
+			</div>
+
+			{% if buttonPosition == "right" and buttonMarkup %}
+				<div class="column xsmall-12 medium-3 xlarge-5 {{ baseClass }}__buttonColumn">
+					{{ buttonMarkup }}
+				</div>
+			{% endif %}
+
+		</div>
+
+	</div>
+
+</div>
+{% endif %}

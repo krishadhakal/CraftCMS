@@ -1,0 +1,131 @@
+{% set components = components.all() ?? components ?? [] %}
+{% set componentHandle = componentHandle ?? null %}
+{% set componentData = componentData ?? null %}
+{% set entry = entry ?? null %}
+{% set noBlock = false %}
+
+{% if not components|length and componentHandle|length %}
+	{% set noBlock = true %}
+
+	{% set components = [{
+		type: {
+			handle: componentHandle
+		},
+	}] %}
+{% endif %}
+
+{% for block in components %}
+	{% set blockType = block.type.handle ?? null %}
+	{% set blockId = block.id ?? null %}
+	{% set blockIndex = loop.index %}
+	{% set blockData = componentData ?? {} %}
+	{% set noCacheBlockTypes = [] %}
+
+	{% set blockPath = "" %}
+	{% set blockData = blockData|merge({
+		entry,
+		block: not noBlock ? block,
+		blockIndex
+	}) %}
+
+	{% switch blockType %}
+		{# Content #}
+		{% case "contentTextTypeOne" %}
+			{% set blockPath = "_components/molecules/Content/ContentTextTypeOne/ContentTextTypeOne.handler" %}
+		{% case "contentTextTypeTwo" %}
+			{% set blockPath = "_components/molecules/Content/ContentTextTypeTwo/ContentTextTypeTwo.handler" %}
+		{% case "contentTextTypeThree" %}
+			{% set blockPath = "_components/molecules/Content/ContentTextTypeThree/ContentTextTypeThree.handler" %}
+		{% case "contentTextTypeFour" %}
+			{% set blockPath = "_components/molecules/Content/ContentTextTypeFour/ContentTextTypeFour.handler" %}
+		{% case "contentTextMediaTypeOne" %}
+			{% set blockPath = "_components/molecules/Content/ContentTextMediaTypeOne/ContentTextMediaTypeOne.handler" %}
+		{% case "contentTextMediaTypeTwo" %}
+			{% set blockPath = "_components/molecules/Content/ContentTextMediaTypeTwo/ContentTextMediaTypeTwo.handler" %}
+
+		{# Media #}
+		{% case "carouselCentered" %}
+			{% set blockPath = "_components/molecules/Media/CarouselCentered/CarouselCentered.handler" %}
+		{% case "carouselFullWidth" %}
+			{% set blockPath = "_components/molecules/Media/CarouselFullWidth/CarouselFullWidth.handler" %}
+		{% case "mediaPrimary" %}
+			{% set blockPath = "_components/molecules/Media/MediaPrimary/MediaPrimary.handler" %}
+		{% case "mediaDuo" %}
+			{% set blockPath = "_components/molecules/Media/MediaDuo/MediaDuo.handler" %}
+		{% case "mediaTrio" %}
+			{% set blockPath = "_components/molecules/Media/MediaTrio/MediaTrio.handler" %}
+		{% case "videoCentered" %}
+			{% set blockPath = "_components/molecules/Media/VideoCentered/VideoCentered.handler" %}
+		{% case "videoFullWidth" %}
+			{% set blockPath = "_components/molecules/Media/VideoFullWidth/VideoFullWidth.handler" %}
+		{% case "iframeCentered" %}
+			{% set blockPath = "_components/molecules/Media/IframeCentered/IframeCentered.handler" %}
+		{% case "hotspots" %}
+			{% set blockPath = "_components/molecules/Media/Hotspots/Hotspots.handler" %}
+
+		{# Quotes #}
+		{% case "quoteStandard" %}
+			{% set blockPath = "_components/molecules/Quotes/QuoteStandard/QuoteStandard.handler" %}
+
+		{# Quotes #}
+		{% case "callToActionStandard" %}
+			{% set blockPath = "_components/molecules/CallToActions/CallToActionStandard/CallToActionStandard.handler" %}
+		{% case "callToActionForm" %}
+			{% set blockPath = "_components/molecules/CallToActions/CallToActionForm/CallToActionForm.handler" %}
+		{% case "callToActionFormInset" %}
+			{% set blockPath = "_components/molecules/CallToActions/CallToActionFormInset/CallToActionFormInset.handler" %}
+			
+		{# Listings #}
+		{% case "listingIconInfo" %}
+			{% set blockPath = "_components/molecules/Listings/ListingIconInfo/ListingIconInfo.handler" %}
+		{% case "listingInfo" %}
+			{% set blockPath = "_components/molecules/Listings/ListingInfo/ListingInfo.handler" %}
+		{% case "listingFaq" %}
+			{% set blockPath = "_components/molecules/Listings/ListingFaq/ListingFaq.handler" %}
+		{% case "listingUnitTable" %}
+			{% set blockPath = "_components/molecules/Listings/ListingUnitTable/ListingUnitTable.handler" %}
+		{% case "listingUnits" %}
+			{% set blockPath = "_components/molecules/Listings/ListingUnits/ListingUnits.handler" %}
+		{% case "listingUnitTypes" %}
+			{% set blockPath = "_components/molecules/Listings/ListingUnitTypes/ListingUnitTypes.handler" %}
+		{% case "listingBackgroundImageCardsSlider" %}
+			{% set blockPath = "_components/molecules/Listings/ListingBgImageCardsSlider/ListingBgImageCardsSlider.handler" %}
+			
+		{# Maps #}
+		{% case "mapStandard" %}
+			{% set blockPath = "_components/molecules/Maps/MapStandard/MapStandard.handler" %}
+		{% case "mapWithPoiList" %}
+			{% set blockPath = "_components/molecules/Maps/MapWithPoiList/MapWithPoiList.handler" %}
+			
+		{# Floor Plans #}
+		{% case "floorPlansViewer" %}
+			{% set blockPath = "_components/molecules/FloorPlans/FloorPlansViewer/FloorPlansViewer.handler" %}
+
+		{% case "krisha" %}
+			{% set blockPath = "_components/molecules/FloorPlans/Krisha/Krisha.handler" %}
+
+		{% case "listingComponent" %}
+			{% set blockPath = "_components/molecules/FloorPlans/listingComponent/ListingComponent.handler" %}
+
+		{% case "assignmentexample" %}
+			{% set blockPath = "_components/molecules/FloorPlans/AssignmentExample/AssignmentExample.handler" %}
+			
+		{# Unit Type #}
+		{% case "unitTypeInformation" %}
+			{% set blockPath = "_components/molecules/UnitType/UnitTypeInformation/UnitTypeInformation.handler" %}
+
+		{% default %}
+	{% endswitch %}
+
+	{% if blockPath|length %}
+		{% if blockType in noCacheBlockTypes %}
+			{% include blockPath with blockData %}
+		{% else %}
+			{% include "_includes/cached-molecule" with {
+				cacheKey: blockType ~ blockId,
+				path: blockPath,
+				data: blockData,
+			} only %}
+		{% endif %}
+	{% endif %}
+{% endfor %}

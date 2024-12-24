@@ -1,0 +1,173 @@
+$base-class: '.mol-ListingUnitTable';
+
+@mixin useListingUnitsVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--background-color: #{$color-base-surface-primary-light};
+	--chart-background-color: #{$color-unit-table-row-fill-light};
+	--header-background-color: #{$color-unit-table-header-fill-light};
+	--header-color: #{$color-unit-table-header-text-light};
+	--cell-color: #{$color-unit-table-row-text-light};
+	--cell-border-color: #{rgba($color-unit-table-header-text-light, .5)};
+	--unit-title-border-color: #{$color-unit-table-row-text-light};
+	@include sectionSpacing;
+	@include useDisableSpacing;
+	background-color: var(--background-color);
+
+	&--dark {
+		--background-color: #{$color-base-surface-primary-dark};
+		--chart-background-color: #{$color-unit-table-row-fill-dark};
+		--header-background-color: #{$color-unit-table-header-fill-dark};
+		--header-color: #{$color-unit-table-header-text-dark};
+		--cell-color: #{$color-unit-table-row-text-dark};
+		--cell-border-color: #{rgba($color-unit-table-header-text-dark, .5)};
+		--unit-title-border-color: #{$color-unit-table-row-text-dark};
+	}
+
+	&__filters {
+		@include interpolate(margin-bottom, 20px, 40px);
+	}
+
+	&__chart {
+		@include interpolate(border-radius, 5px, 10px);
+		overflow: hidden;
+		background-color: var(--chart-background-color);
+
+		&__header,
+		&__item {
+			@include interpolate((padding-left, padding-right), 4px, 8px);
+			display: flex;
+			align-items: center;
+			flex-wrap: wrap;
+
+			&__property,
+			&__details,
+			&__heading {
+				@include interpolate((padding-top, padding-bottom), 10px, 16px);
+				@include interpolate((padding-left, padding-right), 10px, 20px);
+			}
+
+			&__property {
+				&[data-property="button"] {
+					text-align: right;
+				}
+
+				&[data-property="title"] {
+					width: 18%;
+
+					@include breakpoint("medium", "max") {
+						width: 25%;
+					}
+
+					@include breakpoint("xsmall", "max") {
+						width: 50%;
+					}
+				}
+
+				&[data-property="button"] {
+					margin-left: auto;
+					flex: 1;
+				}
+
+				&[data-property="bedrooms"] {
+					width: 6%;
+				}
+
+				&[data-property="bathrooms"] {
+					width: 6%;
+				}
+
+				&[data-property="squareFeet"] {
+					width: 8%;
+				}
+
+				&[data-property="availability"] {
+					width: 16%;
+				}
+
+				&[data-property="cost"] {
+					width: 12%;
+				}
+
+				&[data-property="unitType"] {
+					width: 17%;
+				}
+
+				@include breakpoint("medium", "max") {
+					&:not([data-property="title"], [data-property="button"], [data-property="details"]) {
+						display: none;
+					}
+				}
+			}
+		}
+
+		&__header {
+			@include font-body;
+			background-color: var(--header-background-color);
+			color: var(--header-color);
+
+			&__property {
+				@include breakpoint("medium", "max") {
+					display: none;
+				}
+			}
+
+			&__heading {
+				display: none;
+				flex: 1;
+
+				@include breakpoint("medium", "max") {
+					display: block;
+				}
+			}
+		}
+
+		&__item {
+			@include font-body-small;
+			color: var(--cell-color);
+
+			&:not(:last-child) {
+				border-bottom: 1px solid var(--cell-border-color);
+			}
+
+			&[data-hidden] {
+				display: none;
+			}
+
+			&[data-unavailable] {
+				opacity: .5;
+			}
+
+			&__details {
+				display: none;
+				flex: 1;
+
+				@include breakpoint("medium", "max") {
+					display: flex;
+				}
+
+				@include breakpoint("xsmall", "max") {
+					order: 100;
+					flex: 0 1 100%;
+				}
+			}
+
+			&__property {
+				&[data-property="title"] &__text {
+					@include interpolate(border-radius, 10px, 20px);
+					@include interpolate((padding-top, padding-bottom), 2px, 4px);
+					@include interpolate((padding-left, padding-right), 8px, 16px);
+					@include font-body-small;
+					display: inline-block;
+					border: 1px solid var(--unit-title-border-color);
+				}
+			}
+
+			&__button {}
+		}
+	}
+}

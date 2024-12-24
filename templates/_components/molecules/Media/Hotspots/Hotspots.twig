@@ -1,0 +1,188 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set intro = intro ?? null %}
+{% set mainImageSizes = mainImageSizes ?? null %}
+{% set mainImageSources = mainImageSources ?? null %}
+{% set mainImageUrl = mainImageUrl ?? null %}
+{% set mainImageAlt = mainImageAlt ?? null %}
+{% set hotspots = hotspots ?? [] %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-Hotspots" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+<div class="{{ classes }}">
+	{% if intro|trim|length %}
+		{{ intro }}
+	{% endif %}
+	<div class="grid-container">
+		<div class="row">
+			<div class="column xsmall-12">
+				<div class="{{ baseClass }}__wrapper">
+					<div class="{{ baseClass }}__image">
+						{% apply spaceless %}
+							{% include "_components/atoms/Media/ResponsiveImage/ResponsiveImage" with {
+								sizes: mainImageSizes,
+								sources: mainImageSources,
+								url: mainImageUrl,
+								alt: mainImageAlt,
+							} only %}
+						{% endapply %}
+					</div>
+					<div class="{{ baseClass }}__hotspots">
+						{% for hotspot in hotspots %}
+							{% set hotspotId = hotspot.id ?? null %}
+							{% set hotspotX = hotspot.x ?? null %}
+							{% set hotspotY = hotspot.y ?? null %}
+							{% set hotspotType = hotspot.type ?? null %}
+							{% set hotspotData = hotspot.data ?? null %}
+							{% set hotspotIconMap = {
+								information: "hotspot-information",
+								image: "hotspot-image",
+								imageCarousel: "hotspot-imageCarousel",
+								image360: "hotspot-image360",
+								imageBeforeAfter: "hotspot-imageBeforeAfter",
+								video: "hotspot-video",
+								iframe: "hotspot-iframe",
+							} %}
+
+							<div
+								class="{{ baseClass }}__hotspot {{ baseClass }}__hotspot--{{ hotspotType }}"
+								style="left: {{ hotspotX }}%; top: {{ hotspotY }}%;"
+								data-hotspot-id="{{ hotspotId }}"
+								data-hotspot-type="{{ hotspotType }}"
+							>
+								<div class="{{ baseClass }}__hotspot__icon">
+									{{ helpers.getIcon(attribute(hotspotIconMap, hotspotType)) }}
+								</div>
+							</div>
+
+							{% if hotspotType == "information" %}
+								{% set hotspotHeading = hotspotData.heading ?? null %}
+								{% set hotspotCopy = hotspotData.copy ?? null %}
+
+								<div class="{{ baseClass }}__hotspot-popup" data-hotspot-popup-id="{{ hotspotId }}">
+									<h4 class="{{ baseClass }}__hotspot-popup__heading">
+										{{ hotspotHeading }}
+									</h4>
+									<div class="{{ baseClass }}__hotspot-popup__copy">
+										{{ hotspotCopy }}
+									</div>
+								</div>
+							{% else %}
+								{% set modalContent %}
+									<div class="{{ baseClass }}__hotspot-modal {{ baseClass }}__hotspot-modal--{{ hotspotType }}">
+
+										{% switch hotspotType %}
+
+											{% case "image" %}
+
+												{% set image = hotspotData.image ?? null %}
+												{% set imageSizes = image.sizes ?? null %}
+												{% set imageSources = image.sources ?? null %}
+												{% set imageUrl = image.url ?? null %}
+												{% set imageAlt = image.alt ?? null %}
+
+												{% if imageUrl|length %}
+													{% apply spaceless %}
+														{% include "_components/atoms/Media/ResponsiveImage/ResponsiveImage" with {
+															sizes: imageSizes,
+															sources: imageSources,
+															url: imageUrl,
+															alt: imageAlt,
+														} only %}
+													{% endapply %}
+												{% endif %}
+
+											{% case "imageCarousel" %}
+
+												{% set carousel = hotspotData.carousel ?? null %}
+
+												<div class="{{ baseClass }}__hotspot-modal__carousel">
+													{{ carousel }}
+												</div>
+
+											{% case "imageBeforeAfter" %}
+
+												{% set imageBefore = hotspotData.imageBefore ?? null %}
+												{% set imageBeforeSizes = imageBefore.sizes ?? null %}
+												{% set imageBeforeSources = imageBefore.sources ?? null %}
+												{% set imageBeforeUrl = imageBefore.url ?? null %}
+												{% set imageBeforeAlt = imageBefore.alt ?? null %}
+
+												{% set imageAfter = hotspotData.imageAfter ?? null %}
+												{% set imageAfterSizes = imageAfter.sizes ?? null %}
+												{% set imageAfterSources = imageAfter.sources ?? null %}
+												{% set imageAfterUrl = imageAfter.url ?? null %}
+												{% set imageAfterAlt = imageAfter.alt ?? null %}
+
+												<div class="{{ baseClass }}__hotspot-modal__imageBeforeAfter">
+													<div class="{{ baseClass }}__hotspot-modal__imageBeforeAfter__image {{ baseClass }}__hotspot-modal__imageBeforeAfter__image--before">
+														{% apply spaceless %}
+															{% include "_components/atoms/Media/ResponsiveImage/ResponsiveImage" with {
+																backgroundImage: true,
+																sizes: imageBeforeSizes,
+																sources: imageBeforeSources,
+																url: imageBeforeUrl,
+																alt: imageBeforeAlt,
+															} only %}
+														{% endapply %}
+													</div>
+													<div class="{{ baseClass }}__hotspot-modal__imageBeforeAfter__image {{ baseClass }}__hotspot-modal__imageBeforeAfter__image--after">
+														{% apply spaceless %}
+															{% include "_components/atoms/Media/ResponsiveImage/ResponsiveImage" with {
+																backgroundImage: true,
+																sizes: imageAfterSizes,
+																sources: imageAfterSources,
+																url: imageAfterUrl,
+																alt: imageAfterAlt,
+															} only %}
+														{% endapply %}
+													</div>
+													<div class="{{ baseClass }}__hotspot-modal__imageBeforeAfter__handle"></div>
+												</div>
+
+											{% case "image360" %}
+
+												{% set image = hotspotData.image ?? null %}
+												{% set imageUrl = image.url ?? null %}
+												{% set imageAlt = image.alt ?? null %}
+
+												<div class="{{ baseClass }}__hotspot-modal__image360" data-hotspot-image360-imageUrl="{{ imageUrl }}"></div>
+
+											{% case "video" %}
+
+												{% set video = hotspotData.video ?? null %}
+
+												<div class="{{ baseClass }}__hotspot-modal__video">
+													{{ video }}
+												</div>
+
+											{% case "iframe" %}
+
+												{% set iframe = hotspotData.iframe ?? null %}
+
+												{{ iframe }}
+
+											{% default %}
+
+										{% endswitch %}
+
+									</div>
+								{% endset %}
+								{% include "_components/elements/Media/HotspotModal/HotspotModal" with {
+									id: hotspotId,
+									content: modalContent,
+								} only %}
+							{% endif %}
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

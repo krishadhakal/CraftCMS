@@ -1,0 +1,98 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set blockIndex = blockIndex ?? random() %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = "light" %}
+{% set showLogo = true %}
+{% set logoUrl = null %}
+{% set label = null %}
+{% set heading = null %}
+{% set copy = null %}
+{% set form = null %}
+{% set carousel = null %}
+
+{#---------- Data Handling ----------#}
+{% set imageSizes = "(min-width: 1024px) 50vw, 100vw" %}
+{% set imageOptions = [
+	{
+        width: 480,
+    },
+    {
+        width: 640,
+    },
+    {
+        width: 1000,
+    },
+    {
+        width: 1600,
+    },
+    {
+        width: 2048,
+    },
+    {
+        width: 2400,
+    },
+] %}
+
+{% if entry %}
+
+	{% set theme = entry.common_theme %}
+
+	{% set showLogo = entry.splashPage_showLogo %}
+
+	{% if theme == "dark" %}
+		{% set logoUrl = globalLogos.globalLogos_logoPrimaryLight.one().url ?? null %}
+	{% else %}
+		{% set logoUrl = globalLogos.globalLogos_logoPrimaryDark.one().url ?? null %}
+	{% endif %}
+
+	{% set label = entry.splashPage_label ?? label %}
+	{% set heading = entry.splashPage_heading ?? heading %}
+	{% set copy = helpers.getRawText(entry.splashPage_copy, copy) %}
+
+	{% set formieForm = entry.splashPage_form.one() ?? null %}
+	{% if formieForm|length %}
+		{% set form %}
+			{% apply spaceless %}
+				{% include "_components/elements/Forms/Form/Form.handler" with {
+					variants: ['buttonFullWidth'],
+					theme: theme,
+					formieForm: formieForm,
+				} only %}
+			{% endapply %}
+		{% endset %}
+	{% endif %}
+
+	{% set carousel %}
+		{% apply spaceless %}
+			{% include "_components/elements/Media/Carousel/Carousel.handler" with {
+				block: entry.splashPage_carousel.one() ?? null,
+				theme: theme,
+				showArrows: true,
+				arrowsPosition: "sides",
+				carouselAspectRatio: "693:804",
+				imageSizes: imageSizes,
+				imageOptions: imageOptions,
+			} only %}
+		{% endapply %}
+	{% endset %}
+
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/SplashPages/SplashPageStyleOne/SplashPageStyleOne" with {
+	variants: variants,
+	theme: theme,
+	showLogo: showLogo,
+	logoUrl: logoUrl,
+	label: label,
+	heading: heading,
+	copy: copy,
+	form: form,
+	carousel: carousel,
+} only %}

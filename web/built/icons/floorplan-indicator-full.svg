@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="24px" viewBox="0 0 40 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Path</title>
+    <g id="🔗-Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Map---Floor-Plan-With-Units" transform="translate(-492.000000, -200.000000)" fill="#C3C8D1">
+            <g id="Floors" transform="translate(490.000000, 200.000000)">
+                <g id="icon-levels" transform="translate(2.000000, 0.000000)">
+                    <path d="M0.873222732,13.1292429 L19.168401,23.1084311 C19.6829962,23.4055328 20.3170038,23.4055328 20.831599,23.1084311 L39.1267773,13.1292429 C39.6646941,12.8389062 40,12.2768978 40,11.6656287 C40,11.0543596 39.6646941,10.4923512 39.1267773,10.2020144 L20.831599,0.222826284 C20.3170038,-0.0742754279 19.6829962,-0.0742754279 19.168401,0.222826284 L0.873222732,10.2020144 C0.335305909,10.4923512 0,11.0543596 0,11.6656287 C0,12.2768978 0.335305909,12.8389062 0.873222732,13.1292429 Z" id="Path"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

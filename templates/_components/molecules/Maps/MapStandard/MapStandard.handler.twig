@@ -1,0 +1,86 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = "light" %}
+{% set componentId = 'mapStandard_' ~ blockIndex %}
+{% set zoom = "" %}
+{% set features = [] %}
+
+{#---------- Data Handling ----------#}
+{% if block|length %}
+	{% set disableTopSpacing = block.common_disableTopSpacing ?? false %}
+	{% set disableBottomSpacing = block.common_disableBottomSpacing ?? false %}
+	{% set variants = variants|merge([disableTopSpacing ? "disableTopSpacing", disableBottomSpacing ? "disableBottomSpacing"]) %}
+
+	{% set zoom = block.molMapStandard_zoom ?? zoom %}
+	{% set markers = block.molMapStandard_markers.all() ?? [] %}
+	{% set featuredMarker = block.molMapStandard_featuredMarker.one() ?? null %}
+
+	{% if featuredMarker %}
+		{% set markers = [featuredMarker]|merge(markers) %}
+	{% endif %}
+
+	{% for marker in markers ?? [] %}
+		{% set markerHeading = marker.marker_heading ?? null %}
+		{% set markerCopy = helpers.getRawText(marker.marker_copy) %}
+		{% set markerLocation = marker.marker_location ?? null %}
+		{% set markerLongitude = markerLocation.lng ?? null %}
+		{% set markerLatitude = markerLocation.lat ?? null %}
+		{% set markerIconAsset = marker.marker_icon.one() ?? null %}
+		{% set markerIcon = null %}
+		{% set markerButtonField = marker.marker_button ?? null %}
+		{% set markerLink = null %}
+
+		{% set markerLink = {
+			text: helpers.generateLinkText(markerButtonField),
+			url: helpers.generateLinkUrl(markerButtonField),
+			target: helpers.generateLinkTarget(markerButtonField),
+		} %}
+
+		{% if markerIconAsset|length %}
+			{% set markerIconTitle = markerIconAsset.title ?? null %}
+			{% set markerIconUrl = markerIconAsset.url ?? null %}
+			{% set markerIconPath = markerIconAsset.path ?? null %}
+
+			{% set markerIcon = {
+				title: markerIconTitle,
+				path: markerIconPath,
+				url: markerIconUrl
+			} %}
+		{% endif %}
+
+		{% if markerIcon|length and markerLongitude|length and markerLatitude|length %}
+			{% set features = features|merge([{
+				type: "Feature",
+				geometry: {
+					type: "Point",
+					coordinates: [markerLongitude, markerLatitude],
+				},
+				properties: {
+					featureId: 'feature-'~loop.index,
+					isFeatured: featuredMarker|length and loop.first,
+					heading: markerHeading,
+					copy: markerCopy,
+					icon: markerIcon,
+					button: markerLink,
+				}
+			}]) %}
+		{% endif %}
+
+	{% endfor %}
+
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/Maps/MapStandard/MapStandard" with {
+	variants: variants,
+	theme: theme,
+	componentId: componentId,
+	zoom: zoom,
+	features: features,
+} only %}

@@ -1,0 +1,68 @@
+$base-class: '.mol-MediaDuo';
+
+@mixin useMediaDuoVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--background-color: #{$color-base-surface-primary-light};
+	@include sectionSpacing;
+	@include useDisableSpacing;
+	background-color: var(--background-color);
+	overflow: hidden;
+
+	&--dark {
+		--background-color: #{$color-base-surface-primary-dark};
+	}
+
+	&__mediaGridContainer {
+
+		@include breakpoint($grid-stops-growing, "max") {
+			padding: 0;
+		}
+
+	}
+
+	&__items {
+		@include interpolate((margin-left, margin-right), -2px, -4px);
+		display: flex;
+		align-items: stretch;
+		justify-content: space-between;
+		flex-wrap: wrap;
+	}
+
+	&__item {
+		@include interpolate((padding-left, padding-right), 2px, 4px);
+		flex: 1 1 100%;
+
+		&__inner {
+			@include overlayCarousel();
+			width: 100%;
+			aspect-ratio: 1/1;
+			max-height: 836px;
+
+			@include useMediaDuoVariants(media-portraitPortrait) {
+				aspect-ratio: 3/4;
+				max-height: 1114px;
+			}
+
+			@include useMediaDuoVariants(media-landscapeLandscape) {
+				aspect-ratio: 4/3;
+				max-height: 627px;
+			}
+		}
+
+		@include breakpoint(small) {
+			flex: 0 1 50%;
+		}
+	}
+
+}
+
+#{$base-class}--disableBottomSpacing + #{$base-class}--disableTopSpacing,
+.mol-MediaTrio--disableBottomSpacing + #{$base-class}--disableTopSpacing,
+.mol-MediaPrimary--disableBottomSpacing + #{$base-class}--disableTopSpacing {
+	@include interpolate(padding-top, 4px, 8px);
+}

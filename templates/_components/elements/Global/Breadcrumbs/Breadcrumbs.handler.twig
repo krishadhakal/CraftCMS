@@ -1,0 +1,77 @@
+{#---------- Parameters ----------#}
+{% set entry = entry ?? null %}
+{% set theme = theme ?? "light" %}
+
+{#---------- Output Variables ----------#}
+{% set items = [] %}
+
+{#---------- Data Handling ----------#}
+{% if entry|length %}
+
+	{% set entryType = entry.type.handle ?? null %}
+	{% set itemData = [] %}
+
+	{% set siteBreadcrumb = {
+		text: "Home",
+		url: siteUrl
+	} %}
+
+	{% set entryBreadcrumb = null %}
+	{% if siteUrl != entry.url %}
+		{% set entryBreadcrumb = {
+			text: entry.title,
+			url: entry.url
+		} %}
+	{% endif %}
+
+	{% set ancestorsBreadcrumbs = [] %}
+	{% set indexBreadcrumb = null %}
+	{% set indexEntry = null %}
+	{% set indexAncestorsBreadcrumbs = [] %}
+
+	{% switch entryType %}
+		{% case "floorPlan" %}
+			{% set indexEntry = craft.entries({
+				section: ["pages"],
+				slug: "floorPlans",
+			}).one() ?? indexEntry %}
+		{% default %}
+	{% endswitch %}
+
+	{% for ancestor in entry.ancestors.all() ?? [] %}
+		{% set ancestorsBreadcrumbs = ancestorsBreadcrumbs|merge([{
+			text: ancestor.title,
+			url: ancestor.url,
+		}]) %}
+	{% endfor %}
+
+	{% if indexEntry|length %}
+		{% set indexBreadcrumb = {
+			text: indexEntry.title,
+			url: indexEntry.url,
+		} %}
+
+		{% for ancestor in indexEntry.ancestors.all() ?? null %}
+			{% set indexAncestorsBreadcrumbs = indexAncestorsBreadcrumbs|merge([{
+				text: ancestor.title,
+				url: ancestor.url,
+			}]) %}
+		{% endfor %}
+	{% endif %}
+
+	{% set items = items|merge([siteBreadcrumb])
+		|merge(indexAncestorsBreadcrumbs)
+		|merge([indexBreadcrumb])
+		|merge(ancestorsBreadcrumbs)
+		|merge([entryBreadcrumb]) %}
+
+	{# {% if entry.uri == "__home__" %}
+		{% set items = [] %}
+	{% endif %} #}
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/elements/Global/Breadcrumbs/Breadcrumbs" with {
+	theme: theme,
+	items: items,
+} only %}

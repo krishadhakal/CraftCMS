@@ -1,0 +1,89 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = "light" %}
+{% set link = null %}
+{% set copy = null %}
+
+{#---------- Data Handling ----------#}
+{% set useBanner = globalBanner.globalBanner_useBanner ?? false %}
+
+{% if useBanner %}
+	{% set copy = globalBanner.globalBanner_copy ?? copy %}
+	{% set linkField = globalBanner.globalBanner_link ?? null %}
+
+	{% if linkField|length %}
+		{% set link = {
+			url: helpers.generateLinkUrl(linkField),
+			target: helpers.generateLinkTarget(linkField),
+		} %}
+	{% endif %}
+
+	{% if entry|length %}
+
+		{% set entryType = entry.type.handle %}
+
+		{% switch entryType %}
+
+			{% case "splashPage" %}
+
+				{% set style = entry.splashPage_style.value %}
+				{% set splashPageTheme = entry.common_theme %}
+
+				{% switch style %}
+					{% case "SplashPageStyleOne" %}
+						{% if splashPageTheme == "light" %}
+							{% set theme = "dark" %}
+						{% else %}
+							{% set theme = "light" %}
+						{% endif %}
+					{% case "SplashPageStyleTwo" %}
+						{% if splashPageTheme == "light" %}
+							{% set theme = "dark" %}
+						{% else %}
+							{% set theme = "light" %}
+						{% endif %}
+					{% case "SplashPageStyleThree" %}
+						{% set theme = "light" %}
+					{% case "SplashPageStyleFour" %}
+						{% set theme = "light" %}
+					{% default %}
+				{% endswitch %}
+				
+			{% default %}
+
+				{% set hero = entry.common_heroComponents.one() ?? null %}
+
+				{% if hero|length %}
+					{% set heroType = entry.common_heroComponents.one().type.handle ?? null %}
+
+					{% switch heroType %}
+						{% case "heroBasic" %}
+							{% set theme = "dark" %}
+						{% case "heroStandard" %}
+							{% set theme = "light" %}
+						{% case "heroComplex" %}
+							{% set theme = "light" %}
+						{% default %}
+					{% endswitch %}
+
+				{% endif %}
+
+		{% endswitch %}
+
+	{% endif %}
+
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/Global/Banner/Banner" with {
+	variants: variants,
+	theme: theme,
+	link: link,
+	copy: copy,
+} only %}

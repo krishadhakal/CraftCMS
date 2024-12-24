@@ -1,0 +1,66 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set isFloating = isFloating ?? false %}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set logoUrl = logoUrl ?? null %}
+{% set navigationBar = navigationBar ?? null %}
+{% set button = button ?? null %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-Header" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme, isFloating ? "floating"], []) %}
+
+{#---------- Output ----------#}
+{% if logoUrl|length %}
+<div class="{{ classes }}">
+	<div class="{{ baseClass }}__wrapper">
+		<div class="grid-container">
+			<div class="row">
+				<div class="{{ baseClass }}__inner column xsmall-12">
+					<div class="{{ baseClass }}__logo">
+						<a href="{{ currentSite.baseUrl }}" class="{{ baseClass }}__logo__link">
+							<div class="{{ baseClass }}__logo__image">
+								{% include "_components/atoms/Media/ResponsiveImage/ResponsiveImage" with {
+									url: logoUrl,
+									alt: currentSite.name,
+								} only %}
+							</div>
+						</a>
+					</div>
+					{% if navigationBar|length %}
+						<div class="{{ baseClass }}__navigation-bar">
+							{{ navigationBar }}
+						</div>
+					{% endif %}
+					<div class="{{ baseClass }}__buttons">
+						{% if button %}
+							{% set buttonText = button.text ?? null %}
+							{% set buttonUrl = button.url ?? null %}
+							{% set buttonTarget = button.target ?? null %}
+
+							{% if buttonText|length and buttonUrl|length %}
+								<div class="{{ baseClass }}__button">
+									{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+										theme: theme,
+										arrow: "none",
+										target: buttonTarget,
+										url: buttonUrl,
+										text: buttonText,
+									} only %}
+								</div>
+							{% endif %}
+						{% endif %}
+						<div class="{{ baseClass }}__hamburger">
+							{% include "_components/atoms/Global/Hamburger/Hamburger" with {
+								theme: theme,
+							} only %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %}

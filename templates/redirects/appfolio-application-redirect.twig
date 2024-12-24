@@ -1,0 +1,14 @@
+{# Get the `id` param we pass in from our redirect URL. This is the completed submission ID #}
+{% set submissionId = craft.app.request.getParam('id') %}
+
+{# Fetch the submission #}
+{% set submission = craft.formie.submissions.id(submissionId).one() %}
+
+{% if submission %}
+
+  {# Setting our application URL and requested start date from the submission #}
+  {% set applicationUrl = submission.applicationUrl %}
+
+  {% redirect applicationUrl %}
+
+{% endif %}

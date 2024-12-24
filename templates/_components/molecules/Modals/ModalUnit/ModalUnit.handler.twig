@@ -1,0 +1,30 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+
+{#---------- Output Variables ----------#}
+{% set theme = "light" %}
+{% set formCopy = null %}
+{% set form = null %}
+
+{#---------- Data Handling ----------#}
+{% set formieForm = globalUnits.globalUnits_modalUnitForm.one() ?? null %}
+{% set formCopy = helpers.getRawText(globalUnits.globalUnits_modalUnitFormCopy) %}
+
+{% if formieForm|length %}
+	{% set form %}
+		{% apply spaceless %}
+			{% include "_components/elements/Forms/Form/Form.handler" with {
+				theme: theme,
+				formieForm: formieForm,
+			} only %}
+		{% endapply %}
+	{% endset %}
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/Modals/ModalUnit/ModalUnit" with {
+	theme: theme,
+	formCopy: formCopy,
+	form: form,
+} only %}

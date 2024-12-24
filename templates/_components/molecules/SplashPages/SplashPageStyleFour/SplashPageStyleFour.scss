@@ -1,0 +1,109 @@
+$base-class: '.mol-SplashPageStyleFour';
+
+@mixin useSplashPageStyleFourVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--background-color: #{$color-base-surface-primary-dark};
+	--content-background-color: #{rgba($color-white, 0.1)};
+	--color: #{$color-base-text-primary-dark};
+	background-color: var(--background-color);
+	color: var(--color);
+	position: relative;
+	display: flex;
+	align-items: center;
+	@include interpolate((padding-top, padding-bottom), 28px, 48px);
+
+	&--light {
+		--background-color: #{$color-base-surface-primary-light};
+		--content-background-color: #{rgba($color-white, 0.25)};
+		--color: #{$color-base-text-primary-light};
+	}
+
+	.grid-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	&__media {
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+
+		&__inner {
+			@include useMediaTakeover;
+			height: 100%;
+			width: 100%;
+		}
+
+	}
+
+	&__logo {
+		line-height: 0;
+		position: relative;
+		@include interpolate(margin-bottom, 28px, 40px);
+		display: flex;
+		justify-content: center;
+
+		&__image {
+			width: 364px;
+		}
+
+	}
+
+	&__wrapper {
+		@include interpolate(padding, $spacing-body-listing);
+		border-radius: 8px;
+		background-color: var(--content-background-color);
+		box-shadow: 15px 15px 25px 0px rgba(0, 0, 0, 0.05);
+		backdrop-filter: blur(10px);
+		max-width: 524px;
+		width: 100%;
+	}
+
+	&__carousel {
+		width: 100%;
+		@include carouselAspectRatio(294, 230);
+		border-radius: 8px;
+		overflow: hidden;
+		@include interpolate(margin-bottom, $spacing-body-listing);
+
+		@include breakpoint(small) {
+			@include carouselAspectRatio(3, 2);
+		}
+
+		@include breakpoint(medium) {
+			@include carouselAspectRatio(443, 272);
+		}
+
+	}
+
+	&__content {
+		text-align: center;
+	}
+
+	@include useContentSpacing();
+
+	&__label {
+		@include font-h6();
+	}
+
+	&__heading {
+		@include font-h3();
+	}
+
+	&__copy {
+		@include richText();
+	}
+
+	&__form {
+		@include interpolate(margin-top, $spacing-body-listing);
+	}
+
+}

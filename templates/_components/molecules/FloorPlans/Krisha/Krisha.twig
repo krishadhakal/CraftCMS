@@ -1,0 +1,18 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+
+{#---------- Data Handling ----------#}
+{% set heading = heading ?? false %}
+{% set copy = copy ?? false %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-Krisha" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [], []) %}
+
+{#---------- Output ----------#}
+<div class="{{ classes }}">
+    {{ heading }}
+    {{ copy }}
+</div>

@@ -1,0 +1,43 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+
+{% set theme = theme ?? "light" %}
+{% set buttonPosition = helpers.getOption(buttonPosition ?? null, ["right", "inline"]) %}
+{% set label = label ?? null %}
+{% set heading = heading ?? null %}
+{% set copy = copy ?? null %}
+{% set button = button ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+
+{#---------- Data Handling ----------#}
+{% if block|length %}
+
+	{% set label = label ?? block.commonIntro_label %}
+	{% set heading = heading ?? block.commonIntro_heading %}
+	{% set copy = copy ?? helpers.getRawText(block.commonIntro_copy, copy) %}
+	{% set buttonField = block.commonIntro_button ?? null %}
+
+	{% if not buttonField.isEmpty() and not button %}
+		{% set button = {
+			text: helpers.generateLinkText(buttonField),
+			url: helpers.generateLinkUrl(buttonField),
+			target: helpers.generateLinkTarget(buttonField),
+		} %}
+	{% endif %}
+
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/elements/Global/Intro/Intro" with {
+	variants: variants,
+	theme: theme,
+	buttonPosition: buttonPosition,
+	label: label,
+	heading: heading,
+	copy: copy,
+	button: button,
+} only %}

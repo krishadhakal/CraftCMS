@@ -1,0 +1,77 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set imageSizes = imageSizes ?? null %}
+{% set imageSources = imageSources ?? null %}
+{% set imageUrl = imageUrl ?? null %}
+{% set imageAlt = imageAlt ?? null %}
+{% set heading = heading ?? null %}
+{% set labels = labels ?? [] %}
+{% set copy = copy ?? null %}
+
+{#---------- Data Handling ----------#}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-UnitTypeInformation" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+<div class="{{ classes }}">
+	<div class="grid-container">
+		<div class="row">
+			<div class="{{ baseClass }}__media column xsmall-12 medium-5 large-6 xlarge-5 offset-xlarge-1">
+				<div class="{{ baseClass }}__image">
+					{% include "_components/atoms/Media/ResponsiveImage/ResponsiveImage" with {
+						backgroundImage: true,
+						backgroundImageContain: true,
+						sizes: imageSizes,
+						sources: imageSources,
+						url: imageUrl,
+						alt: imageAlt,
+					} only %}
+				</div>
+			</div>
+			<div class="{{ baseClass }}__content column xsmall-12 medium-6 offset-medium-1 large-5 xlarge-4">
+				<h4 class="{{ baseClass }}__heading">
+					{{ heading }}
+				</h4>
+				{% if labels|length %}
+					{% set labelIconMap = {
+						bedrooms: "unit-bedrooms",
+						bathrooms: "unit-bathrooms",
+						squareFeet: "unit-squareFeet",
+					} %}
+					<ul class="{{ baseClass }}__labels" >
+						{% for label in labels %}
+							{% set labelType = label.type ?? null %}
+							{% set labelValue = label.value ?? null %}
+							{% set labelIcon = null %}
+							
+							{% if labelType|length %}
+								{% set labelIcon = attribute(labelIconMap, labelType) %}
+							{% endif %}
+
+							{% if labelIcon|length and labelValue|length %}
+								<li class="{{ baseClass }}__label" >
+									<span class="{{ baseClass }}__label__icon">
+										{{ helpers.getIcon(labelIcon) }}
+									</span>
+									<span class="{{ baseClass }}__label__copy">
+										{{ labelValue }}
+									</span>
+								</li>
+							{% endif %}
+						{% endfor %}
+					</ul>
+				{% endif %}
+				{% if copy|length %}
+					<div class="{{ baseClass }}__copy">
+						{{ copy }}
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>

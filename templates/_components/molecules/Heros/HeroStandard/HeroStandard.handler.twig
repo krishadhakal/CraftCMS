@@ -1,0 +1,84 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = "dark" %}
+{% set media = null %}
+{% set showBreadcrumb = false %}
+{% set breadcrumbs = null %}
+{% set label = null %}
+{% set heading = null %}
+{% set copy = null %}
+
+{#---------- Data Handling ----------#}
+{% set imageAspectRatio = "14:5" %}
+{% set imageSizes = "100vw" %}
+{% set imageOptions = [
+	{
+        width: 480,
+    },
+    {
+        width: 640,
+    },
+    {
+        width: 1000,
+    },
+    {
+        width: 1600,
+    },
+    {
+        width: 2400,
+    },
+    {
+        width: 3200,
+    },
+] %}
+
+{% if entry|length %}
+	{% set breadcrumbs %}
+		{% apply spaceless %}
+			{% include "_components/elements/Global/Breadcrumbs/Breadcrumbs.handler" with {
+				theme: theme,
+				entry: entry,
+			} only %}
+		{% endapply %}
+	{% endset %}
+	{% set heading = entry.title ?? heading %}
+{% endif %}
+
+{% if block|length %}
+	{% set showBreadcrumb = block.molHeroStandard_showBreadcrumb %}
+	{% set label = block.molHeroStandard_label %}
+	{% set heading = block.molHeroStandard_heading ?? heading %}
+	{% set copy = helpers.getRawText(block.molHeroStandard_copy) %}
+	{% set mediaAsset = block.children.one().elMedia_media.one() ?? null %}
+
+	{% if mediaAsset|length %}
+		{% set media %}
+			{% apply spaceless %}
+				{% include "_components/elements/Media/MediaTakeover/MediaTakeover.handler" with {
+					mediaAsset: mediaAsset,
+					imageAspectRatio: imageAspectRatio,
+					imageSizes: imageSizes,
+					imageOptions: imageOptions,
+				} only %}
+			{% endapply %}
+		{% endset %}
+	{% endif %}
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/Heros/HeroStandard/HeroStandard" with {
+	variants: variants,
+	theme: theme,
+	media: media,
+	showBreadcrumb: showBreadcrumb,
+	breadcrumbs: breadcrumbs,
+	label: label,
+	heading: heading,
+	copy: copy,
+} only %}

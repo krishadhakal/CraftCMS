@@ -1,0 +1,118 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+{% set coverImageSizes = coverImageSizes ?? "100vw" %}
+{% set coverImageOptions = coverImageOptions ?? [
+	{
+        width: 480,
+    },
+    {
+        width: 640,
+    },
+    {
+        width: 1000,
+    },
+    {
+        width: 1600,
+    },
+    {
+        width: 2400,
+    },
+    {
+        width: 3200,
+    },
+] %}
+{% set aspectRatio = aspectRatio ?? "16:9" %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = theme ?? "light" %}
+{% set type = null %}
+{% set coverImageSources = null %}
+{% set coverImageUrl = null %}
+{% set coverImageAlt = null %}
+{% set data = {} %}
+
+{#---------- Data Handling ----------#}
+{% set coverImageDefaultOptions = { fit: 'crop', ar: aspectRatio } %}
+
+{% if block|length %}
+	{% set coverImageAsset = null %}
+
+	{% set video = block %}
+	{% set videoType = video.type.handle ?? null %}
+
+	{% switch videoType %}
+		
+		{% case "videoPlayerFile" %}
+
+			{% set coverImageAsset = video.videoPlayerFile_coverImage.one() ?? null %}
+
+			{% set sources = [] %}
+
+			{% for source in video.videoPlayerFile_videoFiles.all() ?? [] %}
+				{% set sources = sources|merge([{
+					url: source.url,
+					type: source.mimeType
+				}]) %}
+			{% endfor %}
+
+			{% if sources|length %}
+				{% set type = videoType %}
+				{% set data = {
+					sources
+				} %}
+			{% endif %}
+
+		{% case "videoPlayerYT" %}
+
+			{% set coverImageAsset = video.videoPlayerYT_coverImage.one() ?? null %}
+
+			{% set videoId = video.videoPlayerYT_videoId ?? null %}
+
+			{% if videoId|length %}
+				{% set type = videoType %}
+				{% set data = {
+					videoId,
+				} %}
+			{% endif %}
+
+		{% case "videoPlayerVimeo" %}
+
+			{% set coverImageAsset = video.videoPlayerVimeo_coverImage.one() ?? null %}
+
+			{% set videoId = video.videoPlayerVimeo_videoId ?? null %}
+
+			{% if videoId|length %}
+				{% set type = videoType %}
+				{% set data = {
+					videoId,
+				} %}
+			{% endif %}
+
+		{% default %}
+
+	{% endswitch %}
+
+	{% if coverImageAsset|length %}
+		{% set coverImageSources = helpers.imageSources(coverImageAsset, coverImageOptions, coverImageDefaultOptions)|spaceless %}
+		{% set coverImageUrl = helpers.imageDefaultSource(coverImageAsset, coverImageOptions, coverImageDefaultOptions)|spaceless %}
+		{% set coverImageAlt = coverImageAsset.title ?? null %}
+	{% endif %}
+
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/elements/Media/VideoPlayer/VideoPlayer" with {
+	variants: variants,
+	theme: theme,
+	type: type,
+	coverImageSizes: coverImageSizes,
+	coverImageSources: coverImageSources,
+	coverImageUrl: coverImageUrl,
+	coverImageAlt: coverImageAlt,
+	aspectRatio: aspectRatio,
+	data: data,
+} only %}

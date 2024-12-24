@@ -1,0 +1,77 @@
+$base-class: '.el-Pagination';
+
+@mixin usePaginationVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--color: #{$color-button-primary-fill-light};
+	--color-hover: #{$color-button-secondary-fill-light};
+	--color-active: #{$color-button-secondary-fill-light};
+	width: 100%;
+
+	&--dark {
+		--color: #{$color-button-primary-fill-dark};
+		--color-hover: #{$color-button-secondary-fill-dark};
+		--color-active: #{$color-button-secondary-fill-dark};
+	}
+
+	&__list {
+		display: flex;
+		flex-wrap: wrap;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+	}
+
+	&__button__link,
+	&__number__link {
+		@include transition(color);
+
+		&:hover {
+			color: var(--color-hover);
+		}
+	}
+
+	&__ellipsis {
+		@include interpolate((margin-left, margin-right), 6px, 8px);
+		cursor: default;
+		color: var(--color-active);
+	}
+
+	&__button {
+		@include interpolate((margin-left, margin-right), 12px, 24px);
+		line-height: 0;
+
+		&:first-child {
+			margin-left: 0;
+		}
+
+		&:last-child {
+			margin-right: 0;
+		}
+	}
+
+	&__number {
+		@include interpolate((margin-left, margin-right), 6px, 8px);
+		@include font-body-small;
+		$number: &;
+
+		&--current {
+			cursor: default;
+
+			#{$number}__link,
+			#{$number}__text {
+				color: var(--color-active);
+			}
+		}
+
+		&__text,
+		&__link {
+			@include interpolate(padding, 3px, 6px);
+			color: var(--color);
+		}
+	}
+}

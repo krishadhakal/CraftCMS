@@ -1,0 +1,18 @@
+$base-class: '.layout-LayoutSplashPage';
+
+@mixin useLayoutSplashPageVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+
+	& > *:last-child {
+		flex-grow: 1;
+	}
+
+}

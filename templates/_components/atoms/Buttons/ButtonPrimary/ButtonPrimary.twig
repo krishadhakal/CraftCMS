@@ -1,0 +1,60 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set size = helpers.getOption(size ?? null, ["large", "small"]) %}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set style = helpers.getOption(style ?? null, ["filled", "outline"]) %}
+{% set shape = helpers.getOption(shape ?? null, ["square", "round"]) %}
+{% set arrow = helpers.getOption(arrow ?? null, ["right", "left", "none"]) %}
+{% set target = target ?? null %}
+{% set data = data ?? null %}
+{% set url = url ?? null %}
+{% set text = text ?? null %}
+
+{#---------- Data Handling ----------#}
+{% set dataString = '' %}
+{% if data %}
+	{% for key,value in data %}
+		{% set dataString = dataString ~ key ~ '="' ~ value ~ '" ' %}
+	{% endfor %}
+{% endif %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "atom-ButtonPrimary" %}
+{% set variants = variants ?? [] %}
+{% set customVariants = [size, theme, style, shape, 'arrow'~arrow|capitalize] %}
+
+{% set classes = helpers.generateClasses(baseClass, variants, customVariants, []) %}
+
+{#---------- Output ----------#}
+{% if text %}
+
+	{% set markup %}
+		<span class="{{ baseClass }}__inner">
+			{% if arrow == 'left' %}
+				<span class="{{ baseClass }}__arrow">
+					{{ helpers.getIcon("chevron-left")}}
+				</span>
+			{% endif %}	
+			<span class="{{ baseClass }}__text">
+				{{ text }}
+			</span>
+			{% if arrow == 'right' %}
+				<span class="{{ baseClass }}__arrow">
+					{{ helpers.getIcon("chevron-right")}}
+				</span>
+			{% endif %}	
+		</span>
+	{% endset %}
+
+	{% if url|length %}
+		<a class="{{ classes }}" href="{{ url }}" target="{{ target }}" {{ dataString|raw }}>
+			{{ markup }}
+		</a>
+	{% else %}
+		<span class="{{ classes }}" {{ dataString|raw }}>
+			{{ markup }}
+		</span>
+	{% endif %}
+
+{% endif %}

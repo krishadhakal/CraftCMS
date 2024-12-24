@@ -1,0 +1,93 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set id = id ?? null %}
+{% set imageUrl = imageUrl ?? null %}
+{% set heading = heading ?? null %}
+{% set subheading = subheading ?? null %}
+{% set subheadingUrl = subheadingUrl ?? null %}
+{% set labels = labels ?? [] %}
+{% set copy = copy ?? null %}
+{% set subcopy = subcopy ?? null %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "el-PopupUnit" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% if id|length and heading|length %}
+<div class="{{ classes }}" data-unit-id="{{ id }}">
+	{% if imageUrl|length %}
+		<div class="{{ baseClass }}__image">
+			<div class="{{ baseClass }}__image__inner">
+				{% include "_components/atoms/Media/ResponsiveImage/ResponsiveImage" with {
+					backgroundImage: true,
+					url: imageUrl,
+					alt: heading,
+				} only %}
+			</div>
+		</div>
+	{% endif %}
+	<div class="{{ baseClass }}__content">
+		<h3 class="{{ baseClass }}__heading">
+			{{ heading }}
+		</h3>
+		{% if subheading|length %}
+			<span class="{{ baseClass }}__subheading">
+				{% if subheadingUrl|length %}
+					<a href="{{ subheadingUrl }}">
+				{% endif %}
+				{{ subheading }}
+				{% if subheadingUrl|length %}
+					</a>
+				{% endif %}
+			</span>
+		{% endif %}
+		{% if labels|length %}
+			<ul class="{{ baseClass }}__labels">
+				{% for label in labels %}
+					{% set labelType = label.type ?? null %}
+					{% set labelCopy = label.copy ?? null %}
+
+					{% if labelCopy|length %}
+						<li class="{{ baseClass }}__label">
+							{% if labelType|length %}
+								<span class="{{ baseClass }}__label__icon">
+									{% switch labelType %}
+										{% case "bedrooms" %}
+											{{ helpers.getIcon("unit-bedrooms") }}
+										{% case "bathrooms" %}
+											{{ helpers.getIcon("unit-bathrooms") }}
+										{% case "squareFeet" %}
+											{{ helpers.getIcon("unit-squareFeet") }}
+
+										{% default %}
+									{% endswitch %}
+								</span>
+							{% endif %}
+							<span class="{{ baseClass }}__label__copy">
+								{{ labelCopy}}
+							</span>
+						</li>
+					{% endif %}
+				{% endfor %}
+			</ul>
+		{% endif %}
+		{% if subcopy|length %}
+			<small class="{{ baseClass }}__subcopy">
+				{{ subcopy }}
+			</small>
+		{% endif %}
+		<button class="{{ baseClass }}__button" data-modal-unit-show data-modal-unit-unit-id="{{ id }}">
+			{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+				theme: theme,
+				size: "small",
+				arrow: "none",
+				text: "Details",
+			} only %}
+		</button>
+	</div>
+</div>
+{% endif %}

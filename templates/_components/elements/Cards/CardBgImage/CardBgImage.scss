@@ -1,0 +1,73 @@
+$base-class: '.el-CardBgImage';
+
+@mixin useCardBgImageVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--overlay-color: #{rgba($color-black, 0.5)};
+	--color: #{$color-base-text-primary-dark};
+	@include aspectRatio(366, 463);
+	position: relative;
+	overflow: hidden;
+	$card: &;
+
+	&--light {
+		--overlay-color: #{rgba($color-white, 0.6)};
+		--color: #{$color-base-text-primary-light};
+	}
+
+	&__image {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		z-index: 1;
+
+		&__overlay {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			background-color: var(--overlay-color);
+			opacity: 0;
+		}
+
+	}
+
+	&__content {
+		@include interpolate((padding-left, padding-right), 24px, 30px);
+		@include interpolate(padding-bottom, 24px, 30px);
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		color: var(--color);
+		z-index: 2;
+
+		&__heading {
+			@include font-h5();
+			opacity: 0;
+			transform: translateY(12px);
+		}
+
+		&__copy {
+			@include font-body-small();
+			@include interpolate(margin-top, 8px, 10px);
+			opacity: 0;
+			transform: translateY(12px);
+		}
+
+		&__button {
+			@include interpolate(margin-top, 20px, 24px);
+			opacity: 0;
+			transform: translateY(12px);
+		}
+
+	}
+
+}

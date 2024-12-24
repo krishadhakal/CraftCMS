@@ -1,0 +1,83 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = "light" %}
+{% set mediaAspectRatio = null %}
+{% set carousels = [] %}
+
+{#---------- Data Handling ----------#}
+{% set imageDefaultOptions = { fit: 'crop' } %}
+{% set imageSizes = "(min-width: 560px) 50vw, 100vw" %}
+{% set imageOptions = [
+	{
+		width: 480,
+	},
+	{
+		width: 640,
+	},
+	{
+		width: 800,
+	},
+	{
+		width: 1200,
+	},
+	{
+		width: 1600,
+	},
+] %}
+
+{% if block|length %}
+	{% set disableTopSpacing = block.common_disableTopSpacing ?? false %}
+	{% set disableBottomSpacing = block.common_disableBottomSpacing ?? false %}
+	{% set variants = variants|merge([disableTopSpacing ? "disableTopSpacing", disableBottomSpacing ? "disableBottomSpacing"]) %}
+
+	{% set mediaAspectRatio = block.molMediaDuo_mediaAspectRatio.value ?? mediaAspectRatio %}
+
+	{% set carouselAspectRatioMap = {
+		squareSquare: ["1:1", "1:1"],
+		portraitPortrait: ["3:4", "3:4"],
+		landscapeLandscape: ["4:3", "4:3"]
+	} %}
+
+	{% for child in block.children.all() ?? [] %}
+		{% set childType = child.type.handle ?? null %}
+		{% set childIndex = loop.index0 %}
+
+		{% switch childType %}
+			{% case "carouselSimple" %}
+
+				{% set carouselAspectRatio = (attribute(carouselAspectRatioMap, mediaAspectRatio) ?? carouselAspectRatioMap|first)[childIndex] %}
+
+				{% set carousel %}
+					{% apply spaceless %}
+						{% include "_components/elements/Media/Carousel/Carousel.handler" with {
+							block: child ?? null,
+							theme: theme,
+							showArrows: true,
+							arrowsPosition: "sides",
+							carouselAspectRatio: carouselAspectRatio,
+							imageSizes: imageSizes,
+							imageOptions: imageOptions,
+						} only %}
+					{% endapply %}
+				{% endset %}
+
+				{% set carousels = carousels|merge([carousel]) %}
+
+			{% default %}
+		{% endswitch %}
+	{% endfor %}
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/Media/MediaDuo/MediaDuo" with {
+	variants: variants,
+	theme: theme,
+	mediaAspectRatio: mediaAspectRatio,
+	carousels: carousels,
+} only %}

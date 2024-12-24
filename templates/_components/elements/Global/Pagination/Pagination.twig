@@ -1,0 +1,121 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set pageInfo = pageInfo ?? false %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "el-Pagination" %}
+{% macro getBaseClass() %}el-Pagination{% endmacro %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% if pageInfo|length %}
+	{% set neighboringPages = 1 %}
+	{% set prevUrl = pageInfo.prevUrl %}
+	{% set prevText = "previous" %}
+	{% set nextUrl = pageInfo.nextUrl %}
+	{% set nextText = "next" %}
+	{% set currentPage = pageInfo.currentPage %}
+	{% set totalPages = pageInfo.totalPages %}
+
+	{% macro renderNumber(url, text, current) %}
+		{% set baseClass = _self.getBaseClass() %}
+		
+		<li class="{{ baseClass }}__number {{ current ? baseClass ~ "__number--current" : "" }}">
+			{% if url|length %}
+				<a href="{{ url }}" class="{{ baseClass }}__number__link">
+					{{ text }}
+				</a>
+			{% else %}
+				<span class="{{ baseClass }}__number__text">
+					{{ text }} 
+				</span>
+			{% endif %}
+		</li>
+	{% endmacro %}
+
+	{% macro renderButton(url, text, theme = "light") %}
+		{% set baseClass = _self.getBaseClass() %}
+
+		{% if text == "previous" or text == "next" %}
+
+			<li class="{{ baseClass }}__button">
+				{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+					size: "small",
+					theme: theme,
+					style: "outline",
+					shape: "round",
+					type: text == "previous" ? "arrow-left" : "arrow-right",
+					url: url,
+				} only %}
+			</li>
+
+		{% else %}
+
+			<li class="{{ baseClass }}__button">
+				{% if url|length %}
+					<a href="{{ url }}" class="{{ baseClass }}__button__link">
+						{{ text }}
+					</a>
+				{% else %}
+					<span class="{{ baseClass }}__button__text">
+						{{ text }}
+					</span>
+				{% endif %}
+			</li>
+
+		{% endif %}
+		
+	{% endmacro %}
+
+	{% macro renderEllipsis() %}
+		{% set baseClass = _self.getBaseClass() %}
+
+		<li class="{{ baseClass }}__ellipsis">
+			<span class="{{ baseClass }}__ellipsis__text">&hellip;</span>
+		</li>
+	{% endmacro %}
+
+	{% if totalPages > 1 %}
+		<nav class="{{ classes }}">
+			<ul class="{{ baseClass }}__list">
+				{# Previous button #}
+				{{ _self.renderButton(prevUrl, prevText, theme) }}
+
+				{# First page #}
+				{% if currentPage - neighboringPages > 1 %}
+					{{ _self.renderNumber(pageInfo.firstUrl, "1") }}
+				{% endif %}
+
+				{% if currentPage - neighboringPages > 2 %}
+					{{ _self.renderEllipsis() }}
+				{% endif %}
+
+				{% for page, url in pageInfo.getPrevUrls(neighboringPages) %}
+					{{ _self.renderNumber(url, page) }}
+				{% endfor %}
+
+				{# Current page #}
+				{{ _self.renderNumber(null, currentPage, true) }}
+
+				{% for page, url in pageInfo.getNextUrls(neighboringPages) %}
+					{{ _self.renderNumber(url, page) }}
+				{% endfor %}
+
+				{% if totalPages - currentPage > neighboringPages + 1 %}
+					{{ _self.renderEllipsis() }}
+				{% endif %}
+
+				{# Last page #}
+				{% if currentPage + neighboringPages < totalPages %}
+					{{ _self.renderNumber(pageInfo.lastUrl, totalPages) }}
+				{% endif %}
+
+				{# Next button #}
+				{{ _self.renderButton(nextUrl, nextText, theme) }}
+			</ul>
+		</nav>
+	{% endif %}
+{% endif %}

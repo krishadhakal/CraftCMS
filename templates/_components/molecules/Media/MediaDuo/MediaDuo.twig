@@ -1,0 +1,28 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set mediaAspectRatio = helpers.getOption(mediaAspectRatio ?? null, ["squareSquare", "portraitPortrait", "landscapeLandscape"])|t %}
+{% set carousels = carousels ?? [] %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-MediaDuo" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme, mediaAspectRatio|length ? "media-" ~ mediaAspectRatio], []) %}
+
+{#---------- Output ----------#}
+{% if carousels|length %}
+<div class="{{ classes }}">
+	<div class="grid-container {{ baseClass }}__mediaGridContainer">
+		<div class="{{ baseClass }}__items">
+			{% for carousel in carousels %}
+				<div class="{{ baseClass }}__item">
+					<div class="{{ baseClass }}__item__inner">
+						{{ carousel }}
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+{% endif %}

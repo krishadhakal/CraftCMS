@@ -1,0 +1,62 @@
+$base-class: '.atom-VideoLoop';
+
+@mixin useVideoLoopVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+
+	&__inner {
+		height: 100%;
+		width: 100%;
+		position: relative;
+	}
+
+	video {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 2;
+		display: block;
+		height: 100%;
+		width: 100%;
+
+		@media all and (-ms-high-contrast: none),
+		(-ms-high-contrast: active) {
+			min-width: 100%;
+			min-height: 100%;
+			width: auto;
+			height: auto;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+
+	}
+
+	&--cover {
+
+		video {
+			object-fit: cover;
+		}
+		
+	}
+
+	&--contain {
+		
+		video {
+			object-fit: contain;
+		}
+		
+	}
+
+}

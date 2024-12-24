@@ -1,0 +1,26 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-Loader" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+<div class="{{ classes }}">
+	<div class="{{ baseClass }}__icon">
+		{{ helpers.getIcon("mark") }}
+	</div>
+</div>
+
+{% css %}
+	{# Inlining these styles so if no Loader is used, the following is not used #}
+	html.loading {
+		overflow: "hidden";
+	}
+	html.loading body {
+		opacity: 0;
+	}
+{% endcss %}

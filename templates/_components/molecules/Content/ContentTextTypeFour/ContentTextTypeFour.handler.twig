@@ -1,0 +1,45 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = "light" %}
+{% set label = null %}
+{% set heading = null %}
+{% set copy = null %}
+{% set button = null %}
+
+{#---------- Data Handling ----------#}
+{% if block|length %}
+	{% set disableTopSpacing = block.common_disableTopSpacing ?? false %}
+	{% set disableBottomSpacing = block.common_disableBottomSpacing ?? false %}
+	{% set variants = variants|merge([disableTopSpacing ? "disableTopSpacing", disableBottomSpacing ? "disableBottomSpacing"]) %}
+
+	{% set label = block.molContentTextTypeFour_label ?? label %}
+	{% set heading = block.molContentTextTypeFour_heading ?? heading %}
+	{% set copy = block.molContentTextTypeFour_copy ?? null %}
+
+	{% set buttonField = block.molContentTextTypeFour_button ?? null %}
+	
+	{% if not buttonField.isEmpty() %}
+		{% set button = {
+			text: helpers.generateLinkText(buttonField),
+			url: helpers.generateLinkUrl(buttonField),
+			target: helpers.generateLinkTarget(buttonField),
+		} %}
+	{% endif %}
+
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/Content/ContentTextTypeFour/ContentTextTypeFour" with {
+	variants: variants,
+	theme: theme,
+	label: label,
+	heading: heading,
+	copy: copy,
+	button: button,
+} only %}

@@ -1,0 +1,407 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = "light" %}
+{% set intro = null %}
+{% set mainImageSizes = "100vw" %}
+{% set mainImageSources = null %}
+{% set mainImageUrl = null %}
+{% set mainImageAlt = "Hotspots Image" %}
+{% set hotspots = [] %}
+
+{#---------- Data Handling ----------#}
+
+{# main hotspot image #}
+{% set mainImageDefaultOptions = { fit: 'clip' } %}
+{% set mainImageOptions = [
+	{
+		width: 480,
+	},
+	{
+		width: 640,
+	},
+	{
+		width: 800,
+	},
+	{
+		width: 1200,
+	},
+	{
+		width: 1600,
+	},
+	{
+		width: 2000,
+	},
+	{
+		width: 2400,
+	},
+	{
+		width: 2800,
+	},
+	{
+		width: 3200,
+	},
+] %}
+
+{# hotspotImage #}
+{% set hotspotImageDefaultOptions = { fit: 'clip' } %}
+{% set hotspotImageSizes = "100vw" %}
+{% set hotspotImageOptions = [
+	{
+		width: 480,
+	},
+	{
+		width: 640,
+	},
+	{
+		width: 800,
+	},
+	{
+		width: 1200,
+	},
+	{
+		width: 1600,
+	},
+	{
+		width: 2000,
+	},
+	{
+		width: 2400,
+	},
+	{
+		width: 2880,
+	},
+] %}
+
+{# hotspotImageCarousel #}
+{% set hotspotImageCarouselImageSizes = "100vw" %}
+{% set hotspotImageCarouselImageOptions = [
+	{
+		width: 480,
+	},
+	{
+		width: 640,
+	},
+	{
+		width: 800,
+	},
+	{
+		width: 1200,
+	},
+	{
+		width: 1600,
+	},
+	{
+		width: 2000,
+	},
+	{
+		width: 2400,
+	},
+	{
+		width: 2880,
+	},
+] %}
+
+{# hotspotImageBeforeAfter #}
+{% set hotspotImageBeforeAfterImageDefaultOptions = { fit: 'crop', ar: "16:9" } %}
+{% set hotspotImageBeforeAfterImageSizes = "100vw" %}
+{% set hotspotImageBeforeAfterImageOptions = [
+	{
+		width: 480,
+	},
+	{
+		width: 640,
+	},
+	{
+		width: 800,
+	},
+	{
+		width: 1200,
+	},
+	{
+		width: 1600,
+	},
+	{
+		width: 2000,
+	},
+	{
+		width: 2400,
+	},
+	{
+		width: 2880,
+	},
+] %}
+
+{# hotspotVideo #}
+{% set hotspotVideoCoverImageSizes = "100vw" %}
+{% set hotspotVideoCoverImageOptions = [
+	{
+		width: 480,
+	},
+	{
+		width: 640,
+	},
+	{
+		width: 800,
+	},
+	{
+		width: 1200,
+	},
+	{
+		width: 1600,
+	},
+	{
+		width: 2000,
+	},
+	{
+		width: 2400,
+	},
+	{
+		width: 2880,
+	},
+] %}
+
+{% if block|length %}
+	{% set disableTopSpacing = block.common_disableTopSpacing ?? false %}
+	{% set disableBottomSpacing = block.common_disableBottomSpacing ?? false %}
+	{% set variants = variants|merge([disableTopSpacing ? "disableTopSpacing", disableBottomSpacing ? "disableBottomSpacing"]) %}
+
+	{% set intro %}
+		{% apply spaceless %}
+			{% include "_components/elements/Global/Intro/Intro.handler" with {
+				theme: theme,
+				block: block,
+			} only %}
+		{% endapply %}
+	{% endset %}
+
+	{# main image #}
+	{% set mainImageAsset = block.molHotspots_image.one() ?? null %}
+
+	{% if mainImageAsset|length %}
+		{% set mainImageSources = helpers.imageSources(mainImageAsset, mainImageOptions, mainImageDefaultOptions)|spaceless %}
+		{% set mainImageUrl = helpers.imageDefaultSource(mainImageAsset, mainImageOptions, mainImageDefaultOptions)|spaceless %}
+		{% set mainImageAlt = mainImageAsset.title ?? mainImageAlt %}
+	{% endif %}
+
+	{% for child in block.children.all() ?? [] %}
+
+		{% set childType = child.type.handle ?? null %}
+		{% set hotspotPosition = child.elHotspot_position ?? null %}
+		{% set hotspotPositionX = hotspotPosition.x ?? null %}
+		{% set hotspotPositionY = hotspotPosition.y ?? null %}
+		{% set hotspotId = loop.index %}
+		{% set hotspotType = null %}
+		{% set hotspotData = null %}
+
+		{% switch childType %}
+
+			{% case "hotspotInformation" %}
+
+				{% set hotspotHeading = child.elHotspotInformation_heading ?? null %}
+				{% set hotspotCopy = helpers.getRawText(child.elHotspotInformation_copy) %}
+
+				{% if hotspotHeading|length and hotspotCopy|length %}
+					{% set hotspotType = "information" %}
+					{% set hotspotData = {
+						heading: hotspotHeading,
+						copy: hotspotCopy,
+					} %}
+				{% endif %}
+
+			{% case "hotspotImage" %}
+
+				{% set hotspotImageAsset = child.elHotspotImage_image.one() ?? null %}
+
+				{% set hotspotImageSources = null %}
+				{% set hotspotImageUrl = null %}
+				{% set hotspotImageAlt = null %}
+
+				{% if hotspotImageAsset|length %}
+					{% set hotspotImageSources = helpers.imageSources(hotspotImageAsset, hotspotImageOptions, hotspotImageDefaultOptions)|spaceless %}
+					{% set hotspotImageUrl = helpers.imageDefaultSource(hotspotImageAsset, hotspotImageOptions, hotspotImageDefaultOptions)|spaceless %}
+					{% set hotspotImageAlt = hotspotImageAsset.title ?? null %}
+				{% endif %}
+
+				{% if hotspotImageUrl|length %}
+					{% set hotspotType = "image" %}
+					{% set hotspotData = {
+						image: {
+							sizes: hotspotImageSizes,
+							sources: hotspotImageSources,
+							url: hotspotImageUrl,
+							alt: hotspotImageAlt,
+						}
+					} %}
+				{% endif %}
+
+			{% case "hotspotImageBeforeAfter" %}
+
+				{# before #}
+				{% set hotspotImageBeforeAsset = child.elHotspotImageBeforeAfter_imageBefore.one() ?? null %}
+				{% set hotspotImageBeforeSources = null %}
+				{% set hotspotImageBeforeUrl = null %}
+				{% set hotspotImageBeforeAlt = null %}
+
+				{% if hotspotImageBeforeAsset|length %}
+					{% set hotspotImageBeforeSources = helpers.imageSources(hotspotImageBeforeAsset, hotspotImageBeforeAfterImageOptions, hotspotImageBeforeAfterImageDefaultOptions)|spaceless %}
+					{% set hotspotImageBeforeUrl = helpers.imageDefaultSource(hotspotImageBeforeAsset, hotspotImageBeforeAfterImageOptions, hotspotImageBeforeAfterImageDefaultOptions)|spaceless %}
+					{% set hotspotImageBeforeAlt = hotspotImageBeforeAsset.title ?? null %}
+				{% endif %}
+
+				{# after #}
+				{% set hotspotImageAfterAsset = child.elHotspotImageBeforeAfter_imageAfter.one() ?? null %}
+				{% set hotspotImageAfterSources = null %}
+				{% set hotspotImageAfterUrl = null %}
+				{% set hotspotImageAfterAlt = null %}
+
+				{% if hotspotImageAfterAsset|length %}
+					{% set hotspotImageAfterSources = helpers.imageSources(hotspotImageAfterAsset, hotspotImageBeforeAfterImageOptions, hotspotImageBeforeAfterImageDefaultOptions)|spaceless %}
+					{% set hotspotImageAfterUrl = helpers.imageDefaultSource(hotspotImageAfterAsset, hotspotImageBeforeAfterImageOptions, hotspotImageBeforeAfterImageDefaultOptions)|spaceless %}
+					{% set hotspotImageAfterAlt = hotspotImageAfterAsset.title ?? null %}
+				{% endif %}
+
+				{% if hotspotImageBeforeUrl|length and hotspotImageAfterUrl|length %}
+					{% set hotspotType = "imageBeforeAfter" %}
+					{% set hotspotData = {
+						imageBefore: {
+							sizes: hotspotImageBeforeAfterImageSizes,
+							sources: hotspotImageBeforeSources,
+							url: hotspotImageBeforeUrl,
+							alt: hotspotImageBeforeAlt,
+						},
+						imageAfter: {
+							sizes: hotspotImageBeforeAfterImageSizes,
+							sources: hotspotImageAfterSources,
+							url: hotspotImageAfterUrl,
+							alt: hotspotImageAfterAlt,
+						}
+					} %}
+				{% endif %}
+
+			{% case "hotspotImageCarousel" %}
+
+				{% set hotspotCarousel = null %}
+
+				{% set hotspotCarousel %}
+					{% apply spaceless %}
+						{% include "_components/elements/Media/Carousel/Carousel.handler" with {
+							block: child ?? null,
+							theme: theme,
+							showArrows: true,
+							arrowsPosition: "overlay",
+							carouselAspectRatio: "16:9",
+							imageSizes: hotspotImageCarouselImageSizes,
+							imageOptions: hotspotImageCarouselImageOptions,
+						} only %}
+					{% endapply %}
+				{% endset %}
+
+				{% if hotspotCarousel|length %}
+					{% set hotspotType = "imageCarousel" %}
+					{% set hotspotData = {
+						carousel: hotspotCarousel,
+					} %}
+				{% endif %}
+
+			{% case "hotspotImage360" %}
+
+				{% set hotspotImageAsset = child.elHotspotImage360_image.one() ?? null %}
+				{% set hotspotImageUrl = null %}
+				{% set hotspotImageAlt = null %}
+
+				{% if hotspotImageAsset|length %}
+					{% set hotspotImageUrl = helpers.generateImageUrl(hotspotImageAsset, {
+						ar: null,
+						fit: "clip",
+						width: 1600,
+					}) ?? hotspotImageUrl %}
+
+					{% set hotspotImageAlt = hotspotImageAsset.title ?? hotspotImageAlt %}
+				{% endif %}
+
+				{% if hotspotImageUrl|length %}
+					{% set hotspotType = "image360" %}
+					{% set hotspotData = {
+						image: {
+							url: hotspotImageUrl,
+							alt: hotspotImageAlt,
+						}
+					} %}
+				{% endif %}
+
+			{% case "hotspotVideo" %}
+
+				{% set hotspotVideo = null %}
+
+				{% set hotspotVideo %}
+					{% apply spaceless %}
+						{% include "_components/elements/Media/VideoPlayer/VideoPlayer.handler" with {
+							block: child.elVideoPlayer_videoPlayer.one(),
+							theme: theme,
+							coverImageSizes: hotspotVideoCoverImageSizes,
+							coverImageOptions: hotspotVideoCoverImageOptions,
+						} only %}
+					{% endapply %}
+				{% endset %}
+
+				{% if hotspotVideo|length %}
+					{% set hotspotType = "video" %}
+					{% set hotspotData = {
+						video: hotspotVideo,
+					} %}
+				{% endif %}
+
+			{% case "hotspotIframe" %}
+
+				{% set hotspotIframe = null %}
+
+				{% set hotspotIframe %}
+					{% apply spaceless %}
+						{% include "_components/elements/Media/IframeEmbed/IframeEmbed.handler" with {
+							block: child,
+						} only %}
+					{% endapply %}
+				{% endset %}
+
+				{% if hotspotIframe|length %}
+					{% set hotspotType = "iframe" %}
+					{% set hotspotData = {
+						iframe: hotspotIframe,
+					} %}
+				{% endif %}
+
+			{% default %}
+
+		{% endswitch %}
+
+		{% if hotspotType|length and hotspotData|length and hotspotPositionX|length and hotspotPositionY|length %}
+			{% set hotspots = hotspots|merge([{
+				id: hotspotId,
+				type: hotspotType,
+				x: hotspotPositionX * 100,
+				y: hotspotPositionY * 100,
+				data: hotspotData,
+			}]) %}
+		{% endif %}
+
+	{% endfor %}
+
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/Media/Hotspots/Hotspots" with {
+	variants: variants,
+	theme: theme,
+	intro: intro,
+	mainImageSizes: mainImageSizes,
+	mainImageSources: mainImageSources,
+	mainImageUrl: mainImageUrl,
+	mainImageAlt: mainImageAlt,
+	hotspots: hotspots,
+} only %}

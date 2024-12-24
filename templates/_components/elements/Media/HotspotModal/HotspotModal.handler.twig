@@ -1,0 +1,15 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+
+{#---------- Data Handling ----------#}
+
+{#---------- Output ----------#}
+{% include "_components/elements/Media/HotspotModal/HotspotModal" with {
+	variants: variants,
+} only %}

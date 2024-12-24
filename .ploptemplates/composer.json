@@ -1,0 +1,25 @@
+{
+	"require": {
+		"aelvan/imager": "^2.4",
+		"barrelstrength/sprout-forms": "^3.8",
+		"craftcms/aws-s3": "1.0.8",
+		"craftcms/cms": "^3.0.0",
+		"craftcms/element-api": "^2.6",
+		"craftcms/feed-me": "4.2.0.1",
+		"craftcms/redactor": "2.6.0.1",
+		"doublesecretagency/craft-inventory": "^2.0",
+		"misterbk/mix": "^1.5",
+		"nystudio107/craft-retour": "^3.1",
+		"nystudio107/craft-seomatic": "^3.2",
+		"putyourlightson/craft-blitz": "^3.2",
+		"sebastianlenz/linkfield": "^1.0",
+		"spicyweb/craft-neo": "^2.6",
+		"superbig/craft3-bugsnag": "^2.0",
+		"trendyminds/molecule": "^1.2",
+		"verbb/field-manager": "^2.1",
+		"vlucas/phpdotenv": "^3.4.0"
+	},
+	"config": {
+		"optimize-autoloader": true
+	}
+}

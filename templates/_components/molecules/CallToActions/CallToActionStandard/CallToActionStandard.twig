@@ -1,0 +1,63 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["dark", "light"]) %}
+{% set media = media ?? null %}
+{% set label = label ?? null %}
+{% set heading = heading ?? null %}
+{% set copy = copy ?? null %}
+{% set button = button ?? null %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-CallToActionStandard" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% if heading|length %}
+<div class="{{ classes }}">
+	{% if media|length %}
+		<div class="{{ baseClass }}__media">
+			<div class="{{ baseClass }}__media__inner">
+				{{ media }}
+			</div>
+		</div>
+	{% endif %}
+	<div class="grid-container">
+		<div class="row">
+			<div class="{{ baseClass }}__content column xsmall-12">
+				{% if label|length %}
+					<h5 class="{{ baseClass }}__label">
+						{{ label }}
+					</h5>
+				{% endif %}
+				<h2 class="{{ baseClass }}__heading">
+					{{ heading }}
+				</h2>
+				{% if copy|length %}
+					<div class="{{ baseClass }}__copy">
+						{{ copy }}
+					</div>
+				{% endif %}
+				{% if button %}
+					{% set buttonText = button.text ?? null %}
+					{% set buttonUrl = button.url ?? null %}
+					{% set buttonTarget = button.target ?? null %}
+
+					{% if buttonText|length and buttonUrl|length %}
+						<div class="{{ baseClass }}__button">
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								theme: theme,
+								arrow: "right",
+								target: buttonTarget,
+								url: buttonUrl,
+								text: buttonText,
+							} only %}
+						</div>
+					{% endif %}
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %}

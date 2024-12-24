@@ -1,0 +1,62 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+{% set index = index ?? 0 %}
+
+{% set theme = theme ?? "light" %}
+{% set link = link ?? null %}
+{% set imageSizes = imageSizes ?? "100vw" %}
+{% set imageOptions = imageOptions ?? [
+	{
+		width: 480,
+	},
+	{
+		width: 640,
+	},
+	{
+		width: 1000,
+	},
+	{
+		width: 1600,
+	},
+	{
+		width: 2400,
+	},
+	{
+		width: 3200,
+	},
+] %}
+{% set imageDefaultOptions = imageDefaultOptions ?? { fit: 'crop', ar: "400:365" } %}
+{% set imageAsset = imageAsset ?? null %}
+{% set heading = heading ?? null %}
+{% set copy = copy ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set imageSources = null %}
+{% set imageUrl = null %}
+{% set imageAlt = null %}
+
+{#---------- Data Handling ----------#}
+{% if imageAsset|length %}
+
+	{% set imageSources = helpers.imageSources(imageAsset, imageOptions, imageDefaultOptions)|spaceless %}
+	{% set imageUrl = helpers.imageDefaultSource(imageAsset, imageOptions, imageDefaultOptions)|spaceless %}
+	{% set imageAlt = imageAsset.title ?? null %}
+
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/elements/Cards/CardInfo/CardInfo" with {
+	variants: variants,
+	theme: theme,
+	link: link,
+	imageSizes: imageSizes,
+	imageSources: imageSources,
+	imageUrl: imageUrl,
+	imageAlt: imageAlt,
+	heading: heading,
+	copy: copy,
+} only %}

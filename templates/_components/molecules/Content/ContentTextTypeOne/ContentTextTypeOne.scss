@@ -1,0 +1,61 @@
+$base-class: '.mol-ContentTextTypeOne';
+
+@mixin useContentTextTypeOneVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--background-color: #{$color-base-surface-primary-light};
+	--color: #{$color-base-text-primary-light};
+	@include sectionSpacing;
+	@include useDisableSpacing;
+	background-color: var(--background-color);
+	color: var(--color);
+
+	&--dark {
+		--background-color: #{$color-base-surface-primary-dark};
+		--color: #{$color-base-text-primary-dark};
+	}
+
+	&__label {
+		@include font-h6;
+		@include interpolate(margin-bottom, $spacing-subheading-heading);
+	}
+
+	&__heading {
+		@include interpolate(margin-bottom, $spacing-heading-body);
+		@include font-h2;
+		max-width: 15em;
+	}
+
+	&__copy {
+		@include interpolate(margin-top, -15px, -30px);
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		flex-wrap: wrap;
+
+		&__block {
+			@include interpolate(margin-top, 15px, 30px);
+			@include richText;
+
+			&:not(:first-child:last-child) {
+				@include breakpoint(medium) {
+					flex: 0 1 47%;
+				}
+			}
+		}
+	}
+
+	&__button-wrapper {
+		@include interpolate(margin-top, $spacing-body-button);
+		display: flex;
+
+		@include breakpoint(large) {
+			margin-top: 0;
+			justify-content: flex-end;
+		}
+	}
+}

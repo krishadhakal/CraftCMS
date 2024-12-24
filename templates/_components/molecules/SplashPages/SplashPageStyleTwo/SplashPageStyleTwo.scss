@@ -1,0 +1,131 @@
+$base-class: '.mol-SplashPageStyleTwo';
+
+@mixin useSplashPageStyleTwoVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--background-color: #{$color-base-surface-secondary-light};
+	--text-color: #{$color-base-text-primary-light};
+	background-color: var(--background-color);
+	color: var(--text-color);
+	display: flex;
+	flex-direction: column;
+
+	@include breakpoint(large) {
+		flex-direction: row;
+	}
+
+	&--dark {
+		--background-color: #{$color-base-surface-secondary-dark};
+		--text-color: #{$color-base-text-primary-dark};
+	}
+
+	&__left {
+		flex-grow: 1;
+		padding-top: 48px;
+		padding-bottom: 48px;
+		@include interpolate((padding-left, padding-right), 28px, 98px);
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+
+		@include breakpoint(medium) {
+			padding-top: 80px;
+			padding-bottom: 80px;
+		}
+
+		@include breakpoint(large) {
+			flex-grow: 0;
+			flex-shrink: 0;
+			flex-basis: 49%;
+			padding-top: 50px;
+			padding-bottom: 50px;
+			justify-content: flex-start;
+		}
+
+	}
+
+	&__logo {
+		line-height: 0;
+		position: relative;
+		@include interpolate(margin-bottom, 54px, 64px);
+		display: flex;
+		justify-content: center;
+		
+		@include breakpoint(large) {
+			margin-bottom: 0;
+		}
+
+		&__image {
+			position: relative;
+			@include interpolate(width, 276px, 360px);
+			max-width: 100%;
+		}
+
+	}
+
+	&__content {
+		text-align: center;
+
+		@include breakpoint(large) {
+			@include interpolate((padding-top, padding-bottom), 54px, 64px);
+			flex-grow: 1;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+
+	}
+
+	@include useContentSpacing();
+
+	&__label {
+		@include font-h6;
+		text-transform: uppercase;
+	}
+
+	&__heading {
+		@include font-h2;
+	}
+
+	&__copy {
+		@include richText;
+	}
+
+	&__form {
+		@include interpolate(margin-top, $spacing-body-listing);
+		width: 100%;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	&__right {
+		flex-grow: 0;
+		flex-shrink: 0;
+
+		@include breakpoint(large) {
+			min-width: 0;
+			flex-grow: 1;
+			flex-basis: 0;
+			display: flex;
+		}
+
+	}
+
+	&__carousel {
+		width: 100%;
+		@include overlayCarousel();
+		aspect-ratio: 400/228;
+
+		@include breakpoint(large) {
+			aspect-ratio: auto;
+			max-height: 100vh;
+			min-height: 100%;
+		}
+
+	}
+
+}

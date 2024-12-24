@@ -1,0 +1,723 @@
+@import "./settings";
+@import "./javascript";
+
+@mixin gridPaddingLeft() {
+	padding-left: $grid-padding-size-xsmall;
+
+	@include breakpoint(small) {
+		padding-left: $grid-padding-size-small;
+	}
+
+	@include breakpoint(medium) {
+		padding-left: $grid-padding-size-medium;
+	}
+
+	@include breakpoint(large) {
+		padding-left: $grid-padding-size-large;
+	}
+
+	@include breakpoint(xlarge) {
+		padding-left: $grid-padding-size-xlarge;
+	}
+
+}
+
+@mixin gridPaddingRight() {
+	padding-right: $grid-padding-size-xsmall;
+
+	@include breakpoint(small) {
+		padding-right: $grid-padding-size-small;
+	}
+
+	@include breakpoint(medium) {
+		padding-right: $grid-padding-size-medium;
+	}
+
+	@include breakpoint(large) {
+		padding-right: $grid-padding-size-large;
+	}
+
+	@include breakpoint(xlarge) {
+		padding-right: $grid-padding-size-xlarge;
+	}
+
+}
+
+.grid-container {
+	// we add double the padding onto the set max content width, because we have box-sizing: border-box set
+	max-width: $grid-max-width + ($grid-padding-size-xlarge * 2);
+	// center our grid container at large screen sizes
+	margin: 0 auto;
+	// overflow hidden prevents negative margins from pulling rows outside of container and causing scrollbars
+	// this happens when a grid container is used with padding lower than 1/2 gutter size (usually zero padding containers)
+	overflow: hidden;
+	// set width: 100%; to make sure the grid container fills width of screen even if columns don't span 12
+	width: 100%;
+	box-sizing: border-box;
+	position: relative;
+
+	@include gridPaddingLeft();
+	@include gridPaddingRight();
+
+	&.no-padding {
+		padding-left: 0 !important;
+		padding-right: 0 !important;
+	}
+
+}
+
+.row {
+	display: flex;
+	flex-wrap: wrap;
+	// margin that corrects for gutters between flex items
+	margin-left: -1 * ($gutter-size-xsmall / 2);
+	margin-right: -1 * ($gutter-size-xsmall / 2);
+
+	@include breakpoint(small) {
+		margin-left: -1 * ($gutter-size-small / 2);
+		margin-right: -1 * ($gutter-size-small / 2);
+	}
+
+	@include breakpoint(medium) {
+		margin-left: -1 * ($gutter-size-medium / 2);
+		margin-right: -1 * ($gutter-size-medium / 2);
+	}
+
+	@include breakpoint(large) {
+		margin-left: -1 * ($gutter-size-large / 2);
+		margin-right: -1 * ($gutter-size-large / 2);
+	}
+
+	@include breakpoint(xlarge) {
+		margin-left: -1 * ($gutter-size-xlarge / 2);
+		margin-right: -1 * ($gutter-size-xlarge / 2);
+	}
+
+	.column {
+		flex-grow: 0;
+		flex-shrink: 0;
+		// this allows padding to be set on column interiors
+		box-sizing: border-box;
+		// gutters between flex items
+		margin-left: $gutter-size-xsmall / 2;
+		margin-right: $gutter-size-xsmall / 2;
+		min-width: 0;
+
+		@include breakpoint(small) {
+			margin-left: $gutter-size-small / 2;
+			margin-right: $gutter-size-small / 2;
+		}
+
+		@include breakpoint(medium) {
+			margin-left: $gutter-size-medium / 2;
+			margin-right: $gutter-size-medium / 2;
+		}
+
+		@include breakpoint(large) {
+			margin-left: $gutter-size-large / 2;
+			margin-right: $gutter-size-large / 2;
+		}
+
+		@include breakpoint(xlarge) {
+			margin-left: $gutter-size-xlarge / 2;
+			margin-right: $gutter-size-xlarge / 2;
+		}
+
+		// our column width classes for each breakpoint
+		// .column.xsmall-{column}
+
+		@for $i from 1 through $grid-columns {
+
+			&.xsmall-#{$i} {
+
+				$flexBasisPercent: ($i / $grid-columns) * 100%;
+
+				$gutterSize: $gutter-size-xsmall;
+				flex-basis: calc(#{$flexBasisPercent} - #{$gutterSize});
+
+				@include breakpoint(small) {
+					$gutterSize: $gutter-size-small;
+					flex-basis: calc(#{$flexBasisPercent} - #{$gutterSize});
+				}
+
+				@include breakpoint(medium) {
+					$gutterSize: $gutter-size-medium;
+					flex-basis: calc(#{$flexBasisPercent} - #{$gutterSize});
+				}
+
+				@include breakpoint(large) {
+					$gutterSize: $gutter-size-large;
+					flex-basis: calc(#{$flexBasisPercent} - #{$gutterSize});
+				}
+
+				@include breakpoint(xlarge) {
+					$gutterSize: $gutter-size-xlarge;
+					flex-basis: calc(#{$flexBasisPercent} - #{$gutterSize});
+				}
+
+			}
+
+		}
+
+		@for $i from 1 through $grid-columns {
+
+			&.small-#{$i} {
+
+				$flexBasisPercent: ($i / $grid-columns) * 100%;
+
+				@include breakpoint(small) {
+					$gutterSize: $gutter-size-small;
+					flex-basis: calc(#{$flexBasisPercent} - #{$gutterSize});
+				}
+
+				@include breakpoint(medium) {
+					$gutterSize: $gutter-size-medium;
+					flex-basis: calc(#{$flexBasisPercent} - #{$gutterSize});
+				}
+
+				@include breakpoint(large) {
+					$gutterSize: $gutter-size-large;
+					flex-basis: calc(#{$flexBasisPercent} - #{$gutterSize});
+				}
+
+				@include breakpoint(xlarge) {
+					$gutterSize: $gutter-size-xlarge;
+					flex-basis: calc(#{$flexBasisPercent} - #{$gutterSize});
+				}
+
+			}
+
+		}
+
+		@for $i from 1 through $grid-columns {
+
+			&.medium-#{$i} {
+
+				$flexBasisPercent: ($i / $grid-columns) * 100%;
+
+				@include breakpoint(medium) {
+					$gutterSize: $gutter-size-medium;
+					flex-basis: calc(#{$flexBasisPercent} - #{$gutterSize});
+				}
+
+				@include breakpoint(large) {
+					$gutterSize: $gutter-size-large;
+					flex-basis: calc(#{$flexBasisPercent} - #{$gutterSize});
+				}
+
+				@include breakpoint(xlarge) {
+					$gutterSize: $gutter-size-xlarge;
+					flex-basis: calc(#{$flexBasisPercent} - #{$gutterSize});
+				}
+
+			}
+
+		}
+
+		@for $i from 1 through $grid-columns {
+
+			&.large-#{$i} {
+
+				$flexBasisPercent: ($i / $grid-columns) * 100%;
+
+				@include breakpoint(large) {
+					$gutterSize: $gutter-size-large;
+					flex-basis: calc(#{$flexBasisPercent} - #{$gutterSize});
+				}
+
+				@include breakpoint(xlarge) {
+					$gutterSize: $gutter-size-xlarge;
+					flex-basis: calc(#{$flexBasisPercent} - #{$gutterSize});
+				}
+
+			}
+
+		}
+
+		@for $i from 1 through $grid-columns {
+
+			&.xlarge-#{$i} {
+
+				$flexBasisPercent: ($i / $grid-columns) * 100%;
+
+				@include breakpoint(xlarge) {
+					$gutterSize: $gutter-size-xlarge;
+					flex-basis: calc(#{$flexBasisPercent} - #{$gutterSize});
+				}
+
+			}
+
+		}
+
+		// offset classes
+		@for $i from $grid-columns through 0 {
+
+			&.offset-xsmall-#{$i} {
+				$offsetPercent: ($i / $grid-columns) * 100%;
+				margin-left: calc(#{$offsetPercent} + (#{$gutter-size-xsmall} / 2));
+
+				@include breakpoint(small) {
+					margin-left: calc(#{$offsetPercent} + (#{$gutter-size-small} / 2));
+				}
+
+				@include breakpoint(medium) {
+					margin-left: calc(#{$offsetPercent} + (#{$gutter-size-medium} / 2));
+				}
+
+				@include breakpoint(large) {
+					margin-left: calc(#{$offsetPercent} + (#{$gutter-size-large} / 2));
+				}
+
+				@include breakpoint(xlarge) {
+					margin-left: calc(#{$offsetPercent} + (#{$gutter-size-xlarge} / 2));
+				}
+
+			}
+
+		}
+
+		@for $i from $grid-columns through 0 {
+
+			&.offset-small-#{$i} {
+				$offsetPercent: ($i / $grid-columns) * 100%;
+
+				@include breakpoint(small) {
+					margin-left: calc(#{$offsetPercent} + (#{$gutter-size-small} / 2));
+				}
+
+				@include breakpoint(medium) {
+					margin-left: calc(#{$offsetPercent} + (#{$gutter-size-medium} / 2));
+				}
+
+				@include breakpoint(large) {
+					margin-left: calc(#{$offsetPercent} + (#{$gutter-size-large} / 2));
+				}
+
+				@include breakpoint(xlarge) {
+					margin-left: calc(#{$offsetPercent} + (#{$gutter-size-xlarge} / 2));
+				}
+
+			}
+
+		}
+
+		@for $i from $grid-columns through 0 {
+
+			&.offset-medium-#{$i} {
+				$offsetPercent: ($i / $grid-columns) * 100%;
+
+				@include breakpoint(medium) {
+					margin-left: calc(#{$offsetPercent} + (#{$gutter-size-medium} / 2));
+				}
+
+				@include breakpoint(large) {
+					margin-left: calc(#{$offsetPercent} + (#{$gutter-size-large} / 2));
+				}
+
+				@include breakpoint(xlarge) {
+					margin-left: calc(#{$offsetPercent} + (#{$gutter-size-xlarge} / 2));
+				}
+
+			}
+
+		}
+
+		@for $i from $grid-columns through 0 {
+
+			&.offset-large-#{$i} {
+				$offsetPercent: ($i / $grid-columns) * 100%;
+
+				@include breakpoint(large) {
+					margin-left: calc(#{$offsetPercent} + (#{$gutter-size-large} / 2));
+				}
+
+				@include breakpoint(xlarge) {
+					margin-left: calc(#{$offsetPercent} + (#{$gutter-size-xlarge} / 2));
+				}
+
+			}
+
+		}
+
+		@for $i from $grid-columns through 0 {
+
+			&.offset-xlarge-#{$i} {
+				$offsetPercent: ($i / $grid-columns) * 100%;
+
+				@include breakpoint(xlarge) {
+					margin-left: calc(#{$offsetPercent} + (#{$gutter-size-xlarge} / 2));
+				}
+
+			}
+
+		}
+
+	}
+
+	// rows with no gutters between columns
+	&.no-gutters {
+		margin-left: 0;
+		margin-right: 0;
+
+		.column {
+			margin-left: 0;
+			margin-right: 0;
+
+			@for $i from 1 through $grid-columns {
+
+				&.xsmall-#{$i} {
+					$flexBasisPercent: ($i / $grid-columns) * 100%;
+					flex-basis: #{$flexBasisPercent};
+				}
+
+			}
+
+			@for $i from 1 through $grid-columns {
+
+				&.small-#{$i} {
+
+					@include breakpoint(small) {
+						$flexBasisPercent: ($i / $grid-columns) * 100%;
+						$gutterSize: 0;
+						flex-basis: #{$flexBasisPercent};
+					}
+
+				}
+
+			}
+
+			@for $i from 1 through $grid-columns {
+
+				&.medium-#{$i} {
+
+					@include breakpoint(medium) {
+						$flexBasisPercent: ($i / $grid-columns) * 100%;
+						$gutterSize: 0;
+						flex-basis: #{$flexBasisPercent};
+					}
+
+				}
+
+			}
+
+			@for $i from 1 through $grid-columns {
+
+				&.large-#{$i} {
+
+					@include breakpoint(large) {
+						$flexBasisPercent: ($i / $grid-columns) * 100%;
+						$gutterSize: 0;
+						flex-basis: #{$flexBasisPercent};
+					}
+
+				}
+
+			}
+
+			@for $i from 1 through $grid-columns {
+
+				&.xlarge-#{$i} {
+
+					@include breakpoint(xlarge) {
+						$flexBasisPercent: ($i / $grid-columns) * 100%;
+						$gutterSize: 0;
+						flex-basis: #{$flexBasisPercent};
+					}
+
+				}
+
+			}
+
+			// offset classes
+			@for $i from $grid-columns through 0 {
+
+				&.offset-xsmall-#{$i} {
+					$offsetPercent: ($i / $grid-columns) * 100%;
+					margin-left: #{$offsetPercent};
+
+					@include breakpoint(small) {
+						margin-left: #{$offsetPercent};
+					}
+
+					@include breakpoint(medium) {
+						margin-left: #{$offsetPercent};
+					}
+
+					@include breakpoint(large) {
+						margin-left: #{$offsetPercent};
+					}
+
+					@include breakpoint(xlarge) {
+						margin-left: #{$offsetPercent};
+					}
+
+				}
+
+			}
+
+			@for $i from $grid-columns through 0 {
+
+				&.offset-small-#{$i} {
+					$offsetPercent: ($i / $grid-columns) * 100%;
+
+					@include breakpoint(small) {
+						margin-left: #{$offsetPercent};
+					}
+
+					@include breakpoint(medium) {
+						margin-left: #{$offsetPercent};
+					}
+
+					@include breakpoint(large) {
+						margin-left: #{$offsetPercent};
+					}
+
+					@include breakpoint(xlarge) {
+						margin-left: #{$offsetPercent};
+					}
+
+				}
+
+			}
+
+			@for $i from $grid-columns through 0 {
+
+				&.offset-medium-#{$i} {
+					$offsetPercent: ($i / $grid-columns) * 100%;
+
+					@include breakpoint(medium) {
+						margin-left: #{$offsetPercent};
+					}
+
+					@include breakpoint(large) {
+						margin-left: #{$offsetPercent};
+					}
+
+					@include breakpoint(xlarge) {
+						margin-left: #{$offsetPercent};
+					}
+
+				}
+
+			}
+
+			@for $i from $grid-columns through 0 {
+
+				&.offset-large-#{$i} {
+					$offsetPercent: ($i / $grid-columns) * 100%;
+
+					@include breakpoint(large) {
+						margin-left: #{$offsetPercent};
+					}
+
+					@include breakpoint(xlarge) {
+						margin-left: #{$offsetPercent};
+					}
+
+				}
+
+			}
+
+			@for $i from $grid-columns through 0 {
+
+				&.offset-xlarge-#{$i} {
+					$offsetPercent: ($i / $grid-columns) * 100%;
+
+					@include breakpoint(xlarge) {
+						margin-left: #{$offsetPercent};
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+}
+
+// show/hide breakpoint classes
+.hide {
+	display: none !important;
+}
+
+// hide-for-{ breakpoint }
+.hide-for-xsmall {
+	display: none !important;
+}
+
+.hide-for-small {
+
+	@include breakpoint(small) {
+		display: none !important;
+	}
+
+}
+
+.hide-for-medium {
+
+	@include breakpoint(medium) {
+		display: none !important;
+	}
+
+}
+
+.hide-for-large {
+
+	@include breakpoint(large) {
+		display: none !important;
+	}
+
+}
+
+.hide-for-xlarge {
+
+	@include breakpoint(xlarge) {
+		display: none !important;
+	}
+
+}
+
+// show-for-{ breakpoint }
+.show-for-xsmall {
+	display: block !important;
+}
+
+.show-for-small {
+
+	@include breakpoint(small) {
+		display: block !important;
+	}
+
+}
+
+.show-for-medium {
+
+	@include breakpoint(medium) {
+		display: block !important;
+	}
+
+}
+
+.show-for-large {
+
+	@include breakpoint(large) {
+		display: block !important;
+	}
+
+}
+
+.show-for-xlarge {
+
+	@include breakpoint(xlarge) {
+		display: block !important;
+	}
+
+}
+
+// hide-for-{ breakpoint }-only
+.hide-for-xsmall-only {
+	display: none !important;
+
+	@include breakpoint(small) {
+		display: block !important;
+	}
+}
+
+.hide-for-small-only {
+
+	@include breakpoint(small) {
+		display: none !important;
+	}
+
+	@include breakpoint(medium) {
+		display: block !important;
+	}
+
+}
+
+.hide-for-medium-only {
+
+	@include breakpoint(medium) {
+		display: none !important;
+	}
+
+	@include breakpoint(large) {
+		display: block !important;
+	}
+
+}
+
+.hide-for-large-only {
+
+	@include breakpoint(large) {
+		display: none !important;
+	}
+
+	@include breakpoint(xlarge) {
+		display: block !important;
+	}
+
+}
+
+.hide-for-xlarge-only {
+
+	@include breakpoint(xlarge) {
+		display: none !important;
+	}
+
+}
+
+// show-for-{ breakpoint }-only
+.show-for-xsmall-only {
+	display: block !important;
+
+	@include breakpoint(small) {
+		display: none !important;
+	}
+}
+
+.show-for-small-only {
+
+	@include breakpoint(small) {
+		display: block !important;
+	}
+
+	@include breakpoint(medium) {
+		display: none !important;
+	}
+
+}
+
+.show-for-medium-only {
+
+	@include breakpoint(medium) {
+		display: block !important;
+	}
+
+	@include breakpoint(large) {
+		display: none !important;
+	}
+
+}
+
+.show-for-large-only {
+
+	@include breakpoint(large) {
+		display: block !important;
+	}
+
+	@include breakpoint(xlarge) {
+		display: none !important;
+	}
+
+}
+
+.show-for-xlarge-only {
+
+	@include breakpoint(xlarge) {
+		display: block !important;
+	}
+
+}

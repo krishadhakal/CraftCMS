@@ -1,0 +1,115 @@
+$base-class: '.mol-Header';
+
+@mixin useHeaderVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+$header-height-min: 72px;
+$header-height-max: 120px;
+
+// In hero components where the header floats over the hero, this mixin is used to
+// push the hero content by the height of the header.
+@mixin useHeaderSpacing($top: true, $bottom: false) {
+	@if $top==true {
+		@include interpolate(padding-top, $header-height-min, $header-height-max);
+	}
+
+	@if $bottom==true {
+		@include interpolate(padding-bottom, $header-height-min, $header-height-max);
+	}
+}
+
+#{$base-class} {
+	$hamburger-max-breakpoint: "medium";
+	--background-color: #{$color-base-surface-primary-light};
+	position: relative;
+
+	&--dark {
+		--background-color: #{$color-base-surface-primary-dark};
+	}
+
+	.grid-container {
+		max-width: 100%;
+		overflow: visible;
+	}
+
+	&__wrapper {
+		background-color: var(--background-color);
+
+		@include useHeaderVariants(floating) {
+			background-color: transparent;
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+		}
+	}
+
+	&__inner {
+		@include interpolate(height, $header-height-min, $header-height-max);
+		@include interpolate((padding-top, padding-bottom), 15px, 20px);
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	&__logo,
+	&__button,
+	&__navigation-bar {
+		z-index: $zIndex-header;
+	}
+
+	&__navigation-bar {
+		@include interpolate((margin-left, margin-right), 20px, 40px);
+		display: block;
+		flex: 1;
+
+		@include breakpoint($hamburger-max-breakpoint, "max") {
+			display: none;
+		}
+	}
+
+	&__logo {
+		line-height: 0;
+		position: relative;
+
+		&__link {
+			display: inline-block;
+			max-width: 100%;
+		}
+
+		&__image {
+			@include interpolate(width, 120px, 218px);
+			position: relative;
+		}
+		
+	}
+
+	&__buttons {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+	}
+
+	&__button {
+		@include breakpoint("xsmall", "max") {
+			display: none;
+		}
+	}
+
+	&__hamburger {
+		line-height: 0;
+		z-index: $zIndex-header + 2;
+		display: none;
+
+		@include breakpoint($hamburger-max-breakpoint, "max") {
+			display: block;
+		}
+
+		&:not(:first-child) {
+			@include interpolate(margin-left, 20px, 40px);
+		}
+	}
+}

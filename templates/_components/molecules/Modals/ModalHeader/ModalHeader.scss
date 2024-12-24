@@ -1,0 +1,136 @@
+$base-class: '.mol-ModalHeader';
+
+@mixin useModalHeaderVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	@include useHeaderSpacing($bottom: true);
+	--background-color: #{$color-base-surface-secondary-dark};
+	--color: #{$color-base-text-primary-dark};
+	--navigation-primary-color: #{$color-base-text-primary-dark};
+	--navigation-primary-color-hover: #{rgba($color-base-text-primary-dark, .75)};
+	--navigation-secondary-color: #{$color-base-text-primary-dark};
+	--navigation-secondary-color-hover: #{rgba($color-base-text-primary-dark, .75)};
+	--scrollbar-color: #{rgba($color-base-text-primary-dark, 0.75)};
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: var(--background-color);
+	z-index: $zIndex-header+1;
+	display: flex;
+	color: var(--color);
+	visibility: hidden;
+	opacity: 0;
+	overflow-y: auto;
+
+	&--light {
+		--background-color: #{$color-base-surface-secondary-light};
+		--color: #{$color-base-text-primary-light};
+		--navigation-primary-color: #{$color-base-text-primary-light};
+		--navigation-primary-color-hover: #{rgba($color-base-text-primary-light, .75)};
+		--navigation-secondary-color: #{$color-base-text-primary-light};
+		--navigation-secondary-color-hover: #{rgba($color-base-text-primary-light, .75)};
+		--scrollbar-color: #{rgba($color-base-text-primary-light, 0.75)};
+	}
+
+	.grid-container {
+		overflow: visible;
+	}
+
+	&__inner {
+		min-height: 100%;
+		display: flex;
+		align-items: center;
+	}
+
+	&__navigation {
+		align-items: flex-end;
+	}
+
+	&__navigation-primary {
+		@include interpolate((padding-top, padding-bottom), 5px, 10px);
+
+		a {
+			@include transition(color);
+			color: var(--navigation-primary-color);
+
+			&:hover {
+				color: var(--navigation-primary-color-hover);
+			}
+		}
+
+		&__items {
+			@include interpolate((margin-top, margin-bottom), -5px, -10px);
+		}
+
+		&__item {
+			@include interpolate((margin-top, margin-bottom), 5px, 10px);
+			@include font-h1;
+
+			&__subitems {
+				@include interpolate((margin-top, margin-bottom), -5px, -10px);
+				@include interpolate((padding-bottom, padding-top), 8px, 16px);
+				@include interpolate(padding-left, 20px, 40px);
+
+				@include breakpoint("small", "max") {
+					padding-left: 0;
+				}
+			}
+
+			&__subitem {
+				@include interpolate((margin-top, margin-bottom), 5px, 10px);
+				@include font-h4;
+			}
+		}
+
+		@include breakpoint("small", "max") {
+			text-align: center;
+		}
+	}
+
+	&__navigation-secondary {
+		@include interpolate(margin-top, 25px, 50px);
+
+		a {
+			@include transition(color);
+			color: var(--navigation-secondary-color);
+
+			&:hover {
+				color: var(--navigation-secondary-color-hover);
+			}
+		}
+
+		&__items {
+			@include interpolate((margin-top, margin-bottom), -5px, -10px);
+		}
+
+		&__item {
+			@include interpolate((margin-top, margin-bottom), 5px, 10px);
+			@include font-h5;
+		}
+
+		@include breakpoint(medium) {
+			margin-top: 0;
+		}
+
+		@include breakpoint("small", "max") {
+			text-align: center;
+		}
+
+	}
+
+	.os-scrollbar {
+		// The background of the scrollbar handle
+		--os-handle-bg: var(--scrollbar-color);
+		// The :hover background of the scrollbar handle
+		--os-handle-bg-hover: var(--scrollbar-color);
+		// The :active background of the scrollbar handle
+		--os-handle-bg-active: var(--scrollbar-color);
+	}
+
+}

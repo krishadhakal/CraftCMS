@@ -1,0 +1,157 @@
+/* Variables
+-------------------------------------------*/
+
+/* Colors - Primitive
+-------------------------------------------*/
+$color-primary-500: #0A1622;
+$color-primary-400: #0A2331;
+$color-primary-300: #102F42;
+$color-primary-200: #708998;
+$color-primary-100: #D0D8DE;
+
+$color-secondary-500: #9FB44A;
+$color-secondary-400: #CCE75F;
+$color-secondary-300: #E0FE68;
+$color-secondary-200: #EAFE9A;
+$color-secondary-100: #F5FFD0;
+
+$color-tertiary-500: #31302C;
+$color-tertiary-400: #919085;
+$color-tertiary-300: #E1E0D3;
+$color-tertiary-200: #F7F7EC;
+$color-tertiary-100: #FEFDF9;
+
+$color-neutral-600: #050505;
+$color-neutral-500: #1C1C1C;
+$color-neutral-400: #2B2B2B;
+$color-neutral-300: #6B6B6B;
+$color-neutral-200: #969696;
+$color-neutral-100: #E6E6E6;
+$color-neutral-75: #F7F7F7;
+$color-neutral-50: #FFFFFF;
+
+$color-danger-500: #691515;
+$color-danger-400: #B12424;
+$color-danger-300: #F93232;
+$color-danger-200: #FB7676;
+$color-danger-100: #FEEBEB;
+
+/* Colors - Semantic
+-------------------------------------------*/
+// Light
+// Base
+$color-base-surface-primary-light: $color-tertiary-100;
+$color-base-surface-secondary-light: $color-tertiary-200;
+$color-base-surface-tertiary-light: $color-tertiary-300;
+$color-base-text-primary-light: $color-primary-500;
+$color-base-text-secondary-light: $color-tertiary-100;
+$color-base-accent-primary-light: $color-primary-300;
+$color-base-accent-secondary-light: $color-secondary-300;
+// Unit Table
+$color-unit-table-header-fill-light: $color-tertiary-300;
+$color-unit-table-header-text-light: $color-primary-500;
+$color-unit-table-row-fill-light: $color-tertiary-200;
+$color-unit-table-row-text-light: $color-primary-500;
+// Button
+$color-button-primary-fill-light: $color-primary-500;
+$color-button-primary-fill-text-light: $color-tertiary-100;
+$color-button-primary-text-light: $color-primary-500;
+$color-button-secondary-fill-light: $color-primary-300;
+$color-button-secondary-fill-text-light: $color-tertiary-100;
+$color-button-secondary-text-light: $color-primary-300;
+
+// Dark
+// Base
+$color-base-surface-primary-dark: $color-primary-500;
+$color-base-surface-secondary-dark: $color-primary-400;
+$color-base-surface-tertiary-dark: $color-primary-300;
+$color-base-text-primary-dark: $color-tertiary-100;
+$color-base-text-secondary-dark: $color-primary-500;
+$color-base-accent-primary-dark: $color-secondary-300;
+$color-base-accent-secondary-dark: $color-secondary-300;
+// Unit Table
+$color-unit-table-header-fill-dark: $color-primary-300;
+$color-unit-table-header-text-dark: $color-tertiary-100;
+$color-unit-table-row-fill-dark: $color-primary-400;
+$color-unit-table-row-text-dark: $color-tertiary-100;
+// Button
+$color-button-primary-fill-dark: $color-secondary-300;
+$color-button-primary-fill-text-dark: $color-primary-500;
+$color-button-primary-text-dark: $color-secondary-300;
+$color-button-secondary-fill-dark: $color-secondary-200;
+$color-button-secondary-fill-text-dark: $color-primary-500;
+$color-button-secondary-text-dark: $color-secondary-200;
+
+/* Colors - Other
+   - These are not present in the design file but are used in the code.
+-------------------------------------------*/
+$color-black: $color-neutral-600;
+$color-white: $color-neutral-50;
+$color-error: $color-danger-300;
+
+/* Spacing
+-------------------------------------------*/
+// Variables from Figma
+// Main
+$spacing-component-padding: 128px;
+// Content
+$spacing-breadcrumb: 64px;
+$spacing-subheading-heading: 24px;
+$spacing-heading-body: 24px;
+$spacing-body-listing: 40px;
+$spacing-body-button: 56px;
+$spacing-content-media: 64px;
+
+// These variables are used by the sectionSpacing mixin.
+$xsmall-component-padding: $spacing-component-padding * 0.25;
+$small-component-padding: $spacing-component-padding * 0.5;
+$medium-component-padding: $spacing-component-padding; // default
+$large-component-padding: $spacing-component-padding * 1.15;
+$xlarge-component-padding: $spacing-component-padding * 1.6;
+// The values above will be multiplied by this value to get the mobile section spacing
+$mobile-spacing-multiplier: 0.25;
+
+/* Breakpoints - Minimum Values
+xsmall: < ($bp-s - 1)
+small: >= $bp-s and < ($bp-m - 1)
+medium: >= $bp-m and < ($bp-l - 1)
+large: >= $bp-l and < ($bp-xl - 1)
+xlarge: >= $bp-xl
+-------------------------------------------*/
+$bp-s: 560px;
+$bp-m: 768px;
+$bp-l: 1024px;
+$bp-xl: 1440px;
+
+/* Interpolation
+These values are used for interpolation.
+- Below the minimum value, the minimum provided value will be used for CSS properties.
+- Above the maximum value, the maximum provided value will be used for CSS properties.
+- Between the two values, interpolation will take effect.
+
+Example:
+@include interpolate(width, 20px, 40px);
+- On screen sizes below $interpolation-min, width will be 20px.
+- On screen sizes above $interpolation-max, width will be 40px.
+- On screen sizes between $interpolation-min and $interpolation-max, width will scale
+  with the screen size, between 20px and 40px.
+-------------------------------------------*/
+$interpolation-min: $bp-s;
+$interpolation-max: $bp-xl;
+// When only one value (max) is provided to the interpolation mixin, the max value will
+// be multiplied by this value to get the min value.
+$interpolation-min-multiplier: 0.8;
+
+/* Z-Index
+-------------------------------------------*/
+$zIndex-header: 100;
+$zIndex-modal: 300;
+$zIndex-loader: 1000;
+$zIndex-widgetPopup: 200;
+
+/* Transition Defaults
+- These are used by the transition mixin, and should be used anywhere transitions are set
+  manually to keep transitions consistent.
+-------------------------------------------*/
+$transition-speed: 0.3s;
+$transition-ease: ease-in-out;

@@ -1,0 +1,11 @@
+$base-class: '.{{lowerCase typeShortname}}-{{properCase name}}';
+
+@mixin use{{ properCase name }}Variants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	
+}

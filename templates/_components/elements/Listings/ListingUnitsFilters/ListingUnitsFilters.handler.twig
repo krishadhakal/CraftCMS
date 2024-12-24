@@ -1,0 +1,83 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+{% set theme = theme ?? "light" %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set form = null %}
+
+{#---------- Data Handling ----------#}
+{% set filters = filters ?? {} %}
+{% set formMarkup = null %}
+{% set formFields = [] %}
+
+{% set filterUnitsField %}
+	<input type="hidden" name="filterUnits" value="true">
+{% endset %}
+
+{% set formFields = formFields|merge([filterUnitsField]) %}
+
+{% for filterName, filter in filters %}
+	{% set filterValue = filter.value ?? null %}
+	{% set filterLabel = filter.label ?? null %}
+	{% set filterType = filter.type ?? null %}
+	{% set filterPlaceholder = filter.placeholder ?? null %}
+	{% set filterInput = null %}
+
+	{% set filterInput %}
+		{% apply spaceless %}
+			{% switch filterType %}
+				{% case "text" %}
+					<input type="text" name="{{ filterName }}" aria-label="{{ filterLabel }}" placeholder="{{ filterPlaceholder }}" value="{{ filterValue }}">
+			
+				{% case "select" %}
+					{% set filterOptions = filter.options ?? [] %}
+
+					{% if filterOptions|length %}
+						<select name="{{ filterName }}">
+							<option value="">{{ filterPlaceholder ?? "Select" }}</option>
+							{% for option in filterOptions %}
+								{% set optionValue = option.value ?? null %}
+								{% set optionLabel = option.label ?? null %}
+								<option value="{{ optionValue }}" {{ filterValue == optionValue ? "selected" }}>
+									{{ optionLabel }}
+								</option>
+							{% endfor %}
+						</select>
+					{% endif %}
+				{% default %}
+			{% endswitch %}
+		{% endapply %}
+	{% endset %}
+
+	{% if filterInput|length %}
+		{% set filterField %}
+			<div class="field">
+				<label for="{{ filterName }}">
+					{{ filterLabel }}
+				</label>
+				{{ filterInput }}
+			</div>
+		{% endset %}
+
+		{% set formFields = formFields|merge([filterField]) %}
+	{% endif %}
+{% endfor %}
+
+{% if formFields|length %}
+	{% set formMarkup %}
+		{% for field in formFields %}
+			{{ field }}
+		{% endfor %}
+	{% endset %}
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/elements/Listings/ListingUnitsFilters/ListingUnitsFilters" with {
+	variants: variants,
+	theme: theme,
+	formMarkup: formMarkup,
+} only %}

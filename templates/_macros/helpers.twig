@@ -1,0 +1,315 @@
+{% macro generateClasses(baseClass, baseVariants, customVariants, customClasses) %}
+{% apply spaceless %}
+	{% set classes = [baseClass] %}
+	{% set variants = baseVariants|length ? baseVariants is iterable ? baseVariants : [baseVariants] : [] %}
+
+	{% if customVariants|length %}
+		{% set customVariants = customVariants is iterable ? customVariants : [customVariants] %}
+		{% set variants = variants|merge(customVariants) %}
+	{% endif %}
+
+	{% if customClasses|length %}
+		{% set customClasses = customClasses is iterable ? customClasses : [customClasses] %}
+		{% set classes = classes|merge(customClasses) %}
+	{% endif %}
+
+	{% for variant in variants %}
+		{% if variant|length %}
+			{% set classes = classes|merge([baseClass ~ "--" ~ variant]) %}
+		{% endif %}
+	{% endfor %}
+
+	{% set classes = classes|join(" ") %}
+
+	{{ classes }}
+{% endapply %}
+{% endmacro generateClasses %}
+
+{% macro getOption(option = null, options = [], defaultOption = null) %}
+{% apply spaceless %}
+	{% set defaultOption = defaultOption ?? options[0] ?? null %}
+	{% set option = (option is defined and option|t in options) ? option : defaultOption %}
+
+	{% if option|length %}
+		{{ option|t }}
+	{% endif %}
+{% endapply %}
+{% endmacro getOption %}
+
+{% macro generateLinkText(link, useTargetFallback = true) %}
+{% apply spaceless %}
+	{% set text = null %}
+
+	{% if link|length %}
+		{% set linkType = link.getType() %}
+		{% set customText = link.getCustomText() ?? null %}
+		{% set defaultText = link.getDefaultText() ?? null %}
+		{% set targetText = null %}
+
+		{% switch linkType %}
+			{% case "entry" %}
+				{% set entry = link.getElement() ?? false %}
+
+				{% if entry|length %}
+					{% set targetText = entry.title %}
+				{% endif %}
+
+			{% case "email" or "tel" %}
+				{% set targetText = link.value %}
+
+			{% default %}
+		{% endswitch %}
+
+		{% if customText|length %}
+			{% set text = customText %}
+		{% elseif defaultText|length %}
+			{% set text = defaultText %}
+		{% elseif useTargetFallback and targetText|length %}
+			{% set text = targetText %}
+		{% endif %}
+	{% endif %}
+
+	{{ text }}
+{% endapply %}
+{% endmacro generateLinkText %}
+
+{% macro generateLinkUrl(link) %}
+{% apply spaceless %}
+	{% set url = null %}
+
+	{% if link|length %}
+		{% set linkType = link.getType() ?? null %}
+		{% set linkUrl = link.getUrl() %}
+
+		{% switch linkType %}
+			{% case "entry" %}
+				{% set entry = link.getElement() ?? false %}
+
+				{% if entry|length %}
+					{% switch entry.type.handle %}
+						{% default %}
+							{% set url = linkUrl %}
+					{% endswitch %}
+				{% endif %}
+
+			{% default %}
+				{% set url = linkUrl %}
+		{% endswitch %}
+	{% endif %}
+
+	{{ url }}
+{% endapply %}
+{% endmacro generateLinkUrl %}
+
+{% macro generateLinkTarget(link) %}
+{% apply spaceless %}
+	{% set target = null %}
+
+	{% if link|length %}
+		{% set target = link.getTarget() %}
+	{% endif %}
+
+	{{ target }}
+{% endapply %}
+{% endmacro generateLinkTarget %}
+
+{% macro generateEmbedUrl(field) %}
+{% apply spaceless %}
+	{% if field|length %}
+		{% set fieldUrl = craft.embeddedAssets.get(field.one()).getIframeSrc(["autoplay=0"]) ?? null %}
+
+		{{ fieldUrl }}
+	{% endif %}
+{% endapply %}
+{% endmacro generateEmbedUrl %}
+
+{% macro getRawText(text, fallback = null) %}
+{% apply spaceless %}
+	{% set text = text ?? fallback %}
+	
+	{% if text|length %}
+		{{ text|raw }}
+	{% endif %}
+{% endapply %}
+{% endmacro getRawText %}
+
+{% macro generateImageUrl(asset, options = {}) %}
+{% apply spaceless %}
+	{% set asset = asset is instance of('craft\\elements\\db\\AssetQuery') ? asset.one() : asset %}
+	{% set assetUrl = asset.url ?? null %}
+
+	{% if assetUrl|length %}
+		{% if "svg" not in asset.mimeType %}
+			{% set defaultOptions = {
+				fit: "crop",
+				ar: "4:3",
+				width: 2600,
+				auto: "format",
+				fm: "webp",
+			} %}
+
+			{% set assetUrl = craft.imgix.transformImage(asset, defaultOptions|merge(options)).getUrl() ?? assetUrl %}
+		{% endif %}
+
+		{{ assetUrl }}
+	{% endif %}
+{% endapply %}
+{% endmacro generateImageUrl %}
+
+{% macro getFormattedPostDate(entry) %}
+{% apply spaceless %}
+	{% if entry|length %}
+		{% set postDate = entry.postDate ?? null %}
+
+		{% if postDate|length %}
+			{{ postDate|date("F j, Y") }}
+		{% endif %}
+	{% endif %}
+{% endapply %}
+{% endmacro getFormattedPostDate %}
+
+{% macro getSiteName(siteHandle) %}
+{% apply spaceless %}
+	{% if siteHandle|length %}
+		{% set siteNamesMap = {
+			priyaAllen: "Allen",
+			priyaFremontCityCenter: "Fremont City Center",
+			priyaFremontWarmSprings: "Fremont Warm Springs",
+			priyaRochesterHills: "Rochester Hills",
+			priyaSantaClara: "Santa Clara"
+		} %}
+
+		{% set siteName = attribute(siteNamesMap, siteHandle) %}
+
+		{% if siteName|length %}
+			{{ siteName }}
+		{% endif %}
+	{% endif %}
+{% endapply %}
+{% endmacro getSiteName %}
+
+{% macro getIcon(name) %}
+{% apply spaceless %}
+	{% if name|length %}
+		{% set filePath = '@webroot/built/icons/' ~ name ~ '.svg' %}
+		{{ svg(filePath) }}
+	{% endif %}
+{% endapply %}
+{% endmacro getIcon %}
+
+{% macro getUnitAvailabilityLabel(isAvailable, availability) %}
+{% apply spaceless %}
+	{% if not isAvailable %}
+		{% set availabilityLabel = "Unavailable" %}
+	{% else %}
+		{% set availabilityLabel = "Available" ~ (availability|length ? " " ~ availability : "") %}
+	{% endif %}
+
+	{% if availabilityLabel|length %}
+		{{ availabilityLabel }}
+	{% endif %}
+{% endapply %}
+{% endmacro getUnitAvailabilityLabel %}
+
+{#
+	Image Sources
+	
+	This macro takes an imgix transformed image and returns the sources string that can be used an img tag.
+
+	Example use:
+
+	{% set srcsetOptions = [
+		{
+			width: 400,
+			height: 300
+		},
+		{
+			width: 940,
+			height: 520
+		},
+		{
+			width: 1400,
+		},
+	] %}
+
+	{% set transformedImage = craft.imgix.transformImage(image, srcsetOptions) %}
+
+	{{ imageHelpers.imageSources(transformedImage.transformed) }}
+
+#}
+{% macro imageSources(imageAsset, imageOptions, defaultOptions) %}
+{% apply spaceless %}
+
+	{% set defaultOptions = { auto: 'format' }|merge(defaultOptions) %}
+
+	{% set imageSources = '' %}
+
+	{% if imageAsset|length %}
+
+		{% set transformedImage = craft.imgix.transformImage(imageAsset, imageOptions, defaultOptions) %}
+
+		{% for transformedImage in transformedImage.transformed %}
+
+			{% set imageSources = imageSources ~ transformedImage.url|raw ~ ' ' ~ transformedImage.width ~ 'w' %}
+
+			{% if not loop.last %}
+				{% set imageSources = imageSources ~ ',' %}
+			{% endif %}
+
+		{% endfor %}
+
+	{% endif %}
+
+	{{ imageSources }}
+
+{% endapply %}
+{% endmacro imageSources %}
+
+{#
+	Image Default Source
+	
+	This macro takes an imgix transformed image and returns the url of the default source image.
+
+	Example use:
+
+	{% set srcsetOptions = [
+		{
+			width: 400,
+			height: 300
+		},
+		{
+			width: 940,
+			height: 520
+		},
+		{
+			width: 1400,
+		},
+	] %}
+
+	{% set transformedImage = craft.imgix.transformImage(image, srcsetOptions) %}
+
+	{{ imageHelpers.imageDefaultSource(transformedImage.transformed) }}
+
+#}
+{% macro imageDefaultSource(imageAsset, imageOptions, defaultOptions) %}
+
+	{% set defaultOptions = { auto: 'format' }|merge(defaultOptions) %}
+
+	{% set imageUrl = '' %}
+
+	{% if imageAsset|length %}
+
+		{% set transformedImage = craft.imgix.transformImage(imageAsset, imageOptions, defaultOptions) %}
+
+		{% if transformedImage.transformed|length %}
+		
+			{% set defaultImage = transformedImage.transformed|last %}
+			{% set imageUrl = defaultImage.url|raw %}
+		
+		{% endif %}
+
+	{% endif %}
+
+	{{ imageUrl|raw }}
+
+{% endmacro %}

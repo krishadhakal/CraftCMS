@@ -1,0 +1,90 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set mediaAsset = mediaAsset ?? null %}
+{% set imageAspectRatio = imageAspectRatio ?? 1 %}
+{% set imageSizes = imageSizes ?? "100vw" %}
+{% set imageOptions = imageOptions ?? [
+	{
+        width: 480,
+    },
+    {
+        width: 640,
+    },
+    {
+        width: 1000,
+    },
+    {
+        width: 1600,
+    },
+    {
+        width: 2400,
+    },
+    {
+        width: 3200,
+    },
+] %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set media = {} %}
+
+{#---------- Data Handling ----------#}
+{% set imageDefaultOptions = { fit: 'crop', ar: imageAspectRatio } %}
+
+{% if mediaAsset|length %}
+	{% set mediaAssetType = mediaAsset.type.handle ?? null %}
+
+	{% switch mediaAssetType %}
+		{% case "image" %}
+			{% set imageAsset = mediaAsset.image_image.one() ?? null %}
+
+			{% set imageSources = null %}
+			{% set imageUrl = null %}
+			{% set imageAlt = null %}
+
+			{% if imageAsset|length %}
+				{% set imageSources = helpers.imageSources(imageAsset, imageOptions, imageDefaultOptions)|spaceless %}
+				{% set imageUrl = helpers.imageDefaultSource(imageAsset, imageOptions, imageDefaultOptions)|spaceless %}
+				{% set imageAlt = imageAsset.title ?? null %}
+			{% endif %}
+
+			{% if imageUrl|length %}
+				{% set media = {
+					type: mediaAssetType,
+					data: {
+						sizes: imageSizes,
+						sources: imageSources,
+						url: imageUrl,
+						alt: imageAlt,
+					}
+				} %}
+			{% endif %}
+		{% case "videoFile" %}
+			{% set videoSources = [] %}
+
+			{% for source in mediaAsset.videoFile_videoFiles.all() ?? [] %}
+				{% set videoSources = videoSources|merge([{
+					url: source.url,
+					type: source.mimeType
+				}]) %}
+			{% endfor %}
+
+			{% if videoSources|length %}
+				{% set media = {
+					type: mediaAssetType,
+					data: {
+						sources: videoSources,
+					}
+				} %}
+			{% endif %}
+
+		{% default %}
+	{% endswitch %}
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/elements/Media/MediaTakeover/MediaTakeover" with {
+	variants: variants,
+	media: media,
+} only %}

@@ -1,0 +1,31 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set items = items ?? [] %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "el-FooterNavigation" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% if items|length %}
+<nav class="{{ classes }}">
+	<ul class="{{ baseClass }}__items">
+		{% for item in items %}
+			{% set itemText = item.text ?? null %}
+			{% set itemUrl = item.url ?? null %}
+			{% set itemTarget = item.target ?? null %}
+
+			{% if itemText|length and itemUrl|length %}
+				<li class="{{ baseClass }}__item">
+					<a class="{{ baseClass }}__item__link" href="{{ itemUrl }}" target="{{ itemTarget }}">
+						{{ itemText }}
+					</a>
+				</li>
+			{% endif %}
+		{% endfor %}
+	</ul>
+</nav>
+{% endif %}

@@ -1,0 +1,32 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set items = items ?? [] %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "el-Breadcrumbs" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+<div class="{{ classes }}">
+	<ul class="{{ baseClass }}__items">
+		{% if items|length %}
+			{% for item in items %}
+				{% set itemText = item.text ?? false %}
+				{% set itemUrl = item.url ?? false %}
+
+				{% if itemText|length and itemUrl|length %}
+					<li>
+						<a href="{{ itemUrl }}">
+							{{ itemText }}
+						</a>
+					</li>
+				{% endif %}
+			{% endfor %}
+		{% else %}
+			<li>&nbsp;</li>
+		{% endif %}
+	</ul>
+</div>

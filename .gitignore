@@ -1,0 +1,12 @@
+.DS_Store
+/.env
+/.idea
+/vendor
+node_modules
+storage
+vendor
+web/content
+/schemas
+/config/project
+/scripts/.env.sh
+/.ddev

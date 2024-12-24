@@ -1,0 +1,51 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["dark", "light"]) %}
+{% set media = media ?? null %}
+{% set label = label ?? null %}
+{% set heading = heading ?? null %}
+{% set copy = copy ?? null %}
+{% set form = form ?? null %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-CallToActionFormInset" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% if heading|length and form|length %}
+<div class="{{ classes }}">
+	<div class="{{ baseClass }}__inner">
+		{% if media|length %}
+			<div class="{{ baseClass }}__media">
+				<div class="{{ baseClass }}__media__inner">
+					{{ media }}
+				</div>
+			</div>
+		{% endif %}
+		<div class="grid-container">
+			<div class="row">
+				<div class="{{ baseClass }}__content column xsmall-12 small-9 medium-8 offset-small-1 large-7 xlarge-6">
+					{% if label|length %}
+						<h5 class="{{ baseClass }}__label">
+							{{ label }}
+						</h5>
+					{% endif %}
+					<h2 class="{{ baseClass }}__heading">
+						{{ heading }}
+					</h2>
+					{% if copy|length %}
+						<div class="{{ baseClass }}__copy">
+							{{ copy }}
+						</div>
+					{% endif %}
+					<div class="{{ baseClass }}__form">
+						{{ form }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %}

@@ -1,0 +1,16 @@
+html.scrollbar {
+	overflow-y: scroll; // always show scroll bar to prevent content jump when scrolling is disabled.
+}
+
+body {
+	cursor: default;
+	width: 100%;
+}
+
+img {
+	display: block;
+}
+
+*::selection {
+	background: rgba($color-primary-300, 0.08);
+}

@@ -1,0 +1,146 @@
+{% set entry = entry is defined ? entry : craft.app.response.statusCode == '404' ? craft.entries.type('page404').one() : null %}
+{% set entrySlug = entry.slug ?? null %}
+{% set entryType = entry.type.handle ?? null %}
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" {% if entryType != 'splashPage' %}class="scrollbar"{% endif %}>
+
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="HandheldFriendly" content="true" />
+		<meta http-equiv="x-ua-compatible" content="ie=edge">
+		{% include '_includes/favicon' %}
+
+		{% cache unless craft.app.response.statusCode == '404' %}
+			
+			{% if entry is defined and entry.common_contentComponents is defined and entry.common_contentComponents %}
+
+				{% if clone(entry.common_contentComponents).level(1).type(['mapStandard']).count %}
+					<link href='https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css' rel='stylesheet' />
+				{% endif %}
+
+				{% if clone(entry.common_contentComponents).level(1).type(['videoCentered', 'videoFullWidth', 'mediaPrimary', 'hotspots']).count %}
+					<link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+				{% endif %}
+
+			{% endif %}
+
+		{% endcache %}
+
+		<link href="{{ mix('styles/app.css') }}" rel="stylesheet">
+
+		{% if craft.app.config.custom.environment == "live" %}
+			<script src="https://cdn.jsdelivr.net/gh/derekcavaliero/attributor@latest/dist/attributor.min.js"></script>
+		{% endif %}
+
+	</head>
+
+	<body>
+		
+		{% include "_components/molecules/Global/Loader/Loader.handler" %}
+		
+		{% if entryType != 'splashPage' %}
+
+			{% include "_components/molecules/Global/Banner/Banner.handler" with {
+				entry: entry,
+			} only %}
+
+			{% include "_components/molecules/Widgets/WidgetPopup/WidgetPopup.handler" %}
+
+			{% include "_includes/cached-molecule" with {
+				cacheKey: "header",
+				path: "_components/molecules/Global/Header/Header.handler",
+				data: {
+					entry: entry,
+				},
+			} only %}
+
+			{% include "_includes/cached-molecule" with {
+				cacheKey: "modalInfo",
+				path: "_components/molecules/Modals/ModalInfo/ModalInfo.handler",
+				data: {
+					entry: entry,
+				},
+			} only %}
+
+			{% include "_includes/cached-molecule" with {
+				cacheKey: "modalForm",
+				path: "_components/molecules/Modals/ModalForm/ModalForm.handler",
+				data: {
+					entry: entry,
+				},
+			} only %}
+
+			{% include "_includes/cached-molecule" with {
+				cacheKey: "modalUnit",
+				path: "_components/molecules/Modals/ModalUnit/ModalUnit.handler",
+				data: {
+					entry: entry,
+				},
+			} only %}
+
+		{% endif %}
+
+		{% block content %}{% endblock %}
+
+		{% if entryType != 'splashPage' %}
+
+			{% set footerComponents = globalFooter.globalFooter_components.level(1) ?? null %}
+
+			{% if footerComponents|length %}
+
+				{% set footerComponents = footerComponents|filter(component => entrySlug not in (component.common_excludeComponentOnEntries.all() ?? [])|map(entry => entry.slug)) %}
+
+				{% include "_includes/content-components" with {
+					components: footerComponents,
+					entry: entry,
+				} only %}
+
+			{% endif %}
+
+			{% if globalFooter.globalFooter_useFooter %}
+			
+				{% include "_includes/cached-molecule" with {
+					cacheKey: "footer",
+					path: "_components/molecules/Global/Footer/Footer.handler",
+					data: {
+						entry: entry,
+					},
+				} only %}
+
+			{% endif %}
+
+		{% endif %}
+
+		{% if craft.app.config.general.devMode %}
+			{% include "_components/atoms/Global/BreakpointIndicator/BreakpointIndicator" %}
+		{% endif %}
+
+		{% if craft.app.config.general.devMode %}
+			<script type="text/javascript" src="https://localhost:3000/browser-sync/browser-sync-client.js?v=2.26.3"></script>
+		{% endif %}
+
+		{% cache unless craft.app.response.statusCode == '404' %}
+			
+			{% if entry is defined and entry.common_contentComponents is defined and entry.common_contentComponents %}
+
+				{% if clone(entry.common_contentComponents).level(1).type(['mapStandard']).count %}
+					<script src='https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js'></script>
+				{% endif %}
+
+				{% if clone(entry.common_contentComponents).level(1).type(['hotspots']).count %}
+					<script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+				{% endif %}
+
+				{% if clone(entry.common_contentComponents).level(1).type(['videoCentered', 'videoFullWidth', 'mediaPrimary', 'hotspots']).count %}
+					<script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+				{% endif %}
+
+			{% endif %}
+
+		{% endcache %}
+
+		<script type="text/javascript" src="{{ mix('scripts/app.js') }}"></script>
+	</body>
+</html>

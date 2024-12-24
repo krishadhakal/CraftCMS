@@ -1,0 +1,140 @@
+$base-class: '.mol-SplashPageStyleThree';
+
+@mixin useSplashPageStyleThreeVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--background-color: #{$color-base-surface-primary-dark};
+	--content-background-color: #{rgba($color-white, 0.1)};
+	--color: #{$color-base-text-primary-dark};
+	background-color: var(--background-color);
+	color: var(--color);
+	position: relative;
+	display: flex;
+	align-items: center;
+	@include interpolate((padding-top, padding-bottom), 28px, 40px);
+
+	&--light {
+		--background-color: #{$color-base-surface-primary-light};
+		--content-background-color: #{rgba($color-white, 0.25)};
+		--color: #{$color-base-text-primary-light};
+	}
+
+	&__media {
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+
+		&__inner {
+			@include useMediaTakeover;
+			height: 100%;
+			width: 100%;
+		}
+
+	}
+
+	&__wrapper {
+		@include interpolate(padding, 25px, 35px);
+		border-radius: 8px;
+		background-color: var(--content-background-color);
+		box-shadow: 15px 15px 25px 0px rgba(0, 0, 0, 0.05);
+		backdrop-filter: blur(10px);
+
+		@include breakpoint(large) {
+			display: flex;
+		}
+
+	}
+
+	&__left {
+
+		@include breakpoint(large) {
+			flex-grow: 0;
+			flex-shrink: 0;
+			flex-basis: calc(46% - 32px);
+			margin-right: 32px;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+
+		@include breakpoint(xlarge) {
+			flex-basis: calc(42% - 48px);
+			margin-right: 48px;
+		}
+
+	}
+
+	&__logo {
+		line-height: 0;
+		position: relative;
+		@include interpolate(margin-bottom, $spacing-body-listing);
+		display: flex;
+		justify-content: center;
+
+		@include breakpoint(large) {
+			justify-content: flex-start;
+		}
+
+		&__image {
+			position: relative;
+			@include interpolate(width, 294px, 308px);
+			max-width: 100%;
+		}
+
+	}
+
+	&__content {
+		text-align: center;
+
+		@include breakpoint(large) {
+			text-align: left;
+		}
+
+	}
+
+	@include useContentSpacing();
+
+	&__heading {
+		@include font-h3();
+	}
+
+	&__copy {
+		@include richText();
+	}
+
+	&__form {
+		@include interpolate(margin-top, $spacing-body-listing);
+	}
+
+	&__right {
+		margin-top: 36px;
+
+		@include breakpoint(large) {
+			margin-top: 0;
+			min-width: 0;
+			flex-grow: 1;
+			display: flex;
+		}
+
+	}
+
+	&__carousel {
+		width: 100%;
+		@include overlayCarousel();
+		aspect-ratio: 294/221;
+		border-radius: 8px;
+		overflow: hidden;
+
+		@include breakpoint(large) {
+			aspect-ratio: 570/426;
+		}
+
+	}
+	
+}

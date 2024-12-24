@@ -1,0 +1,116 @@
+$base-class: '.el-CardFaq';
+
+@mixin useCardFaqVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--border-color: #{$color-base-text-primary-light};
+	--heading-color: #{$color-base-text-primary-light};
+	--heading-color-hover: #{$color-button-primary-fill-light};
+	--heading-color-active: #{$color-button-primary-fill-light};
+	--text-color: #{$color-base-text-primary-light};
+	@include interpolate((padding-top, padding-bottom), 15px, 30px);
+	border-bottom: 1.5px solid var(--border-color);
+
+	&--dark {
+		--border-color: #{$color-base-text-primary-dark};
+		--heading-color: #{$color-base-text-primary-dark};
+		--heading-color-hover: #{$color-button-primary-fill-dark};
+		--heading-color-active: #{$color-button-primary-fill-dark};
+		--text-color: #{$color-base-text-primary-dark};
+	}
+
+	&__toggle {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		cursor: pointer;
+
+		&__heading {
+			@include font-h3;
+			@include transition(color);
+			max-width: 20em;
+			flex: 1;
+			color: var(--heading-color);
+		}
+
+		&__button {
+
+		}
+
+		&:hover & {
+
+			&__heading {
+				color: var(--heading-color-hover);
+			}
+
+			&__button {
+
+				.atom-ButtonIcon {
+					@extend .atom-ButtonIcon--hover;
+				}
+
+			}
+
+		}
+
+		@include useCardFaqVariants(active) {
+
+			&__heading {
+				color: var(--heading-color-active);
+			}
+
+			&__button {
+
+				.atom-ButtonIcon {
+					@extend .atom-ButtonIcon--hover;
+				}
+
+			}
+
+		}
+
+	}
+
+	&__copy {
+		overflow: hidden;
+		height: 0;
+		color: var(--text-color);
+
+		&__inner {
+			@include interpolate(padding-top, 15px, 30px);
+			@include interpolate(padding-bottom, 10px, 20px);
+			@include interpolate((padding-left, padding-right), 60px, 120px);
+			@include interpolate(margin-top, -15px, -30px);
+			display: flex;
+			justify-content: space-between;
+			align-items: flex-start;
+			flex-wrap: wrap;
+
+			@include breakpoint("medium", "max") {
+				padding-left: 0;
+				padding-right: 0;
+			}
+			
+		}
+
+		&__block {
+			@include interpolate(margin-top, 15px, 30px);
+			@include richText;
+
+			&:not(:first-child:last-child) {
+
+				@include breakpoint(medium) {
+					flex: 0 1 47%;
+				}
+
+			}
+
+		}
+
+	}
+
+}

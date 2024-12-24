@@ -1,0 +1,107 @@
+$base-class: '.atom-ButtonSecondary';
+
+@mixin useButtonSecondaryVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	$self: &;
+	display: inline-block;
+	cursor: pointer;
+	color: var(--color);
+	@include transition((color, border-bottom-color));
+	
+	//variables
+	--border-color: var(--color);
+	--arrow-color: var(--color);
+	
+	&--light {
+		--color: #{$color-button-primary-text-light};
+	}
+	
+	&--dark {
+		--color: #{$color-button-primary-text-dark};
+	}
+
+	&--underline {
+		padding-bottom: 4px;
+		border: 0px solid var(--border-color);
+		border-bottom-width: 2px;
+	}
+	
+	&--hover {
+
+		&#{$self}--light {
+			--color: #{$color-button-secondary-text-light};
+		}
+
+		&#{$self}--dark {
+			--color: #{$color-button-secondary-text-dark};
+		}
+
+	}
+
+	&__inner {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	&__text {
+
+		@include useButtonSecondaryVariants(large) {
+			@include font-button-large;
+		}
+
+		@include useButtonSecondaryVariants(small) {
+			@include font-button-small;
+		}
+		
+	}
+
+	&__arrow {
+
+		@include useButtonPrimaryVariants(arrowLeft, large) {
+			@include interpolate(margin-right, 10px, 14px);
+		}
+		
+		@include useButtonPrimaryVariants(arrowLeft, small) {
+			@include interpolate(margin-right, 8px, 10px);
+		}
+
+		@include useButtonPrimaryVariants(arrowRight, large) {
+			@include interpolate(margin-left, 10px, 14px);
+		}
+		
+		@include useButtonPrimaryVariants(arrowRight, small) {
+			@include interpolate(margin-left, 8px, 10px);
+		}
+
+		svg {
+			display: block;
+			height: auto;
+			
+			@include useButtonPrimaryVariants(large) {
+				@include interpolate(width, 8px, 8px);
+			}
+
+			@include useButtonPrimaryVariants(small) {
+				@include interpolate(width, 6px, 6px);
+			}
+
+			* {
+				fill: var(--arrow-color);
+				@include transition(fill);
+			}
+
+		}
+
+	}
+
+	a:hover &,
+	&:hover {
+		@extend #{$self}--hover;
+	}
+}

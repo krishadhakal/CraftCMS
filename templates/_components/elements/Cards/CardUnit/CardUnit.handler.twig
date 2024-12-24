@@ -1,0 +1,138 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set blockIndex = blockIndex ?? random() %}
+{% set entry = entry ?? null %}
+
+{% set theme = theme ?? "light" %}
+{% set imageSizes = imageSizes ?? "(min-width: 1024px) 25vw, (min-width: 560px) 50vw, 100vw" %}
+{% set imageOptions = imageOptions ?? [
+	{
+		width: 480,
+	},
+	{
+		width: 640,
+	},
+	{
+		width: 800,
+	},
+	{
+		width: 1200,
+	},
+] %}
+{% set imageDefaultOptions = imageDefaultOptions ?? { fit: 'fit', ar: "290:330" } %}
+{% set linkText = linkText ?? "View Details" %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set imageSources = null %}
+{% set imageUrl = null %}
+{% set imageAlt = null %}
+{% set heading = null %}
+{% set labels = [] %}
+{% set link = null %}
+
+{#---------- Data Handling ----------#}
+{% set imageAsset = imageAsset ?? null %}
+
+{% if entry and entry.type.handle == 'unitType' %}
+
+	{% set heading = entry.title ?? heading %}
+	{% set imageAsset = entry.unitType_cardImage.one() ?? null %}
+	{% set bathrooms = entry.unit_bathrooms ?? null %}
+	{% set bedrooms = entry.unit_bedrooms ?? null %}
+	{% set squareFeet = entry.unit_squareFeet ?? null %}
+
+	{% if bedrooms|length %}
+		{% set labels = labels|merge([{
+			type: "bedrooms",
+			value: bedrooms matches '/^[-+]?[0-9]*\\.?[0-9]+$/' ? (bedrooms > 0 ? bedrooms ~ " Bed" : "Studio") : bedrooms,
+		}]) %}
+	{% endif %}
+
+	{% if bathrooms|length %}
+		{% set labels = labels|merge([{
+			type: "bathrooms",
+			value: bathrooms ~ " Bath",
+		}]) %}
+	{% endif %}
+
+	{% if squareFeet|length %}
+		{% set labels = labels|merge([{
+			type: "squareFeet",
+			value: squareFeet ~ " Sq Ft",
+		}]) %}
+	{% endif %}
+
+	{% set link = {
+		text: linkText,
+		url: entry.url ?? null,
+	} %}
+
+{% elseif entry and entry.type.handle == 'unit' %}
+
+	{% set unitType = entry.unit_unitType.one %}
+
+	{% set heading = entry.title ?? heading %}
+	{% set bathrooms = entry.unit_bathrooms ?? unitType.unit_bathrooms ?? null %}
+	{% set bedrooms = entry.unit_bedrooms ?? unitType.unit_bedrooms ?? null %}
+	{% set squareFeet = entry.unit_squareFeet ?? unitType.unit_squareFeet ?? null %}
+	
+	{% if entry.unit_cardImage|length %}
+		{% set imageAsset = entry.unit_cardImage.one() ?? null %}
+	{% else %}
+		{% set imageAsset = unitType.unitType_cardImage.one() ?? null %}
+	{% endif %}
+
+	{% if bedrooms|length %}
+		{% set labels = labels|merge([{
+			type: "bedrooms",
+			value: bedrooms matches '/^[-+]?[0-9]*\\.?[0-9]+$/' ? (bedrooms > 0 ? bedrooms ~ " Bed" : "Studio") : bedrooms,
+		}]) %}
+	{% endif %}
+
+	{% if bathrooms|length %}
+		{% set labels = labels|merge([{
+			type: "bathrooms",
+			value: bathrooms ~ " Bath",
+		}]) %}
+	{% endif %}
+
+	{% if squareFeet|length %}
+		{% set labels = labels|merge([{
+			type: "squareFeet",
+			value: squareFeet ~ " Sq Ft",
+		}]) %}
+	{% endif %}
+
+	{% set link = {
+		text: linkText,
+		data: {
+			'data-modal-unit-show': '',
+			'data-modal-unit-unit-id': entry.id,
+		},
+	} %}
+
+{% endif %}
+
+{% if imageAsset|length %}
+
+	{% set imageSources = helpers.imageSources(imageAsset, imageOptions, imageDefaultOptions)|spaceless %}
+	{% set imageUrl = helpers.imageDefaultSource(imageAsset, imageOptions, imageDefaultOptions)|spaceless %}
+	{% set imageAlt = imageAsset.title ?? null %}
+
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/elements/Cards/CardUnit/CardUnit" with {
+	variants: variants,
+	theme: theme,
+	imageSizes: imageSizes,
+	imageSources: imageSources,
+	imageUrl: imageUrl,
+	imageAlt: imageAlt,
+	heading: heading,
+	labels: labels,
+	link: link,
+} only %}

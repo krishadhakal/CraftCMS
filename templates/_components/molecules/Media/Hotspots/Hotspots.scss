@@ -1,0 +1,302 @@
+$base-class: '.mol-Hotspots';
+
+@mixin useHotspotsVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--background-color: #{$color-base-surface-primary-light};
+	--information-icon-background-color: #{$color-button-primary-fill-light};
+	--information-icon-text-color: #{$color-button-primary-fill-text-light};
+	--information-popup-background-color: #{$color-base-surface-primary-light};
+	--information-popup-text-color: #{$color-base-text-primary-light};
+	--hotspot-background-color: #{$color-button-primary-fill-light};
+	--hotspot-icon-color: #{$color-button-primary-fill-text-light};
+	@include sectionSpacing;
+	@include useDisableSpacing;
+	background-color: var(--background-color);
+
+	&--dark {
+		--background-color: #{$color-base-surface-primary-dark};
+		--information-icon-background-color: #{$color-button-primary-fill-dark};
+		--information-icon-text-color: #{$color-button-primary-fill-text-dark};
+		--information-popup-background-color: #{$color-base-surface-primary-dark};
+		--information-popup-text-color: #{$color-base-text-primary-dark};
+		--hotspot-background-color: #{$color-button-primary-fill-dark};
+		--hotspot-icon-color: #{$color-button-primary-fill-text-dark};
+	}
+
+	.grid-container {
+		overflow: visible;
+	}
+
+	&__wrapper {
+		position: relative;
+	}
+
+	&__image {
+		line-height: 0;
+
+		img {
+			width: 100%;
+		}
+	}
+
+	&__hotspot {
+		position: absolute;
+		transform: translate(-50%, -50%);
+
+		&--information &__icon {
+			@include interpolate((width, height), 15px, 20px);
+			background-color: transparent;
+			position: relative;
+
+			svg {
+				fill: var(--information-icon-background-color);
+				height: 100%;
+				width: 100%;
+				z-index: 2;
+			}
+
+			// our information icon has a transparent letter 'i', so we use this background to fill the letter in.
+			&:after {
+				content: '';
+				position: absolute;
+				top: 1px;
+				bottom: 1px;
+				left: 1px;
+				right: 1px;
+				z-index: 1;
+				background-color: var(--information-icon-text-color);
+				border-radius: 50%;
+			}
+
+		}
+
+		&__icon {
+			@include interpolate((width, height), 40px, 42px);
+			background-color: var(--hotspot-background-color);
+			border-radius: 50%;
+			display: flex;
+			flex-wrap: wrap;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			opacity: 1;
+			@include transition(opacity);
+
+			svg {
+				fill: var(--hotspot-icon-color);
+				width: 50%;
+				height: 50%;
+
+				* {
+					fill: inherit;
+				}
+			}
+
+			&:hover {
+				opacity: .85;
+			}
+		}
+	}
+
+	&__hotspot-popup {
+		@include interpolate((padding-top, padding-bottom), 12px, 20px);
+		@include interpolate((padding-left, padding-right), 14px, 26px);
+
+		&__heading {
+			@include font-h5;
+		}
+
+		&__copy {
+			@include interpolate(margin-top, 8px, 14px);
+			@include richText();
+
+			p {
+				@include font-body-small;
+			}
+
+		}
+		
+	}
+
+	.el-HotspotModal {
+		z-index: 10;
+	}
+
+	&__hotspot-modal {
+		display: flex;
+		flex-wrap: wrap;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+		width: 100%;
+
+		&--image {}
+
+		&--image {
+
+			img {
+				width: auto;
+				max-height: 100%;
+				max-width: 100%;
+			}
+
+		}
+
+		&--imageBeforeAfter {}
+
+		&--imageBeforeAfter & {
+			&__imageBeforeAfter {
+				@include aspectRatio(16, 9);
+				position: relative;
+
+				&__image {
+					position: absolute;
+					top: 0;
+					left: 0;
+					right: 0;
+					bottom: 0;
+
+					&--after {
+						left: 50%;
+					}
+
+					img {
+						object-position: center right;
+					}
+
+				}
+
+				&__handle {
+					@include interpolate(width, 8px, 16px);
+					position: absolute;
+					top: 0;
+					bottom: 0;
+					left: 50%;
+					transform: translateX(-50%);
+					cursor: pointer;
+					--before-after-handle-color: #{$color-white};
+
+					&:before,
+					&:after {
+						content: "";
+						position: absolute;
+					}
+
+					&:before {
+						@include interpolate(width, 2px, 3px);
+						top: 0;
+						bottom: 0;
+						height: 100%;
+						left: 50%;
+						transform: translateX(-50%);
+						background-color: var(--before-after-handle-color);
+					}
+
+					&:after {
+						@include interpolate(height, 25px, 50px);
+						@include interpolate(border-radius, 4px, 8px);
+						background-color: var(--before-after-handle-color);
+						width: 100%;
+						top: 50%;
+						left: 50%;
+						transform: translate(-50%, -50%);
+					}
+				}
+			}
+		}
+
+		&--image360 {}
+
+		&--image360 & {
+			&__image360 {
+				@include aspectRatio(16, 9);
+				position: relative;
+
+				a-scene {
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+				}
+			}
+		}
+
+		&--imageCarousel {}
+
+		&--imageCarousel & {
+			&__carousel {
+				width: 100%;
+				background-color: $color-black;
+				@include carouselAspectRatio(16, 9);
+			}
+		}
+
+		&--video {}
+
+		&--video & {
+			&__video {
+				width: 100%;
+			}
+		}
+
+		&--iframe {
+
+			.el-IframeEmbed {
+				width: 100%;
+				max-height: 100%;
+
+				&__embed {
+					
+				}
+
+			}
+
+		}
+
+	}
+
+	.tippy-box[data-theme~='hotspots-hotspot-popup'] {
+		background-color: var(--information-popup-background-color);
+		color: var(--information-popup-text-color);
+		padding: 0;
+		filter: drop-shadow(0 0px 20px rgba(104, 104, 104, 0.3));
+		@include interpolate(border-radius, 2px, 4px);
+		max-width: 80%;
+
+		.tippy-content {
+			width: 25em;
+			max-width: 70vw;
+			padding: 0;
+
+			@include breakpoint("small", "max") {
+				width: auto;
+				width: 20em;
+				max-width: 50vw;
+			}
+		}
+	}
+
+	.tippy-box[data-theme~='hotspots-hotspot-popup'][data-placement^='top']>.tippy-arrow::before {
+		border-top-color: var(--information-popup-background-color);
+	}
+
+	.tippy-box[data-theme~='hotspots-hotspot-popup'][data-placement^='bottom']>.tippy-arrow::before {
+		border-bottom-color: var(--information-popup-background-color);
+	}
+
+	.tippy-box[data-theme~='hotspots-hotspot-popup'][data-placement^='left']>.tippy-arrow::before {
+		border-left-color: var(--information-popup-background-color);
+	}
+
+	.tippy-box[data-theme~='hotspots-hotspot-popup'][data-placement^='right']>.tippy-arrow::before {
+		border-right-color: var(--information-popup-background-color);
+	}
+}

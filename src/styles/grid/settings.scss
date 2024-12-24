@@ -1,0 +1,20 @@
+// grid
+$grid-columns: 12 !default; // Set number of columns in the grid
+$grid-max-width: 100rem !default; // Set the max-width of the content well
+
+// default gutter sizes for columns
+$gutter-size-xsmall: .75rem !default;
+$gutter-size-small: 1rem !default;
+$gutter-size-medium: 1.25rem !default;
+$gutter-size-large: 1.5rem !default;
+$gutter-size-xlarge: 2.25rem !default;
+
+// left and right page padding
+$grid-padding-size-xsmall: 1.5rem !default;
+$grid-padding-size-small: 2rem !default;
+$grid-padding-size-medium: 3rem !default;
+$grid-padding-size-large: 4rem !default;
+$grid-padding-size-xlarge: 5.25rem !default;
+
+// screen size when the grid hits its max-width
+$grid-stops-growing: $grid-max-width + ($grid-padding-size-xlarge * 2);

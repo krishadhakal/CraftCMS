@@ -1,0 +1,161 @@
+$base-class: '.atom-ButtonPrimary';
+
+@mixin useButtonPrimaryVariants($variant, $variant2: null, $variant3: null) {
+	@include useVariants($base-class, $variant, $variant2, $variant3) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	$self: &;
+	display: inline-block;
+	cursor: pointer;
+	border: 1.5px solid var(--border-color);
+	background-color: var(--background-color);
+	color: var(--color);
+	@include transition((color, background-color, border-color));
+
+	// variables
+	--arrow-color: var(--color);
+
+	&--filled {
+
+		&#{$self}--light {
+			--background-color: #{$color-button-primary-fill-light};
+			--color: #{$color-button-primary-fill-text-light};
+			--border-color: #{$color-button-primary-fill-light};
+		}
+
+		&#{$self}--dark {
+			--background-color: #{$color-button-primary-fill-dark};
+			--color: #{$color-button-primary-fill-text-dark};
+			--border-color: #{$color-button-primary-fill-dark};
+		}
+
+	}
+
+	&--outline {
+		--background-color: transparent;
+
+		&#{$self}--light {
+			--color: #{$color-button-primary-text-light};
+			--border-color: #{$color-button-primary-text-light};
+		}
+
+		&#{$self}--dark {
+			--color: #{$color-button-primary-text-dark};
+			--border-color: #{$color-button-primary-text-dark};
+		}
+
+	}
+
+	&--hover {
+
+		&#{$self}--filled {
+
+			&#{$self}--light {
+				--background-color: #{$color-button-secondary-fill-light};
+				--border-color: #{$color-button-secondary-fill-light};
+			}
+
+			&#{$self}--dark {
+				--background-color: #{$color-button-secondary-fill-dark};
+				--border-color: #{$color-button-secondary-fill-dark};
+			}
+
+		}
+
+		&#{$self}--outline {
+
+			&#{$self}--light {
+				--color: #{$color-button-secondary-text-light};
+				--border-color: #{$color-button-secondary-text-light};
+			}
+
+			&#{$self}--dark {
+				--color: #{$color-button-secondary-text-dark};
+				--border-color: #{$color-button-secondary-text-dark};
+			}
+
+		}
+		
+	}
+
+	&--round {
+		border-radius: 9999px;
+	}
+
+	&__inner {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		@include useButtonPrimaryVariants(large) {
+			@include interpolate((padding-left, padding-right), 12px, 22px);
+			@include interpolate((padding-top, padding-bottom), 12px, 16px);
+		}
+
+		@include useButtonPrimaryVariants(small) {
+			@include interpolate((padding-left, padding-right), 8px, 16px);
+			@include interpolate((padding-top, padding-bottom), 8px, 10px);
+		}
+
+	}
+
+	&__text {
+
+		@include useButtonPrimaryVariants(large) {
+			@include font-button-large;
+		}
+
+		@include useButtonPrimaryVariants(small) {
+			@include font-button-small;
+		}
+
+	}
+
+	&__arrow {
+
+		@include useButtonPrimaryVariants(arrowLeft, large) {
+			@include interpolate(margin-right, 10px, 14px);
+		}
+		
+		@include useButtonPrimaryVariants(arrowLeft, small) {
+			@include interpolate(margin-right, 8px, 10px);
+		}
+
+		@include useButtonPrimaryVariants(arrowRight, large) {
+			@include interpolate(margin-left, 10px, 14px);
+		}
+		
+		@include useButtonPrimaryVariants(arrowRight, small) {
+			@include interpolate(margin-left, 8px, 10px);
+		}
+
+		svg {
+			display: block;
+			height: auto;
+
+			@include useButtonPrimaryVariants(large) {
+				@include interpolate(width, 8px, 8px);
+			}
+
+			@include useButtonPrimaryVariants(small) {
+				@include interpolate(width, 6px, 6px);
+			}
+
+			* {
+				fill: var(--arrow-color);
+				@include transition(fill);
+			}
+
+		}
+
+	}
+
+	a:hover &,
+	&:hover {
+		@extend #{$self}--hover;
+	}
+
+}

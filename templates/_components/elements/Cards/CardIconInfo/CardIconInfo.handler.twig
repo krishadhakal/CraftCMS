@@ -1,0 +1,36 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set data = data ?? null %}
+{% set index = index ?? 0 %}
+{% set theme = theme ?? "light" %}
+{% set align = align ?? "left" %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set iconSvg = null %}
+{% set heading = null %}
+{% set copy = null %}
+
+{#---------- Data Handling ----------#}
+{% if data|length %}
+	{% set heading = data.heading ?? heading %}
+	{% set copy = helpers.getRawText(data.copy) %}
+	{% set iconAsset = data.icon ?? null %}
+
+	{% if iconAsset and iconAsset.extension == 'svg' %}
+		{% set iconSvg %}
+			{{ svg(iconAsset) }}
+		{% endset %}
+	{% endif %}
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/elements/Cards/CardIconInfo/CardIconInfo" with {
+	variants: variants,
+	theme: theme,
+	align: align,
+	iconSvg: iconSvg,
+	heading: heading,
+	copy: copy,
+} only %}

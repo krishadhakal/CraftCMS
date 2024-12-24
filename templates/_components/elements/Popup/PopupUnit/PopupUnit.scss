@@ -1,0 +1,117 @@
+$base-class: '.el-PopupUnit';
+
+@mixin usePopupUnitVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--background-color: #{$color-base-surface-secondary-light};
+	--label-icon-color: #{$color-base-text-primary-light};
+	--text-color: #{$color-base-text-primary-light};
+	@include interpolate(padding, 10px, 20px);
+	display: flex;
+	align-items: flex-start;
+	border-radius: 4px;
+	background-color: var(--background-color);
+	color: var(--text-color);
+
+	&--dark {
+		--background-color: #{$color-base-surface-secondary-dark};
+		--label-icon-color: #{$color-base-text-primary-dark};
+		--text-color: #{$color-base-text-primary-dark};
+	}
+
+	@include breakpoint("small", "max") {
+		display: block;
+	}
+
+	&__image {
+		overflow: hidden;
+		align-self: center;
+		flex: 0 1 40%;
+
+		&__inner {
+			@include aspectRatio(4, 3);
+			position: relative;
+		}
+	}
+
+	&__content {
+		@include interpolate(margin-left, 15px, 30px);
+		@include interpolate(margin-top, 15px, 30px);
+		@include interpolate(padding-bottom, 10px, 20px);
+		flex: 1;
+
+		@include breakpoint("small", "max") {
+			margin-left: 5%;
+			margin-right: 5%;
+		}
+
+		@include breakpoint("small") {
+			margin-top: 0;
+			padding-bottom: 0;
+		}
+	}
+
+	&__heading {
+		@include font-h4;
+	}
+
+	&__subheading {
+		@include font-body-small;
+		@include interpolate(margin-top, 4px, 8px);
+		display: block;
+	}
+
+	&__labels {
+		@include interpolate(margin-top, 4px, 8px);
+		@include interpolate((margin-left, margin-right), -5px, -10px);
+	}
+
+	&__label {
+		@include font-body-xsmall;
+		display: inline-flex;
+		flex-wrap: wrap;
+		flex-direction: row;
+		align-items: center;
+		justify-content: flex-start;
+
+		@include interpolate((padding-left, padding-right), 5px, 10px);
+
+		&+& {
+			@include interpolate(margin-top, 3px, 6px);
+		}
+
+		&__icon {
+			@include interpolate(margin-right, 5px, 10px);
+			@include interpolate((width, height), 12px, 24px);
+			display: block;
+
+			svg {
+				fill: var(--label-icon-color);
+				height: 100%;
+				width: 100%;
+
+				* {
+					fill: inherit;
+				}
+			}
+		}
+
+		&__text {
+			display: block;
+		}
+	}
+
+	&__subcopy {
+		@include interpolate(margin-top, 4px, 8px);
+		display: block;
+	}
+
+	&__button {
+		@include interpolate(margin-top, 10px, 20px);
+		display: block;
+	}
+}

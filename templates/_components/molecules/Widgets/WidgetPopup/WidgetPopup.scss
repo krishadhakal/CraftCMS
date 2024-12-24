@@ -1,0 +1,290 @@
+$base-class: '.mol-WidgetPopup';
+
+@mixin useWidgetPopupVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--toggle-background-color: #{$color-base-surface-primary-light};
+	--toggle-text-color: #{$color-base-text-primary-light};
+	--content-background-color: #{$color-base-surface-primary-light};
+	--content-text-color: #{$color-base-text-primary-light};
+	--item-calendar-background-color: #{$color-base-surface-secondary-light};
+	--scrollbar-color: #{rgba($color-base-text-primary-light, 0.75)};
+	margin-right: 20px;
+	margin-bottom: 20px;
+	width: calc(100% - 40px);
+	right: 0;
+	bottom: 0;
+	position: fixed;
+	z-index: $zIndex-widgetPopup;
+	pointer-events: none;
+	display: none;
+	max-width: 500px;
+
+	&--dark {
+		--toggle-background-color: #{$color-base-surface-primary-dark};
+		--toggle-text-color: #{$color-base-text-primary-dark};
+		--content-background-color: #{$color-base-surface-primary-dark};
+		--content-text-color: #{$color-base-text-primary-dark};
+		--item-calendar-background-color: #{$color-base-surface-secondary-dark};
+		--scrollbar-color: #{rgba($color-base-text-primary-dark, 0.75)};
+	}
+
+	&>* {
+		pointer-events: all;
+	}
+
+	@include breakpoint(small) {
+		width: 80%;
+		@include interpolate((margin-right, margin-bottom), 20px, 50px);
+	}
+
+	[data-active="false"] {
+		visibility: hidden;
+		pointer-events: none;
+		display: none;
+	}
+
+	[data-active="true"] {
+		visibility: visible;
+		pointer-events: all;
+		display: block;
+	}
+
+	&__wrapper {
+		
+	}
+
+	&__button {
+		filter: drop-shadow(0 0px 20px rgba(40, 40, 40, 0.25));
+		line-height: 0;
+		position: absolute;
+		right: 0;
+		bottom: calc(100% + 6px);
+
+		@include breakpoint(medium) {
+			bottom: calc(100% + 10px);
+		}
+
+	}
+
+	&__toggle,
+	&__content {
+		@include interpolate(border-radius, 10px, 20px);
+		filter: drop-shadow(0 0px 20px rgba(40, 40, 40, 0.25));
+		overflow: hidden;
+	}
+
+	&__toggle {
+		background-color: var(--toggle-background-color);
+		color: var(--toggle-text-color);
+		display: flex;
+		flex-wrap: wrap;
+		flex-direction: row;
+		align-items: stretch;
+		justify-content: space-between;
+		cursor: pointer;
+
+		&[data-active="true"] {
+			display: flex;
+		}
+
+		&__media {
+			@include useMediaTakeover;
+			position: relative;
+			flex: 0 1 30%;
+
+			&__inner {
+				@include aspectRatio(4, 3);
+			}
+		}
+
+		&__content {
+			display: flex;
+			flex-wrap: wrap;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+			@include interpolate(padding, 10px, 20px);
+			flex: 1;
+			text-align: center;
+		}
+
+		&__heading {
+			@include font-h5;
+		}
+
+	}
+
+	&__content {
+		background-color: var(--content-background-color);
+		color: var(--content-text-color);
+		max-height: 80%;
+		position: relative;
+		width: 100%;
+		display: flex;
+
+		&[data-active="true"] {
+			display: flex;
+		}
+
+		&:before {
+			content: "";
+			padding-top: 100%;
+		}
+	}
+
+	&__introduction,
+	&__item {
+		background-color: var(--content-background-color);
+	}
+
+	&__introduction,
+	&__items,
+	&__item {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	&__introduction,
+	&__item {
+		overflow-y: auto;
+	}
+
+	&__item__content,
+	&__introduction__inner {
+		@include interpolate((padding-left, padding-right), 25px, 50px);
+		@include interpolate((padding-top, padding-bottom), 20px, 40px);
+	}
+
+	&__introduction {
+
+		&[data-active="true"] {
+			display: flex;
+		}
+
+		&__inner {
+			min-height: 100%;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			flex-wrap: nowrap;
+			text-align: center;
+		}
+		
+		&__heading {
+			@include font-h5;
+
+			&:not(:last-child) {
+				@include interpolate(margin-bottom, 20px, 40px);
+			}
+
+		}
+
+		&__buttons {
+			@include interpolate(margin-top, -10px, -20px);
+		}
+
+		&__button {
+			@include interpolate(padding-top, 10px, 20px);
+			display: block;
+			text-align: center;
+			width: 100%;
+		}
+
+	}
+
+	&__item {
+		display: flex;
+		flex-wrap: nowrap;
+		flex-direction: column;
+		align-items: stretch;
+		justify-content: space-between;
+
+		&[data-active="true"] {
+			display: flex;
+		}
+
+		&__media {
+			@include useMediaTakeover;
+
+			&__inner {
+				@include aspectRatio(16, 5);
+			}
+
+		}
+
+		&__heading {
+			@include font-h5;
+
+			&:not(:last-child) {
+				@include interpolate(margin-bottom, 20px, 40px);
+			}
+
+		}
+
+		&__content {
+			display: flex;
+			flex: 1;
+
+			&__inner {
+				margin-top: auto;
+				margin-bottom: auto;
+			}
+
+		}
+
+		&__calendar {
+			@include aspectRatio(4, 3);
+			@include interpolate(border-radius, 10px, 20px);
+			position: relative;
+			background-color: var(--item-calendar-background-color);
+
+			&__image {
+				@include interpolate(margin, 15px, 30px);
+				background-image: url(/built/images/widgetPopup_calendar-light.png);
+				background-size: contain;
+				background-repeat: no-repeat;
+				background-position: center center;
+				position: absolute;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				right: 0;
+
+				@include useWidgetPopupVariants(dark) {
+					background-image: url(/built/images/widgetPopup_calendar-dark.png);
+				}
+			}
+
+			&__button {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+			}
+
+		}
+
+	}
+
+	.os-scrollbar {
+		// The axis padding of the scrollbar (horizontal: padding-x, vertical: padding-y)
+		// --os-padding-axis: 20px;
+		@include interpolate(--os-padding-axis, 10px, 20px);
+		// The background of the scrollbar handle
+		--os-handle-bg: var(--scrollbar-color);
+		// The :hover background of the scrollbar handle
+		--os-handle-bg-hover: var(--scrollbar-color);
+		// The :active background of the scrollbar handle
+		--os-handle-bg-active: var(--scrollbar-color);
+	}
+
+}

@@ -1,0 +1,16 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set blockIndex = blockIndex ?? random() %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+
+{#---------- Data Handling ----------#}
+
+{#---------- Output ----------#}
+{% include "_components/{{lowerCase type}}{{#if folderPath}}/{{properCase folderPath}}{{/if}}/{{properCase name}}/{{properCase name}}" with {
+	variants: variants,
+} only %}

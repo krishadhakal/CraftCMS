@@ -1,0 +1,85 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set size = helpers.getOption(size ?? null, ["large", "small"]) %}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set hoverStyle = hoverStyle ?? true %}
+{% set style = helpers.getOption(style ?? null, ["filled", "outline"]) %}
+{% set shape = helpers.getOption(shape ?? null, ["round", "square"]) %}
+{% set type = helpers.getOption(type ?? null, ["facebook", "instagram", "linkedin", "youtube", "twitter", "whatsapp", "houzz", "pinterest", "x", "chevron-up", "chevron-down", "chevron-left", "chevron-right", "arrow-up", "arrow-down", "arrow-left", "arrow-right"], "") %}
+{% set target = target ?? null %}
+{% set url = url ?? null %}
+
+{#---------- Data Handling ----------#}
+{% set iconMarkup = null %}
+{% if type|length %}
+	{% set iconMarkup %}
+	{% apply spaceless %}
+		{% switch type %}
+			{% case "facebook" %}
+				{{ helpers.getIcon("social/facebook")}}
+			{% case "instagram" %}
+				{{ helpers.getIcon("social/instagram")}}
+			{% case "linkedin" %}
+				{{ helpers.getIcon("social/linkedin")}}
+			{% case "youtube" %}
+				{{ helpers.getIcon("social/youtube")}}
+			{% case "twitter" %}
+				{{ helpers.getIcon("social/twitter")}}
+			{% case "whatsapp" %}
+				{{ helpers.getIcon("social/whatsapp")}}
+			{% case "houzz" %}
+				{{ helpers.getIcon("social/houzz")}}
+			{% case "pinterest" %}
+				{{ helpers.getIcon("social/pinterest")}}
+			{% case "x" %}
+				{{ helpers.getIcon("x")}}
+			{% case "chevron-up" %}
+				{{ helpers.getIcon("chevron-up")}}
+			{% case "chevron-down" %}
+				{{ helpers.getIcon("chevron-down")}}
+			{% case "chevron-left" %}
+				{{ helpers.getIcon("chevron-left")}}
+			{% case "chevron-right" %}
+				{{ helpers.getIcon("chevron-right")}}
+			{% case "arrow-up" %}
+				{{ helpers.getIcon("arrow-up")}}
+			{% case "arrow-down" %}
+				{{ helpers.getIcon("arrow-down")}}
+			{% case "arrow-left" %}
+				{{ helpers.getIcon("arrow-left")}}
+			{% case "arrow-right" %}
+				{{ helpers.getIcon("arrow-right")}}
+			{% default %}
+		{% endswitch %}
+	{% endapply %}
+	{% endset %}
+{% endif %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "atom-ButtonIcon" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [size, theme, hoverStyle ? 'hoverStyle', style, shape, type], []) %}
+
+{#---------- Output ----------#}
+{% if iconMarkup|length %}
+
+	{% set markup %}
+		<span class="{{ baseClass }}__inner">
+			<div class="{{ baseClass }}__icon">
+				{{ iconMarkup }}
+			</div>
+		</span>
+	{% endset %}
+
+	{% if url|length %}
+		<a class="{{ classes }}" href="{{ url }}" target="{{ target }}">
+			{{ markup }}
+		</a>
+	{% else %}
+		<span class="{{ classes }}">
+			{{ markup }}
+		</span>
+	{% endif %}
+
+{% endif %}

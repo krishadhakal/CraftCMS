@@ -1,0 +1,94 @@
+$base-class: '.mol-UnitTypeInformation';
+
+@mixin useUnitTypeInformationVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--background-color: #{$color-base-surface-primary-light};
+	--color: #{$color-base-text-primary-light};
+	--label-icon-color: #{$color-base-text-primary-light};
+	@include sectionSpacing;
+	@include useDisableSpacing;
+	background-color: var(--background-color);
+	color: var(--color);
+
+	&--dark {
+		--background-color: #{$color-base-surface-primary-dark};
+		--color: #{$color-base-text-primary-dark};
+		--label-icon-color: #{$color-base-text-primary-dark};
+	}
+
+	&__image {
+		@include aspectRatio(4, 3);
+		@include interpolate(margin-bottom, 25px, 50px);
+		position: relative;
+
+		@include breakpoint(medium) {
+			margin-bottom: 0;
+		}
+	}
+
+	&__content {
+		align-self: center;
+	}
+
+	&__heading {
+		@include font-h3;
+	}
+
+	&__copy {
+		@include interpolate(margin-top, 10px, 20px);
+
+		p {
+			@include font-body-small;
+		}
+
+	}
+
+	&__labels {
+		@include interpolate(margin-top, 10px, 20px);
+		@include interpolate((margin-left, margin-right), -5px, -10px);
+		display: flex;
+		flex-wrap: wrap;
+		flex-direction: row;
+		align-items: baseline;
+		justify-content: flex-start;
+	}
+
+	&__label {
+		@include font-body-xsmall;
+		display: flex;
+		flex-wrap: wrap;
+		flex-direction: row;
+		align-items: center;
+		justify-content: flex-start;
+		@include interpolate((padding-left, padding-right), 5px, 10px);
+
+		&+& {
+			@include interpolate(margin-top, 3px, 6px);
+		}
+
+		&__icon {
+			@include interpolate(margin-right, 5px, 10px);
+			@include interpolate((width, height), 12px, 24px);
+			display: block;
+
+			svg {
+				fill: var(--label-icon-color);
+				height: 100%;
+				width: 100%;
+
+				* {
+					fill: inherit;
+				}
+			}
+		}
+
+		&__text {
+			display: block;
+		}
+	}
+}

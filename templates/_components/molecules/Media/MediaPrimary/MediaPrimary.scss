@@ -1,0 +1,115 @@
+$base-class: '.mol-MediaPrimary';
+
+@mixin useMediaPrimaryVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--background-color: #{$color-base-surface-primary-light};
+	--color: #{$color-base-text-primary-light};
+	@include sectionSpacing;
+	@include useDisableSpacing;
+	background-color: var(--background-color);
+	
+	&--dark {
+		--background-color: #{$color-base-surface-primary-dark};
+		--color: #{$color-base-text-primary-dark};
+	}
+
+	&--large {
+
+		#{$base-class}__carouselGridContainer {
+			
+			@include breakpoint($grid-stops-growing, "max") {
+				padding: 0;
+			}
+
+		}
+
+	}
+
+	&__intro {
+		color: var(--color);
+
+		@include breakpoint(medium) {
+			@include interpolate(margin-bottom, $spacing-content-media);
+		}
+		
+	}
+
+	&__introContentColumn {
+		@include interpolate(margin-bottom, $spacing-content-media);
+
+		@include breakpoint(medium) {
+			margin-bottom: 0;
+		}
+
+	}
+
+	@include useContentSpacing($button: false);
+
+	&__label {
+		@include font-h6;
+	}
+
+	&__heading {
+		@include font-h2;
+	}
+
+	&__copy {
+		@include richText;
+		max-width: 44em;
+	}
+
+	&__arrowsColumn {
+		@include interpolate(margin-bottom, 16px, 24px);
+		display: flex;
+		justify-content: flex-end;
+		align-items: flex-end;
+
+		@include breakpoint(medium) {
+			margin-bottom: 0;
+		}
+
+	}
+
+	&__arrows {
+		display: flex;
+	}
+
+	&__arrow {
+		display: block;
+
+		&--next {
+			@include interpolate(margin-left, 12px, 16px);
+		}
+
+	}
+
+	&__carousel {
+		width: 100%;
+		@include carouselAspectRatio(16, 9);
+
+		@include useMediaPrimaryVariants(small) {
+			// aspect-ratio: 1054/600;
+		}
+
+		@include useMediaPrimaryVariants(medium) {
+			// aspect-ratio: 1272/725;
+		}
+
+		@include useMediaPrimaryVariants(large) {
+			// aspect-ratio: 1440/750;
+		}
+
+	}
+
+}
+
+#{$base-class}--disableBottomSpacing + #{$base-class}--disableTopSpacing#{$base-class}--noIntro,
+.mol-MediaDuo--disableBottomSpacing + #{$base-class}--disableTopSpacing#{$base-class}--noIntro,
+.mol-MediaTrio--disableBottomSpacing + #{$base-class}--disableTopSpacing#{$base-class}--noIntro {
+	@include interpolate(padding-top, 4px, 8px);
+}

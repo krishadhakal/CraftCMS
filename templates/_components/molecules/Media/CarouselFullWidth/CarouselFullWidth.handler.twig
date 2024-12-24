@@ -1,0 +1,70 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = "light" %}
+{% set intro = null %}
+{% set carousel = null %}
+
+{#---------- Data Handling ----------#}
+{% set imageSizes = "100vw" %}
+{% set imageOptions = [
+	{
+        width: 480,
+    },
+    {
+        width: 640,
+    },
+    {
+        width: 1000,
+    },
+    {
+        width: 1600,
+    },
+    {
+        width: 2400,
+    },
+    {
+        width: 3200,
+    },
+] %}
+
+{% if block|length %}
+	{% set disableTopSpacing = block.common_disableTopSpacing ?? false %}
+	{% set disableBottomSpacing = block.common_disableBottomSpacing ?? false %}
+	{% set variants = variants|merge([disableTopSpacing ? "disableTopSpacing", disableBottomSpacing ? "disableBottomSpacing"]) %}
+
+	{% set intro %}
+		{% apply spaceless %}
+			{% include "_components/elements/Global/Intro/Intro.handler" with {
+				theme: theme,
+				block: block,
+			} only %}
+		{% endapply %}
+	{% endset %}
+
+	{% set carousel %}
+		{% apply spaceless %}
+			{% include "_components/elements/Media/Carousel/Carousel.handler" with {
+				block: block.children.one() ?? null,
+				theme: theme,
+				showArrows: true,
+				carouselAspectRatio: "16:9",
+				imageSizes: imageSizes,
+				imageOptions: imageOptions,
+			} only %}
+		{% endapply %}
+	{% endset %}
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/Media/CarouselFullWidth/CarouselFullWidth" with {
+	variants: variants,
+	theme: theme,
+	intro: intro,
+	carousel: carousel,
+} only %}

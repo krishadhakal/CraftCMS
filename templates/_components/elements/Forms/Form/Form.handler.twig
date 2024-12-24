@@ -1,0 +1,26 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = variants ?? [] %}
+{% set theme = theme ?? "dark" %}
+{% set formieForm = formieForm ?? null %}
+
+{#---------- Data Handling ----------#}
+{% set numberOfFields = null %}
+
+{% if formieForm|length %}
+	{% set numberOfFields = (formieForm.getCustomFields() ?? [])|length %}
+{% endif %}
+
+{#---------- Output ----------#}
+{% if formieForm|length and numberOfFields|length %}
+	{% include "_components/elements/Forms/Form/Form" with {
+		variants: variants,
+		theme: theme,
+		formieForm: formieForm,
+	} only %}
+{% endif %}

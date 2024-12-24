@@ -1,0 +1,152 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = "light" %}
+{% set hideDuration = null %}
+{% set theme = null %}
+{% set media = null %}
+{% set heading = null %}
+{% set introductionHeading = null %}
+{% set items = [] %}
+
+{% set toggleImageAspectRatio = "14:10" %}
+{% set toggleImageSizes = "(min-width: 768px) 180px, (min-width: 560px) 24vw, 30vw" %}
+{% set toggleImageOptions = [
+	{
+        width: 480,
+    },
+] %}
+
+{% set formImageAspectRatio = "16:5" %}
+{% set formImageSizes = "(min-width: 768px) 600px, (min-width: 560px) 80vw, 100vw" %}
+{% set formImageOptions = [
+	{
+        width: 480,
+    },
+    {
+        width: 640,
+    },
+    {
+        width: 1000,
+    },
+    {
+        width: 1200,
+    },
+] %}
+
+{#---------- Data Handling ----------#}
+{% set useWidgetPopup = globalWidgetPopup.globalWidgetPopup_useWidgetPopup ?? false %}
+
+{% if useWidgetPopup %}
+	{% set heading = globalWidgetPopup.globalWidgetPopup_heading ?? heading %}
+	{% set mediaAsset = globalWidgetPopup.elMedia_media.one() ?? null %}
+	{% set introductionHeading = globalWidgetPopup.globalWidgetPopup_introductionHeading ?? introductionHeading %}
+	{% set theme = globalWidgetPopup.common_theme.value ?? null %}
+	{% set hideDuration = globalWidgetPopup.globalWidgetPopup_hideDuration ?? null %}
+
+	{% if mediaAsset|length %}
+		{% set media %}
+			{% apply spaceless %}
+				{% include "_components/elements/Media/MediaTakeover/MediaTakeover.handler" with {
+					mediaAsset: mediaAsset,
+					imageAspectRatio: toggleImageAspectRatio,
+					imageSizes: toggleImageSizes,
+					imageOptions: toggleImageOptions,
+				} only %}
+			{% endapply %}
+		{% endset %}
+	{% endif %}
+
+	{% for item in globalWidgetPopup.globalWidgetPopup_items.level(1).all() ?? [] %}
+		{% set itemType = item.type.handle ?? null %}
+		{% set itemLabel = item.elWidgetPopupItem_label ?? null %}
+		{% set itemHandle = itemLabel|lower|replace("/[^A-Za-z0-9]/", "") %}
+		{% set itemData = null %}
+
+		{% switch itemType %}
+			{% case "itemForm" %}
+				{% set itemHeading = item.elWidgetPopupItem_heading ?? null %}
+				{% set itemFormieForm = item.elWidgetPopupItemForm_form.one() ?? null %}
+				{% set itemMediaAsset = item.elMedia_media.one() ?? null %}
+				{% set itemMedia = null %}
+				{% set itemForm = null %}
+
+				{% if itemMediaAsset|length %}
+					{% set itemMedia %}
+						{% apply spaceless %}
+							{% include "_components/elements/Media/MediaTakeover/MediaTakeover.handler" with {
+								mediaAsset: itemMediaAsset,
+								imageAspectRatio: formImageAspectRatio,
+								imageSizes: formImageSizes,
+								imageOptions: formImageOptions,
+							} only %}
+						{% endapply %}
+					{% endset %}
+				{% endif %}
+
+				{% if itemFormieForm|length %}
+					{% set itemForm %}
+						{% apply spaceless %}
+							{% include "_components/elements/Forms/Form/Form.handler" with {
+								theme: theme,
+								formieForm: itemFormieForm,
+							} only %}
+						{% endapply %}
+					{% endset %}
+				{% endif %}
+
+				{% if itemForm|length %}
+					{% set itemData = {
+						heading: itemHeading,
+						form: itemForm,
+						media: itemMedia,
+					} %}
+				{% endif %}
+			{% case "itemCalendar" %}
+				{% set itemHeading = item.elWidgetPopupItem_heading ?? null %}
+				{% set itemButtonField = item.elWidgetPopupItemCalendar_button ?? null %}
+				{% set itemButton = null %}
+
+				{% if itemButtonField|length %}
+					{% set itemButton = {
+						text: helpers.generateLinkText(itemButtonField),
+						url: helpers.generateLinkUrl(itemButtonField),
+						target: helpers.generateLinkTarget(itemButtonField),
+					} %}
+				{% endif %}
+
+				{% if itemButton|length %}
+					{% set itemData = {
+						heading: itemHeading,
+						button: itemButton,
+					} %}
+				{% endif %}
+			{% default %}
+		{% endswitch %}
+
+		{% if itemLabel|length and itemHandle|length and itemData|length %}
+			{% set items = items|merge([{
+				type: itemType,
+				label: itemLabel,
+				handle: itemHandle,
+				data: itemData,
+			}]) %}
+		{% endif %}
+	{% endfor %}
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/Widgets/WidgetPopup/WidgetPopup" with {
+	variants: variants,
+	hideDuration: hideDuration,
+	theme: theme,
+	media: media,
+	heading: heading,
+	introductionHeading: introductionHeading,
+	items: items,
+} only %}

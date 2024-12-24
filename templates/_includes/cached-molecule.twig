@@ -1,0 +1,37 @@
+{#---------- Parameters ----------#}
+{% set cacheKey = cacheKey ?? null %}
+{% set cacheGlobally = cacheGlobally ?? false %}
+{% set cacheWithQueryStrings = cacheWithQueryStrings ?? true %}
+{% set path = path ?? null %}
+{% set data = data ?? null %}
+
+{#---------- Data Handling ----------#}
+{% if cacheGlobally != true and cacheWithQueryStrings == true %}
+	{% set queryString = craft.app.request.queryStringWithoutPath %}
+	{% set cacheKey = cacheKey ~ queryString %}
+{% endif %}
+
+{#---------- Output ----------#}
+{% if cacheKey %}
+
+	{% if cacheGlobally == true %}
+		{% cache globally using key cacheKey unless craft.app.config.general.devMode %}
+			{% include path with data %}
+		{% endcache %}
+	{% else %}
+		{% cache using key cacheKey unless craft.app.config.general.devMode %}
+			{% include path with data %}
+		{% endcache %}
+	{% endif %}
+
+{% else %}
+	
+	{#
+		If cache key not set, do not cache.
+		- If we let cache create the key, it will think all calls to cached molecule are the same and
+		  will use the same key for all of them.
+	#}
+	{% include path with data %}
+
+{% endif %}
+

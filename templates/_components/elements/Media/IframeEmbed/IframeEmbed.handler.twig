@@ -1,0 +1,26 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+{% set constrainToParent = constrainToParent ?? false %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set iframe = null %}
+
+{#---------- Data Handling ----------#}
+{% if block|length %}
+	{% set iframe = block.elIframeEmbed_iframeCode ?? block.iframe_iframeCode ?? null %}
+{% endif %}
+
+{% if constrainToParent %}
+	{% set variants = variants|merge(['constrainToParent']) %}
+{% endif %}
+
+
+{#---------- Output ----------#}
+{% include "_components/elements/Media/IframeEmbed/IframeEmbed" with {
+	variants: variants,
+	iframe: iframe,
+} only %}

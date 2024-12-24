@@ -1,0 +1,8 @@
+{% extends '_layout.twig' %}
+
+{% block content %}
+	{% include "_components/molecules/Heros/HeroBasic/HeroBasic" with {
+		heading: "Style Guide",
+	} only %}
+	{% include "_components/molecules/Misc/Styleguide/Styleguide" %}
+{% endblock %}

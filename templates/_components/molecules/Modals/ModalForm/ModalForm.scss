@@ -1,0 +1,115 @@
+$base-class: '.mol-ModalForm';
+
+@mixin useModalFormVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--overlay-color: #{rgba($color-white, .5)};
+	--background-color: #{$color-base-surface-secondary-dark};
+	--color: #{$color-base-text-primary-dark};
+	--scrollbar-color: #{rgba($color-base-text-primary-dark, 0.75)};
+	visibility: hidden;
+	opacity: 0;
+	position: fixed;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	z-index: $zIndex-modal;
+	$self: &;
+
+	&--light {
+		--background-color: #{$color-base-surface-secondary-light};
+		--color: #{$color-base-text-primary-light};
+		--scrollbar-color: #{rgba($color-base-text-primary-light, 0.75)};
+	}
+
+	&__wrapper {
+		@include sectionSpacing;
+		background-color: var(--background-color);
+		color: var(--color);
+		position: fixed;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		width: 100%;
+		z-index: $zIndex-modal;
+		overflow-y: auto;
+
+		@include breakpoint(medium) {
+			width: 75%;
+		}
+
+		@include breakpoint(large) {
+			width: 50%;
+		}
+
+	}
+
+	&__wrapperInner {
+		min-height: 100%;
+		display: flex;
+		align-items: center;
+		z-index: 1;
+	}
+
+	&__content {
+		width: 100%;
+		@include interpolate((padding-left, padding-right), 58px, 84px);
+	}
+
+	@include useContentSpacing();
+
+	&__label {
+		@include font-h6;
+	}
+
+	&__heading {
+		@include font-h2;
+		max-width: 15em;
+	}
+
+	&__copy {
+		@include richText;
+	}
+
+	&__label,
+	&__heading,
+	&__copy {
+
+		& + #{$self}__form {
+			@include interpolate(margin-top, $spacing-content-media);
+		}
+
+	}
+
+	&__close {
+		@include interpolate(top, 12px, 24px);
+		@include interpolate(right, 12px, 20px);
+		position: fixed;
+		z-index: 2;
+	}
+
+	&__overlay {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: $zIndex-modal - 1;
+		background-color: var(--overlay-color);
+	}
+
+	.os-scrollbar {
+		// The background of the scrollbar handle
+		--os-handle-bg: var(--scrollbar-color);
+		// The :hover background of the scrollbar handle
+		--os-handle-bg-hover: var(--scrollbar-color);
+		// The :active background of the scrollbar handle
+		--os-handle-bg-active: var(--scrollbar-color);
+	}
+
+}

@@ -1,0 +1,90 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = "light" %}
+{% set disableSpacing = true %}
+{% set imageSizes = "(min-width: 1440px) 42vw, (min-width: 1024px) 50vw, (min-width: 768px) 42vw, 100vw" %}
+{% set imageSources = null %}
+{% set imageUrl = null %}
+{% set imageAlt = null %}
+{% set heading = null %}
+{% set labels = [] %}
+{% set copy = null %}
+
+{#---------- Data Handling ----------#}
+{% set imageDefaultOptions = { fit: 'crop', ar: "4:3" } %}
+{% set imageOptions = [
+	{
+		width: 480,
+	},
+	{
+		width: 640,
+	},
+	{
+		width: 800,
+	},
+	{
+		width: 1200,
+	},
+	{
+		width: 1440,
+	},
+] %}
+
+{% if disableSpacing %}
+	{% set variants = variants|merge(["disableTopSpacing", "disableBottomSpacing"]) %}
+{% endif %}
+
+{% if entry|length %}
+	{% set heading = entry.title ?? heading %}
+	{% set copy = helpers.getRawText(entry.unitType_heroCopy ?? entry.unitType_cardDescription) ?? null %}
+	{% set imageAsset = entry.unitType_floorPlanImage.one() ?? entry.unitType_heroImage.one() ?? null %}
+	{% set bathrooms = entry.unit_bathrooms ?? null %}
+	{% set bedrooms = entry.unit_bedrooms ?? null %}
+	{% set squareFeet = entry.unit_squareFeet ?? null %}
+
+	{% if bedrooms|length %}
+		{% set labels = labels|merge([{
+			type: "bedrooms",
+			value: bedrooms matches '/^[-+]?[0-9]*\\.?[0-9]+$/' ? bedrooms ~ " bd." : bedrooms,
+		}]) %}
+	{% endif %}
+
+	{% if bathrooms|length %}
+		{% set labels = labels|merge([{
+			type: "bathrooms",
+			value: bathrooms ~ " ba.",
+		}]) %}
+	{% endif %}
+
+	{% if squareFeet|length %}
+		{% set labels = labels|merge([{
+			type: "squareFeet",
+			value: squareFeet ~ " sq. ft.",
+		}]) %}
+	{% endif %}
+
+	{% if imageAsset|length %}
+		{% set imageSources = helpers.imageSources(imageAsset, imageOptions, imageDefaultOptions)|spaceless %}
+		{% set imageUrl = helpers.imageDefaultSource(imageAsset, imageOptions, imageDefaultOptions)|spaceless %}
+		{% set imageAlt = imageAsset.title ?? null %}
+	{% endif %}
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/UnitType/UnitTypeInformation/UnitTypeInformation" with {
+	variants: variants,
+	theme: theme,
+	imageSizes: imageSizes,
+	imageSources: imageSources,
+	imageUrl: imageUrl,
+	imageAlt: imageAlt,
+	heading: heading,
+	labels: labels,
+	copy: copy,
+} only %}

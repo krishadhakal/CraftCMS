@@ -1,0 +1,550 @@
+@use "sass:map";
+
+$base-class: '.el-Form';
+
+@mixin useFormVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+/* Colors
+-------------------------------------------*/
+
+// We use a map here so that these variables aren't attached to the el-Form element, so that
+// the mixins that use these variables can be used in other components.
+$form-colors: (
+
+	// ----- Dark -----
+	// labels
+	dark-label-text-color: #{$color-base-text-primary-dark}, // label text color
+	dark-required-label-asterisk-color: #{$color-error}, // asterisk color for required field labels
+	// instructions
+	dark-instructions-text-color: #{rgba($color-base-text-primary-dark, .75)}, // instructions text color
+	// fields
+	dark-field-border-color: #{$color-base-text-primary-dark}, // field border color
+	dark-field-background-color: transparent, // field background color
+	dark-placeholder-text-color: #{rgba($color-base-text-primary-dark, .5)}, // placeholder text color
+	dark-field-text-color: #{$color-base-text-primary-dark}, // field text color
+	dark-dropdown-chevron-url: url('/built/icons/chevron-down-light.svg'), // URL for chevron icon used for select dropdowns
+	dark-checkbox-checkmark-url: url('/built/icons/checkmark-light.svg'), // URL for checkmark icon used for checkboxes
+	// fields - focus
+	dark-focus-field-border-color: #{$color-base-text-primary-dark}, // border color when field has focus
+	// fields - error
+	dark-error-label-text-color: #{$color-error}, // label text color for fields with an error
+	dark-error-field-border-color: #{$color-error}, // border color for fields with an error
+	dark-error-field-text-color: #{$color-error}, // field text color for fields with an error
+	dark-error-message-text-color: #{$color-error}, // error message color
+	// alerts
+	dark-alert-background-color: #{$color-button-primary-fill-dark}, // non-error alert background color
+	dark-alert-text-color: #{$color-button-primary-fill-text-dark}, // non-error alert text color
+	// error alerts
+	dark-error-alert-background-color: #{rgba($color-error, .25)}, // error alert background color
+	dark-error-alert-text-color: #{$color-error}, // error alert text color
+	
+	// ----- Light -----
+	// labels
+	light-label-text-color: #{$color-base-text-primary-light}, // label text color
+	light-required-label-asterisk-color: #{$color-error}, // asterisk color for required field labels
+	// instructions
+	light-instructions-text-color: #{rgba($color-base-text-primary-light, .75)}, // instructions text color
+	// fields
+	light-field-border-color: #{$color-base-text-primary-light}, // field border color
+	light-field-background-color: transparent, // field background color
+	light-placeholder-text-color: #{rgba($color-base-text-primary-light, .5)}, // placeholder text color
+	light-field-text-color: #{$color-base-text-primary-light}, // field text color
+	light-dropdown-chevron-url: url('/built/icons/chevron-down.svg'), // URL for chevron icon used for select dropdowns
+	light-checkbox-checkmark-url: url('/built/icons/checkmark.svg'), // URL for checkmark icon used for checkboxes
+	// fields - focus
+	light-focus-field-border-color: #{$color-base-text-primary-light}, // border color when field has focus
+	// fields - error
+	light-error-label-text-color: #{$color-error}, // label text color for fields with an error
+	light-error-field-border-color: #{$color-error}, // border color for fields with an error
+	light-error-field-text-color: #{$color-error}, // field text color for fields with an error
+	light-error-message-text-color: #{$color-error}, // error message color
+	// alerts
+	light-alert-background-color: #{$color-button-primary-fill-light}, // non-error alert background color
+	light-alert-text-color: #{$color-button-primary-fill-text-light}, // non-error alert text color
+	// error alerts
+	light-error-alert-background-color: #{rgba($color-error, .25)}, // error alert background color
+	light-error-alert-text-color: #{$color-error}, // error alert text color
+	
+);
+
+/* Other Variables
+-------------------------------------------*/
+
+/*
+	These variables are applied to general form elements (such as input). They will affect generic forms as well
+	as Formie forms.
+*/
+$field-border-width: 1.5px; // border width for all fields
+$field-border-radius: 0px; // border radius for fields
+$checkbox-border-radius: 3px; // border radius for checkboxes
+$label-spacing: 10px; // spacing between label and instructions/fields
+$submit-button-spacing: 28px; // spacing above submit button
+$radio-button-size: 18px; // width/height of radio buttons, including border
+$radio-button-label-spacing: 10px; // space between radio button and label
+$checkbox-size: 18px; // width/height of checkboxes, including border
+$checkbox-label-spacing: 10px; // space between checkbox and label
+
+/*
+	These variables are needed when the label line-height is different from the height of the radio button or checkbox.
+	- If line-height is shorter than the height of the radio button/checkbox, text-adjust can be used
+	  to push the text down.
+	- If line-height is larger than the height of the radio button/checkbox, position-adjust can be
+	  used to push the radio button/checkbox down.
+	- If radio button/checkbox height are equal/similar to the line height, these will be set to 0.
+*/
+$radio-button-text-adjust: 0px;
+$radio-button-position-adjust: 1px;
+$checkbox-text-adjust: 0px;
+$checkbox-position-adjust: 1px;
+
+/*
+	These variables are Formie specific. They will not affect generic forms, as they are applied to formie selectors.
+*/
+$formie-label-instructions-spacing: -5px; // adjusts spacing between label and instructions (this is added to $label-spacing)
+$formie-instructions-spacing: 6px; // spacing between instructions and fields
+$formie-input-spacing: 20px; // spacing between fields
+$formie-radio-button-checkbox-spacing: 4px; // spacing between checkboxes/radio buttons
+
+/* Helper mixins
+	- These mixins are helpers, they do not include any selectors and should be used inside specific selectors.
+-------------------------------------------*/
+
+// This is where the label font is defined.
+@mixin formLabelFont($theme: "dark") {
+	@include font-body-small;
+	line-height: 1;
+}
+
+@mixin formInstructionsFont($theme: "dark") {
+	@include font-body-xsmall;
+}
+
+// This is where the field font is defined.
+@mixin formFieldFont($theme: "dark", $lineHeightOne: true) {
+	@include font-body-small;
+
+	@if $lineHeightOne {
+		line-height: 1;
+	}
+
+}
+
+// This mixin is general, and is used for several input types.
+@mixin formField($theme: "dark") {
+	@include interpolate((padding-top, padding-bottom), 12px, 16px);
+	@include interpolate((padding-left, padding-right), 10px, 20px);
+	background-color: map.get($form-colors, #{$theme}-field-background-color);
+	outline: none !important;
+	box-shadow: none !important;
+	border: #{$field-border-width} solid map.get($form-colors, #{$theme}-field-border-color);
+	line-height: 1;
+	border-radius: $field-border-radius;
+	@include formFieldFont($theme);
+	color: map.get($form-colors, #{$theme}-field-text-color);
+
+	&:focus {
+		border-color: map.get($form-colors, #{$theme}-focus-field-border-color);
+	}
+
+	&::placeholder {
+		opacity: 1;
+		color: map.get($form-colors, #{$theme}-placeholder-text-color);
+	}
+
+	&:-webkit-autofill,
+	&:-webkit-autofill:hover, 
+	&:-webkit-autofill:focus {
+		-webkit-text-fill-color: map.get($form-colors, #{$theme}-field-text-color);
+	}
+
+}
+
+/* Form mixins
+	- These mixins can be applied to non-formie forms.
+	- The styleForm mixin can be applied to the form wrapper.
+-------------------------------------------*/
+
+// This mixin styles all form elements.
+@mixin styleForm($theme: "dark") {
+	@include styleFormFields($theme);
+
+	label,
+	legend {
+		@include formLabelFont($theme);
+		color: map.get($form-colors, #{$theme}-label-text-color);
+		display: block;
+	}
+
+	// We only apply this spacing to non-Formie labels/legends, because Formie has a variable
+	// for this that handles different label position settings.
+	label:not(.fui-label),
+	legend:not(.fui-legend) {
+		@include interpolate(margin-bottom, ($label-spacing * 0.7), $label-spacing);
+	}
+
+	button,
+	[type="submit"] {
+		@include interpolate(margin-top, ($submit-button-spacing * 0.7), $submit-button-spacing);
+	}
+
+}
+
+// This mixin styles all form fields.
+@mixin styleFormFields($theme: "dark") {
+
+	input,
+	select,
+	textarea {
+		width: 100%;
+	}
+
+	@include formFieldText($theme);
+	@include formFieldRadioButton($theme);
+	@include formFieldSelect($theme);
+	@include formFieldCheckbox($theme);
+
+	input[type="hidden"] {
+		display: none;
+	}
+
+}
+
+// This mixin styles text inputs.
+@mixin formFieldText($theme: "dark") {
+
+	input[type="text"],
+	input[type="email"],
+	input[type="tel"],
+	input[type="number"],
+	input[type="file"],
+	textarea {
+		@include formField($theme);
+	}
+
+	textarea {
+		resize: none;
+	}
+
+	.iti__flag-container + input[type="tel"] {
+		@include interpolate(padding-left, 60px, 70px);
+	}
+
+}
+
+// This mixin styles radio buttons.
+@mixin formFieldRadioButton($theme: "dark") {
+
+	input[type="radio"] + label {
+		@include formFieldFont($theme, $lineHeightOne: false);
+		color: map.get($form-colors, #{$theme}-field-text-color);
+		padding-left: $radio-button-size + $radio-button-label-spacing;
+		cursor: pointer;
+		margin-bottom: 0;
+		min-height: $radio-button-size; // make the label element as tall as the radio button
+		@include interpolate(padding-top, $radio-button-text-adjust, $radio-button-text-adjust);
+
+		&:before,
+		&:after {
+			transform: translateY($radio-button-position-adjust);
+		}
+
+		&:before {
+			content: '';
+			width: $radio-button-size;
+			height: $radio-button-size;
+			outline: none !important;
+			box-shadow: none !important;
+			border-radius: 50%;
+			position: absolute;
+			top: 0;
+			left: 0;
+			display: block;
+			background-image: none !important;
+			background-color: transparent;
+			box-shadow: none;
+			border: #{$field-border-width} solid map.get($form-colors, #{$theme}-field-border-color);
+		}
+
+		&:after {
+			content: '';
+			width: ($radio-button-size - 8px);
+			height: ($radio-button-size - 8px);
+			outline: none !important;
+			box-shadow: none !important;
+			border-radius: 50%;
+			position: absolute;
+			top: 4px;
+			left: 4px;
+			display: block;
+			background-image: none !important;
+			background-color: map.get($form-colors, #{$theme}-field-border-color);
+			box-shadow: none;
+			display: none;
+		}
+
+	}
+
+	input[type="radio"]:focus + label,
+	input[type="radio"]:checked + label {
+
+		&:before {
+			border-color: map.get($form-colors, #{$theme}-field-border-color);
+			background-color: transparent;
+		}
+
+	}
+
+	input[type="radio"]:checked + label {
+
+		&:after {
+			display: block;
+		}
+
+	}
+
+}
+
+// This mixin styles select inputs.
+@mixin formFieldSelect($theme: "dark") {
+
+	select {
+		@include formField($theme);
+		line-height: 1.2;
+		color: map.get($form-colors, #{$theme}-placeholder-text-color);
+		@include transition(color);
+
+		&.value-selected {
+			color: map.get($form-colors, #{$theme}-field-text-color);
+		}
+		
+	}
+
+	select:not([multiple]):not([size]) {
+		@include interpolate(padding-right, 25px, 50px);
+		@include interpolate(background-size, 8px, 12px);
+		background-image: map.get($form-colors, #{$theme}-dropdown-chevron-url);
+		background-position: right 1em center;
+		background-repeat: no-repeat;
+	}
+
+	select[multiple] {
+		overflow: auto;
+	}
+
+}
+
+// This mixin styles checkboxes.
+@mixin formFieldCheckbox($theme: "dark") {
+
+	input[type="checkbox"] + label {
+		@include formFieldFont($theme, $lineHeightOne: false);
+		color: map.get($form-colors, #{$theme}-field-text-color);
+		padding-left: $checkbox-size + $checkbox-label-spacing;
+		cursor: pointer;
+		margin-bottom: 0;
+		min-height: $checkbox-size; // make the label element as tall as the checkbox
+		@include interpolate(padding-top, $checkbox-text-adjust, $checkbox-text-adjust);
+
+		&:before,
+		&:after {
+			content: '';
+			position: absolute;
+			display: block;
+			transform: translateY($checkbox-position-adjust);
+		}
+
+		&:before {
+			background-image: none !important;
+			background-color: transparent !important;
+			box-shadow: none;
+			border: #{$field-border-width} solid map.get($form-colors, #{$theme}-field-border-color);
+			outline: none !important;
+			box-shadow: none !important;
+			border-radius: $checkbox-border-radius;
+			width: $checkbox-size;
+			height: $checkbox-size;
+			top: 0;
+			left: 0;
+		}
+
+		&:after {
+			width: ($checkbox-size - 6px);
+			height: ($checkbox-size - 6px);
+			outline: none !important;
+			box-shadow: none !important;
+			position: absolute;
+			top: 3px;
+			left: 3px;
+			display: block;
+			background-image: map.get($form-colors, #{$theme}-checkbox-checkmark-url) !important;
+			background-size: contain;
+			background-position: center;
+			background-repeat: no-repeat;
+			box-shadow: none;
+			display: none;
+		}
+
+	}
+
+	input[type="checkbox"]:focus + label,
+	input[type="checkbox"]:checked + label {
+
+		&:before {
+			border-color: map.get($form-colors, #{$theme}-field-border-color);
+		}
+
+	}
+
+	input[type="checkbox"]:checked + label {
+
+		&:after {
+			display: block;
+		}
+
+	}
+
+}
+
+/* Formie mixins
+	- These mixins are Formie specific, and they shouldn't be applied to generic forms.
+-------------------------------------------*/
+
+// This mixin styles all formie form elements.
+@mixin styleFormieForm($theme: "dark") {
+
+	// override formie default colors
+	--fui-required-color: #{map.get($form-colors, #{$theme}-required-label-asterisk-color)}; // color of the asterisk on required inputs
+	--fui-label-error-color: #{map.get($form-colors, #{$theme}-error-label-text-color)}; // color of the label when input has an error
+	--fui-error-color: #{map.get($form-colors, #{$theme}-error-message-text-color)}; // color of error messages associated with inputs
+	--fui-input-error-color: #{map.get($form-colors, #{$theme}-error-field-text-color)}; // color of the input text when input has an error
+	--fui-input-error-border-color: #{map.get($form-colors, #{$theme}-error-field-border-color)}; // color of the input border when input has an error
+
+	// pull in all generic form styles
+	@include styleForm($theme);
+
+	// formie allows for country code dropdowns on phone number inputs, which requires different padding
+	.iti--allow-dropdown input,
+	.iti--separate-dial-code input {
+		@include interpolate(padding-left, 62px, 72px);
+	}
+
+	// formie specific styles
+	@include formieAlert($theme);
+	@include formieSpacing($theme);
+
+	.fui-instructions {
+		@include formInstructionsFont($theme);
+		color: map.get($form-colors, #{$theme}-instructions-text-color);
+	}
+
+	.fui-error-message {
+		@include formLabelFont($theme);
+	}
+
+	.fui-submit {
+		display: none;
+	}
+
+	// This is needed for the formie error border color to work properly. Without this, the non-error
+	// border color overrides the formie error border color due to selector specificity.
+	input[type="text"],
+	input[type="email"],
+	input[type="tel"],
+	input[type="number"],
+	input[type="file"],
+	textarea {
+
+		&.fui-error {
+			border-color: var(--fui-input-error-border-color);
+		}
+
+	}
+
+}
+
+// This mixin styles formie alerts.
+@mixin formieAlert($theme: "dark") {
+
+	.fui-alert {
+		@include interpolate((padding-top, padding-bottom), 8px, 16px);
+		@include interpolate((padding-left, padding-right), 10px, 20px);
+		@include font-body;
+		border-radius: 0;
+		background-color: map.get($form-colors, #{$theme}-alert-background-color);
+		color: map.get($form-colors, #{$theme}-alert-text-color);
+		text-align: center;
+		margin-bottom: 2em;
+
+		&.fui-alert-error {
+			background-color: map.get($form-colors, #{$theme}-error-alert-background-color);
+			color: map.get($form-colors, #{$theme}-error-alert-text-color);
+		}
+
+	}
+
+}
+
+@mixin formieSpacing($theme: "dark") {
+
+	@include interpolate(--fui-label-margin, ($label-spacing * 0.7), $label-spacing); // spacing between labels and instructions/fields
+	@include interpolate(--fui-instructions-margin, ($formie-instructions-spacing * 0.7), $formie-instructions-spacing); // spacing between instructions and fields
+	@include interpolate(--fui-check-margin-bottom, ($formie-radio-button-checkbox-spacing * 0.8), $formie-radio-button-checkbox-spacing); // spacing between radio buttons/checkboxes
+
+	// spacing between fields
+	.fui-row {
+		@include interpolate(margin-top, ($formie-input-spacing * 0.7), $formie-input-spacing);
+		margin-bottom: 0;
+
+		&:first-child {
+			margin-top: 0;
+		}
+
+		&.fui-row-empty {
+			margin-top: 0;
+		}
+
+		.fui-field {
+			margin-bottom: 0;
+		}
+
+	}
+
+	// pull the instructions closer to labels
+	.fui-label + .fui-instructions {
+		margin-top: $formie-label-instructions-spacing;
+	}
+
+	// remove the default formie spacing around the submit button
+	.fui-btn-wrapper {
+		margin: 0;
+		padding: 0;
+	}
+
+}
+
+#{$base-class} {
+
+	&--light {
+		@include styleFormieForm("light");
+	}
+
+	&--dark {
+		@include styleFormieForm("dark");
+	}
+
+	&--buttonFullWidth {
+
+		button,
+		.atom-ButtonPrimary,
+		.atom-ButtonSecondary,
+		[type="submit"] {
+			width: 100%;
+		}
+
+	}
+
+}

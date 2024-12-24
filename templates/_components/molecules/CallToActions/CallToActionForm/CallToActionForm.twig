@@ -1,0 +1,43 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["dark", "light"]) %}
+{% set label = label ?? null %}
+{% set heading = heading ?? null %}
+{% set copy = copy ?? null %}
+{% set form = form ?? null %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-CallToActionForm" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% if heading|length and copy|length and form|length %}
+<div class="{{ classes }}">
+	<div class="{{ baseClass }}__inner">
+		<div class="grid-container">
+			<div class="row">
+				<div class="{{ baseClass }}__content column xsmall-12 medium-6">
+					{% if label|length %}
+						<h5 class="{{ baseClass }}__label">
+							{{ label }}
+						</h5>
+					{% endif %}
+					<h2 class="{{ baseClass }}__heading">
+						{{ heading }}
+					</h2>
+					{% if copy|length %}
+						<div class="{{ baseClass }}__copy">
+							{{ copy }}
+						</div>
+					{% endif %}
+				</div>
+				<div class="{{ baseClass }}__form column xsmall-12 medium-6">
+					{{ form }}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %}

@@ -1,0 +1,52 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = "light" %}
+{% set label = null %}
+{% set heading = null %}
+{% set copyItems = [] %}
+{% set button = null %}
+
+{#---------- Data Handling ----------#}
+{% if block|length %}
+	{% set disableTopSpacing = block.common_disableTopSpacing ?? false %}
+	{% set disableBottomSpacing = block.common_disableBottomSpacing ?? false %}
+	{% set variants = variants|merge([disableTopSpacing ? "disableTopSpacing", disableBottomSpacing ? "disableBottomSpacing"]) %}
+
+	{% set label = block.molContentTextTypeOne_label ?? label %}
+	{% set heading = block.molContentTextTypeOne_heading ?? heading %}
+	{% set buttonField = block.molContentTextTypeOne_button ?? null %}
+
+	{% if not buttonField.isEmpty() %}
+		{% set button = {
+			text: helpers.generateLinkText(buttonField),
+			url: helpers.generateLinkUrl(buttonField),
+			target: helpers.generateLinkTarget(buttonField),
+		} %}
+	{% endif %}
+
+	{% for item in block.molContentTextTypeOne_copyItems.all() ?? [] %}
+		{% set itemCopy = item.item_copy ?? null %}
+
+		{% if itemCopy|length %}
+			{% set copyItems = copyItems|merge([{
+				copy: itemCopy
+			}]) %}
+		{% endif %}
+	{% endfor %}
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/Content/ContentTextTypeOne/ContentTextTypeOne" with {
+	variants: variants,
+	theme: theme,
+	label: label,
+	heading: heading,
+	copyItems: copyItems,
+	button: button,
+} only %}

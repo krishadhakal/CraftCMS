@@ -1,0 +1,24 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "atom-Hamburger" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+<button class="{{ classes }}">
+	<div class="{{ baseClass }}__icon">
+		<span class="top">
+			<span class="line"></span>
+		</span>
+		<span class="middle">
+			<span class="line"></span>
+		</span>
+		<span class="bottom">
+			<span class="line"></span>
+		</span>
+	</div>
+</button>

@@ -1,0 +1,479 @@
+@mixin breakpoint($breakpoint, $minMax: "min") {
+	@if $breakpoint == "xsmall only" {
+		@media all and (max-width: #{$bp-s - 1}) {
+			@content;
+		}
+	}
+
+	@else if $breakpoint == "small only" {
+		@media all and (min-width: #{$bp-s}) and (max-width: #{$bp-m - 1}) {
+			@content;
+		}
+	}
+
+	@else if $breakpoint == "medium only" {
+		@media all and (min-width: #{$bp-m}) and (max-width: #{$bp-l - 1}) {
+			@content;
+		}
+	}
+
+	@else if $breakpoint == "large only" {
+		@media all and (min-width: #{$bp-l}) and (max-width: #{$bp-xl - 1}) {
+			@content;
+		}
+	}
+
+	@else if $breakpoint == "xlarge only" {
+		@media all and (min-width: #{$bp-xl}) {
+			@content;
+		}
+	}
+
+	@else if $breakpoint == "xsmall" {
+		@if $minMax == "max" {
+			@media all and (max-width: #{$bp-s - 1}) {
+				@content;
+			}
+		}
+
+		@else {
+			@content;
+		}
+	}
+
+	@else if $breakpoint == "small" {
+		@if $minMax == "max" {
+			@media all and (max-width: #{$bp-m - 1}) {
+				@content;
+			}
+		}
+
+		@else {
+			@media all and (min-width: #{$bp-s}) {
+				@content;
+			}
+		}
+	}
+
+	@else if $breakpoint == "medium" {
+		@if $minMax == "max" {
+			@media all and (max-width: #{$bp-l - 1}) {
+				@content;
+			}
+		}
+
+		@else {
+			@media all and (min-width: #{$bp-m}) {
+				@content;
+			}
+		}
+	}
+
+	@else if $breakpoint == "large" {
+		@if $minMax == "max" {
+			@media all and (max-width: #{$bp-xl - 1}) {
+				@content;
+			}
+		}
+
+		@else {
+			@media all and (min-width: #{$bp-l}) {
+				@content;
+			}
+		}
+	}
+
+	@else if $breakpoint == "xlarge" {
+		@if $minMax == "max" {			
+			@content;
+		}
+
+		@else {
+			@media all and (min-width: #{$bp-xl}) {
+				@content;
+			}
+		}
+	}
+
+	@else {
+		@if $minMax == "max" {
+			@media all and (max-width: $breakpoint) {
+				@content;
+			}
+		}
+
+		@else {
+			@media all and (min-width: $breakpoint) {
+				@content;
+			}
+		}
+
+	}
+}
+
+//
+// Loading our fonts
+//
+@mixin font-face($font-family, $font-filename, $font-weight: 400, $font-style :normal) {
+	@font-face {
+		font-family: "#{$font-family}";
+		font-style: $font-style;
+		font-weight: $font-weight;
+		src: url("/built/fonts/#{$font-filename}.eot");
+		src: url("/built/fonts/#{$font-filename}.eot?#iefix") format("embedded-opentype"),
+		url("/built/fonts/#{$font-filename}.woff") format("woff"),
+		url("/built/fonts/#{$font-filename}.ttf") format("truetype"),
+		url("/built/fonts/#{$font-filename}.svg##{$font-family}") format("svg");
+		font-display: swap;
+	}
+}
+
+//
+// Font mixin
+//
+
+@mixin font($font-name: "Helvetica", $font-weight: false, $font-size-min: false, $font-size-max: false, $line-height: false, $font-style: false, $letter-spacing: false) {
+
+	font-family: $font-name;
+
+	@if $font-weight != false {
+		font-weight: $font-weight;
+	}
+
+	@else {
+		font-weight: 300;
+	}
+
+	@include interpolate(font-size, $font-size-min, $font-size-max);
+
+	@if $line-height != false {
+		line-height: $line-height;
+	}
+
+	@else {
+		line-height: 1.3;
+	}
+
+	@if $font-style != false {
+		font-style: $font-style;
+	}
+
+	@if $letter-spacing != false {
+		letter-spacing: $letter-spacing;
+	}
+
+}
+
+/* Variants
+--------------------------------------------------------------*/
+@mixin useVariants($baseClass, $variant, $variant2: null, $variant3: null) {
+	@if $variant2 != null and $variant3 != null {
+		#{$baseClass}--#{$variant}#{$baseClass}--#{$variant2}#{$baseClass}--#{$variant3} & {
+			@content;
+		}
+	}
+	@else if $variant2 != null {
+		#{$baseClass}--#{$variant}#{$baseClass}--#{$variant2} & {
+			@content;
+		}
+	}
+	@else {
+		#{$baseClass}--#{$variant} & {
+			@content;
+		}
+	}
+}
+
+//
+// A method used for determing fluid responsive properties
+// - If only one value is supplied, that value will be used for max and half of that value will be used for min.
+//
+@mixin interpolate($properties,
+	$min-value,
+	$max-value: null,
+	$min-screen: $interpolation-min,
+	$max-screen: $interpolation-max) {
+
+	@if not $max-value {
+		$max-value: $min-value;
+		$min-value: $min-value * $interpolation-min-multiplier;
+	}
+
+	& {
+		@each $property in $properties {
+			#{$property}: $min-value;
+		}
+
+		@media screen and (min-width: $min-screen) {
+			@each $property in $properties {
+				#{$property}: calc-interpolation($min-value,
+						$max-value,
+						$min-screen,
+						$max-screen);
+			}
+		}
+
+		@media screen and (min-width: $max-screen) {
+			@each $property in $properties {
+				#{$property}: $max-value;
+			}
+		}
+	}
+}
+
+//
+// Requires the calc-interpolation function which can also be used independently
+//
+@function calc-interpolation($min-value,
+	$max-value,
+	$min-screen: $interpolation-min,
+	$max-screen: $interpolation-max) {
+	$a: ($max-value - $min-value) / ($max-screen - $min-screen);
+	$b: $min-value - $a * $min-screen;
+
+	$sign: '+';
+
+	@if ($b < 0) {
+		$sign: '-';
+		$b: abs($b);
+	}
+
+	@return calc(#{$a * 100}vw #{$sign} #{$b});
+}
+
+@mixin vertical-align($position: relative) {
+	position: $position;
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+
+@mixin input-placeholder {
+
+	// used in _base.scss
+	// replaces compass/css/user-interface/input-placeholder()
+	&::-webkit-input-placeholder {
+		@content;
+	}
+
+	&:-moz-placeholder {
+		@content;
+		opacity: 1;
+	}
+
+	&::-moz-placeholder {
+		@content;
+		opacity: 1;
+	}
+
+	&:-ms-input-placeholder {
+		@content;
+	}
+}
+
+/* Aspect Ratio
+--------------------------------------------------------------*/
+@mixin aspectRatio($w: 16, $h: 9) {
+	width: 100%;
+	height: 0;
+	padding-top: calc(#{$h}/#{$w}* 100%);
+}
+
+/* Transition
+--------------------------------------------------------------*/
+@mixin transition($target: all,
+	$time: $transition-speed,
+	$type: $transition-ease,
+	$delay: 0,
+	$important: false) {
+	@if $important == true {
+		transition: all $time $type !important;
+		transition-property: $target !important;
+		transition-delay: $delay;
+	}
+
+	@else {
+		transition: all $time $type;
+		transition-property: $target;
+		transition-delay: $delay;
+	}
+}
+
+/* Max-width
+--------------------------------------------------------------*/
+@mixin maxWidth($width, $centered: true) {
+	max-width: $width;
+
+	@if $centered == true {
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+
+@mixin sectionSpacingTop($size: medium) {
+	@if $size == xsmall {
+		@include interpolate(padding-top, ($xsmall-component-padding * $mobile-spacing-multiplier), $xsmall-component-padding);
+	}
+
+	@if $size == small {
+		@include interpolate(padding-top, ($small-component-padding * $mobile-spacing-multiplier), $small-component-padding);
+	}
+
+	@if $size == medium {
+		@include interpolate(padding-top, ($medium-component-padding * $mobile-spacing-multiplier), $medium-component-padding);
+	}
+
+	@if $size == large {
+		@include interpolate(padding-top, ($large-component-padding * $mobile-spacing-multiplier), $large-component-padding);
+	}
+
+	@if $size == xlarge {
+		@include interpolate(padding-top, ($xlarge-component-padding * $mobile-spacing-multiplier), $xlarge-component-padding);
+	}
+}
+
+@mixin sectionSpacingBottom($size: medium) {
+	@if $size == xsmall {
+		@include interpolate(padding-bottom, ($xsmall-component-padding * $mobile-spacing-multiplier), $xsmall-component-padding);
+	}
+
+	@if $size == small {
+		@include interpolate(padding-bottom, ($small-component-padding * $mobile-spacing-multiplier), $small-component-padding);
+	}
+
+	@if $size == medium {
+		@include interpolate(padding-bottom, ($medium-component-padding * $mobile-spacing-multiplier), $medium-component-padding);
+	}
+
+	@if $size == large {
+		@include interpolate(padding-bottom, ($large-component-padding * $mobile-spacing-multiplier), $large-component-padding);
+	}
+
+	@if $size == xlarge {
+		@include interpolate(padding-bottom, ($xlarge-component-padding * $mobile-spacing-multiplier), $xlarge-component-padding);
+	}
+}
+
+@mixin sectionSpacing($size: medium) {
+	@include sectionSpacingTop($size);
+	@include sectionSpacingBottom($size);
+}
+
+@mixin hideElement {
+	border: 0;
+	clip: rect(1px, 1px, 1px, 1px);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+}
+
+@mixin formReset {
+	div[id^='__lpform_'] {
+		display: none;
+	}
+
+	input,
+	textarea,
+	select {
+		width: 100%;
+		outline: none;
+		border: none;
+		-webkit-appearance: none;
+		resize: none;
+		background: none;
+		font-size: inherit;
+		font-family: inherit;
+		font-weight: inherit;
+		color: inherit;
+		line-height: normal;
+		padding: 0;
+		border: none;
+		box-shadow: none !important;
+
+		&:-webkit-autofill,
+		&:-webkit-autofill:hover,
+		&:-webkit-autofill:focus,
+		&:-webkit-autofill:active {
+			transition: background-color 99999s ease-in-out 0s;
+			-webkit-text-fill-color: $color-black;
+			font-size: inherit;
+			font-family: inherit;
+			font-weight: inherit;
+			color: inherit;
+		}
+
+		&::-ms-clear {
+			display: none;
+		}
+
+		&::placeholder {
+			color: inherit;
+			opacity: 0.5;
+		}
+	}
+
+	input[type='search']::-webkit-search-decoration,
+	input[type='search']::-webkit-search-cancel-button,
+	input[type='search']::-webkit-search-results-button,
+	input[type='search']::-webkit-search-results-decoration {
+		-webkit-appearance: none;
+	}
+
+	.fui-field,
+	.fui-row,
+	.fui-btn-container {
+		margin: 0;
+		padding: 0;
+	}
+}
+
+@mixin useDisableSpacing($top: true, $bottom: true) {
+	@if $top == true {
+		&--disableTopSpacing {
+			padding-top: 0;
+		}
+	}
+
+	@if $bottom == true {
+		&--disableBottomSpacing {
+			padding-bottom: 0;
+		}
+	}
+}
+
+/*
+ * This mixin is used for spacing in components that have text elements in the order:
+ * __label
+ * __heading
+ * __copy
+ * __button (optional with parameter)
+*/
+
+@mixin useContentSpacing($button: false) {
+	$context: &;
+
+	* {
+
+		& + #{$context}__heading {
+			@include interpolate(margin-top, $spacing-subheading-heading);
+		}
+
+		& + #{$context}__copy {
+			@include interpolate(margin-top, $spacing-heading-body);
+		}
+
+		@if $button {
+
+			& + #{$context}__button {
+				@include interpolate(margin-top, $spacing-body-button);
+			}
+
+		}
+
+	}
+
+}

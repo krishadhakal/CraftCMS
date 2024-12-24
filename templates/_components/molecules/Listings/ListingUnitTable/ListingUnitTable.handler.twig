@@ -1,0 +1,187 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = "light" %}
+{% set intro = null %}
+{% set filters = null %}
+{% set properties = [] %}
+{% set items = [] %}
+
+{#---------- Data Handling ----------#}
+{% set paramFilterUnits = craft.app.request.getParam('filterUnits') ?? false %}
+{% set paramMinCost = craft.app.request.getParam('minCost') ?? null %}
+{% set paramMaxCost = craft.app.request.getParam('maxCost') ?? null %}
+{% set paramUnitType = craft.app.request.getParam('unitType') ?? null %}
+{% set useFilters = false %}
+
+{% if paramFilterUnits == "true" %}
+	{% set useFilters = true %}
+{% endif %}
+
+{% set filtersData = {
+	minCost: {
+		value: paramMinCost,
+		type: "text",
+		label: "Min. Cost",
+		placeholder: "eg. 2000",
+	},
+	maxCost: {
+		value: paramMaxCost,
+		type: "text",
+		label: "Max. Cost",
+		placeholder: "eg. 3000",
+	},
+	unitType: {
+		value: paramUnitType,
+		type: "select",
+		label: "Unit Type",
+		placeholder: "Select",
+		options: []
+	}
+} %}
+
+{% set properties = {
+	unitType: {
+		heading: "Unit Type",
+	},
+	bedrooms: {
+		heading: "Beds",
+	},
+	bathrooms: {
+		heading: "Baths",
+	},
+	squareFeet: {
+		heading: "Sq. Ft.",
+	},
+	cost: {
+		heading: "Cost",
+	},
+	availability: {
+		heading: "Availability",
+	},
+} %}
+
+{% set entries = [] %}
+
+{% if entry|length %}
+	{% set entryType = entry.type.handle ?? null %}
+
+	{% switch entryType %}
+		{% case "unitType" %}
+			{% set entries = craft.entries({
+				type: "unit",
+				relatedTo: entry,
+			}) %}
+
+		{% default %}
+	{% endswitch %}
+{% endif %}
+
+{% if block|length %}
+	{% set disableTopSpacing = block.common_disableTopSpacing ?? false %}
+	{% set disableBottomSpacing = block.common_disableBottomSpacing ?? false %}
+	{% set variants = variants|merge([disableTopSpacing ? "disableTopSpacing", disableBottomSpacing ? "disableBottomSpacing"]) %}
+
+	{% set selectedEntries = block.molListingUnitTable_entries.all() ?? null %}
+	{% set entries = [] %}
+
+	{% set intro %}
+		{% apply spaceless %}
+			{% include "_components/elements/Global/Intro/Intro.handler" with {
+				theme: theme,
+				block: block,
+			} only %}
+		{% endapply %}
+	{% endset %}
+
+	{% if selectedEntries|length %}
+		{% set entries = selectedEntries %}
+	{% else %}
+		{% set entries = craft.entries({
+			type: "unit",
+		}).all() %}
+	{% endif %}
+
+{% endif %}
+
+{% if entries|length %}
+	{% set unitTypes = craft.entries({
+		type: "unitType",
+		relatedTo: entries,
+	}).all() %}
+
+	{% for unitType in unitTypes %}
+		{% set filtersData = filtersData|merge({
+			unitType: filtersData.unitType|merge({
+				options: filtersData.unitType.options|merge([{
+					value: unitType.slug,
+					label: unitType.title,
+				}])
+			})
+		}) %}
+	{% endfor %}
+
+	{% for unit in entries %}
+		{% set unitId = unit.id ?? null %}
+		{% set unitUnitType = unit.unit_unitType.one() ?? null %}
+		{% set unitUnitTypeSlug = unitUnitType.slug ?? null %}
+		{% set unitAvailability = unit.unit_availability ?? null %}
+		{% set unitBedrooms = unit.unit_bedrooms ?? unitUnitType.unit_bedrooms ?? null %}
+		{% set unitBathrooms = unit.unit_bathrooms ?? unitUnitType.unit_bathrooms ?? null %}
+		{% set unitCost = unit.unit_cost ?? unitUnitType.unit_cost ?? null %}
+		{% set unitCost = unitCost|money %}
+		{% set unitCostValue = unitCost|replace('/[^0-9.]/', '') %}
+		{% set unitIsAvailable = unit.unit_isAvailable ?? false %}
+		{% set unitSquareFeet = unit.unit_squareFeet ?? unitUnitType.unit_squareFeet ?? null %}
+		{% set unitTitle = unit.title ?? null %}
+		{% set unitUnitTypeTitle = unitUnitType.title ?? null %}
+		{% set unitAvailabilityLabel = helpers.getUnitAvailabilityLabel(unitIsAvailable, unitAvailability) %}
+		{% set showUnit = true %}
+
+		{% if useFilters == true and (paramUnitType|length and paramUnitType != unitUnitTypeSlug
+		or paramMinCost|length and paramMinCost >= unitCostValue
+		or paramMaxCost|length and paramMaxCost <= unitCostValue) %}
+			{% set showUnit = false %}
+		{% endif %}
+
+		{% if unitId|length and unitTitle|length and showUnit == true %}
+			{% set items = items|merge([{
+				id: unitId,
+				title: unitTitle,
+				isAvailable: unitIsAvailable,
+				availability: unitAvailabilityLabel,
+				bedrooms: unitBedrooms,
+				bathrooms: unitBathrooms,
+				cost: unitIsAvailable ? unitCost : null,
+				squareFeet: unitSquareFeet,
+				unitType: unitUnitTypeTitle,
+			}]) %}
+		{% endif %}
+	{% endfor %}
+{% endif %}
+
+{% if filtersData|length %}
+	{% set filters %}
+		{% apply spaceless %}
+			{% include "_components/elements/Listings/ListingUnitsFilters/ListingUnitsFilters.handler" with {
+				theme: theme,
+				filters: filtersData,
+			} only %}
+		{% endapply %}
+	{% endset %}
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/Listings/ListingUnitTable/ListingUnitTable" with {
+	variants: variants,
+	theme: theme,
+	intro: intro,
+	filters: filters,
+	properties: properties,
+	items: items,
+} only %}

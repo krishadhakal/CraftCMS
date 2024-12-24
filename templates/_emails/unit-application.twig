@@ -1,0 +1,9 @@
+{{ contentHtml }}
+
+{# get application link #}
+{% set unit = submission.unit %}
+{% set applicationUrl = submission.applicationUrl %}
+
+{% if applicationUrl %}
+<a href="{{ applicationUrl }}">Click here</a> to get started on the application process.
+{% endif %}

@@ -1,0 +1,80 @@
+$base-class: '.mol-ListingBgImageCardsSlider';
+
+@mixin useListingBgImageCardsSliderVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--background-color: #{$color-base-surface-primary-light};
+	--color: #{$color-base-text-primary-light};
+	@include sectionSpacing();
+	@include useDisableSpacing();
+	overflow: hidden;
+	background-color: var(--background-color);
+	color: var(--color);
+	$self: &;
+
+	&--dark {
+		--background-color: #{$color-base-surface-primary-dark};
+		--color: #{$color-base-text-primary-dark};
+	}
+
+	.grid-container {
+		overflow: visible;
+	}
+
+	&__top {
+		@include interpolate(margin-bottom, $spacing-content-media);
+	}
+
+	&__content {
+
+	}
+
+	&__label {
+		@include font-h6;
+	}
+
+	&__heading {
+		@include font-h2;
+	}
+
+	&__label + &__heading {
+		@include interpolate(margin-top, $spacing-subheading-heading);
+	}
+
+	&__arrowsColumn {
+		@include interpolate(margin-top, $spacing-body-button);
+
+		@include breakpoint(medium) {
+			display: flex;
+			align-items: flex-end;
+			justify-content: flex-end;
+		}
+
+	}
+
+	&__arrows {
+		display: flex;
+	}
+
+	&__arrow {
+		display: block;
+
+		&--next {
+			@include interpolate(margin-left, 12px, 16px);
+		}
+
+	}
+
+	&__cardWrapper {
+		
+		@include breakpoint("420px") {
+			@include interpolate(width, 340px, 366px);	
+		}
+
+	}
+
+}

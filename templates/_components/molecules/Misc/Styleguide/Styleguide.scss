@@ -1,0 +1,239 @@
+$base-class: '.mol-Styleguide';
+
+@mixin useStyleguideVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	@include sectionSpacing;
+
+	&__section {
+
+		&__heading {
+			@include interpolate(margin-bottom, 16px, 20px);
+			@include font-h6;
+			color: $color-black;
+		}
+
+		&+& {
+			@include sectionSpacingTop();
+		}
+
+		&__content {
+			@include interpolate(padding, 20px, 40px);
+
+			&--light {
+				background-color: $color-neutral-75;
+			}
+
+			&--dark {
+				background-color: $color-black;
+			}
+
+		}
+
+	}
+
+	&__colors {
+
+	}
+
+	&__colorSetWrapper {
+		display: flex; // set to flex to prevent child negative margin from pulling parent up
+		flex-direction: column;
+		position: relative;
+		@include interpolate(margin-top, 32px, 48px);
+
+		&:before {
+			content: '';
+			display: block;
+			position: absolute;
+			@include interpolate(top, -16px, -24px);
+			left: 0;
+			right: 0;
+			height: 1px;
+			background-color: $color-neutral-200;
+		}
+
+		&:first-child {
+			margin-top: 0;
+
+			&:before {
+				display: none;
+			}
+
+		}
+
+	}
+
+	&__colorSet {
+		display: flex;
+		flex-wrap: wrap;
+		margin: -6px;
+	}
+
+	&__swatch {
+		border-radius: 8px;
+		position: relative;
+		// @include interpolate(height, 200px, 240px);
+		aspect-ratio: 1/1;
+		flex-shrink: 0;
+		flex-grow: 0;
+		flex-basis: calc(50% - 12px);
+		margin: 6px;
+		box-shadow: 0px 0px 6px 0px rgba($color-black, 0.2);
+
+		@include breakpoint(small) {
+			flex-basis: calc(33.333% - 12px);
+		}
+
+		@include breakpoint(medium) {
+			
+		}
+
+		@include breakpoint(large) {
+			flex-basis: calc(25% - 12px);
+		}
+
+		@include breakpoint(xlarge) {
+			flex-basis: calc(20% - 12px);
+		}
+
+		&--primary-500 { background-color: $color-primary-500; }
+		&--primary-400 { background-color: $color-primary-400; }
+		&--primary-300 { background-color: $color-primary-300; }
+		&--primary-200 { background-color: $color-primary-200; }
+		&--primary-100 { background-color: $color-primary-100; }
+
+		&--secondary-500 { background-color: $color-secondary-500; }
+		&--secondary-400 { background-color: $color-secondary-400; }
+		&--secondary-300 { background-color: $color-secondary-300; }
+		&--secondary-200 { background-color: $color-secondary-200; }
+		&--secondary-100 { background-color: $color-secondary-100; }
+
+		&--tertiary-500 { background-color: $color-tertiary-500; }
+		&--tertiary-400 { background-color: $color-tertiary-400; }
+		&--tertiary-300 { background-color: $color-tertiary-300; }
+		&--tertiary-200 { background-color: $color-tertiary-200; }
+		&--tertiary-100 { background-color: $color-tertiary-100; }
+
+		&--neutral-600 { background-color: $color-neutral-600; }
+		&--neutral-500 { background-color: $color-neutral-500; }
+		&--neutral-400 { background-color: $color-neutral-400; }
+		&--neutral-300 { background-color: $color-neutral-300; }
+		&--neutral-200 { background-color: $color-neutral-200; }
+		&--neutral-100 { background-color: $color-neutral-100; }
+		&--neutral-75 { background-color: $color-neutral-75; }
+		&--neutral-50 { background-color: $color-neutral-50; }
+
+		&--danger-500 { background-color: $color-danger-500; }
+		&--danger-400 { background-color: $color-danger-400; }
+		&--danger-300 { background-color: $color-danger-300; }
+		&--danger-200 { background-color: $color-danger-200; }
+		&--danger-100 { background-color: $color-danger-100; }
+
+		#{$base-class}__colorSet--tokensLight & {
+
+			&--base-surface-primary { background-color: $color-base-surface-primary-light; }
+			&--base-surface-secondary { background-color: $color-base-surface-secondary-light; }
+			&--base-surface-tertiary { background-color: $color-base-surface-tertiary-light; }
+			&--base-text-primary { background-color: $color-base-text-primary-light; }
+			&--base-text-secondary { background-color: $color-base-text-secondary-light; }
+			&--base-accent-fill { background-color: $color-base-accent-primary-light; }
+			&--base-accent-text { background-color: $color-base-accent-secondary-light; }
+
+			&--unit-table-header-fill { background-color: $color-unit-table-header-fill-light; }
+			&--unit-table-header-text { background-color: $color-unit-table-header-text-light; }
+			&--unit-table-row-fill { background-color: $color-unit-table-row-fill-light; }
+			&--unit-table-row-text { background-color: $color-unit-table-row-text-light; }
+
+			&--button-primary-fill { background-color: $color-button-primary-fill-light; }
+			&--button-primary-fill-text { background-color: $color-button-primary-fill-text-light; }
+			&--button-primary-text { background-color: $color-button-primary-text-light; }
+			&--button-secondary-fill { background-color: $color-button-secondary-fill-light; }
+			&--button-secondary-fill-text { background-color: $color-button-secondary-fill-text-light; }
+			&--button-secondary-text { background-color: $color-button-secondary-text-light; }
+
+		}
+
+		#{$base-class}__colorSet--tokensDark & {
+
+			&--base-surface-primary { background-color: $color-base-surface-primary-dark; }
+			&--base-surface-secondary { background-color: $color-base-surface-secondary-dark; }
+			&--base-surface-tertiary { background-color: $color-base-surface-tertiary-dark; }
+			&--base-text-primary { background-color: $color-base-text-primary-dark; }
+			&--base-text-secondary { background-color: $color-base-text-secondary-dark; }
+			&--base-accent-fill { background-color: $color-base-accent-primary-dark; }
+			&--base-accent-text { background-color: $color-base-accent-secondary-dark; }
+
+			&--unit-table-header-fill { background-color: $color-unit-table-header-fill-dark; }
+			&--unit-table-header-text { background-color: $color-unit-table-header-text-dark; }
+			&--unit-table-row-fill { background-color: $color-unit-table-row-fill-dark; }
+			&--unit-table-row-text { background-color: $color-unit-table-row-text-dark; }
+			
+			&--button-primary-fill { background-color: $color-button-primary-fill-dark; }
+			&--button-primary-fill-text { background-color: $color-button-primary-fill-text-dark; }
+			&--button-primary-text { background-color: $color-button-primary-text-dark; }
+			&--button-secondary-fill { background-color: $color-button-secondary-fill-dark; }
+			&--button-secondary-fill-text { background-color: $color-button-secondary-fill-text-dark; }
+			&--button-secondary-text { background-color: $color-button-secondary-text-dark; }
+
+		}
+
+		&__text {
+			@include font-body-xsmall;
+			position: absolute;
+			@include interpolate(bottom, 8px, 12px);
+			@include interpolate(left, 8px, 12px);
+			color: $color-black;
+			background-color: rgba($color-white, 0.8);
+			border-radius: 8px;
+			padding: 1px 6px;
+		}
+	
+	}
+
+	&__typography {
+		@include richText();
+
+		#{$base-class}__h0 {
+			@include font-h0;
+		}
+
+		p {
+
+			&#{$base-class}__body-large {
+				@include font-body-large;
+			}
+
+			&#{$base-class}__body-small {
+				@include font-body-small;
+			}
+
+			&#{$base-class}__body-xsmall {
+				@include font-body-xsmall;
+			}
+
+		}
+
+	}
+
+	&__buttons {
+
+		&__wrapper {
+			display: flex;
+			align-items: center;
+			flex-wrap: wrap;
+			@include interpolate(margin, -8px, -12px);
+
+			&>* {
+				@include interpolate(margin, 8px, 12px);
+			}
+
+		}
+
+	}
+
+}

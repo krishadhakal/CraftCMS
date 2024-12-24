@@ -1,0 +1,142 @@
+$base-class: '.el-VideoPlayer';
+
+@mixin useVideoPlayerVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--play-button-background-color: #{$color-button-primary-fill-light};
+	--play-button-icon-color: #{$color-button-primary-fill-text-light};
+	--plyr-color-main: #{$color-button-primary-fill-light};
+	--plyr-video-controls-background: transparent;
+	--plyr-video-progress-buffered-background: #{rgba($color-button-primary-fill-light, .25)};
+	--plyr-progress-loading-background: #{rgba($color-button-primary-fill-light, .25)};
+	--cover-image-background-color: #{$color-base-surface-tertiary-light};
+	
+	--plyr-range-thumb-height: 0px;
+	--plyr-range-thumb-background: transparent;
+	--plyr-range-track-height: 3px;
+	--plyr-font-family: #{$font-primary};
+	
+	position: relative;
+
+	&--dark {
+		--play-button-background-color: #{$color-button-primary-fill-dark};
+		--play-button-icon-color: #{$color-button-primary-fill-text-dark};
+		--plyr-color-main: #{$color-button-primary-fill-dark};
+		--plyr-video-controls-background: transparent;
+		--plyr-video-progress-buffered-background: #{rgba($color-button-primary-fill-dark, .25)};
+		--plyr-progress-loading-background: #{rgba($color-button-primary-fill-dark, .25)};
+		--cover-image-background-color: #{$color-base-surface-tertiary-dark};
+	}
+
+	.plyr {
+		position: relative;
+		z-index: unset;
+	}
+
+	.plyr__poster {
+		background-size: cover;
+	}
+
+	.plyr__controls {
+		@include interpolate(padding-left, 60px, 160px);
+		@include interpolate(padding-right, 20px, 60px);
+		@include interpolate(padding-bottom, 15px, 40px);
+		opacity: 1;
+		@include transition(opacity);
+		// z-index: 3;
+		// @include transition(padding-left);
+	}
+
+	&[data-playing="false"] {
+		.plyr__controls {
+			// @include interpolate(padding-left, 20px, 60px);
+			opacity: 0;
+		}
+	}
+
+	&__play-button {
+		@include interpolate((width, height), 30px, 60px);
+		@include interpolate(left, 20px, 60px);
+		@include interpolate(bottom, 15px, 40px);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: absolute;
+		background-color: var(--play-button-background-color);
+		z-index: 4;
+		cursor: pointer;
+
+		[data-playing="false"] & {
+			left: 50%;
+			bottom: 50%;
+			transform: translate(-50%, 50%);
+			@include interpolate((width, height), 45px, 90px);
+		}
+
+		&__icon {
+			display: block;
+			@include interpolate((width, height), 6px, 12px);
+
+			[data-playing="false"] & {
+				@include interpolate((width, height), 10px, 20px);
+			}
+		}
+
+		&__play {
+			display: none;
+
+			[data-playing="false"] & {
+				display: block;
+			}
+		}
+
+		&__pause {
+			display: none;
+
+			[data-playing="true"] & {
+				display: block;
+			}
+		}
+
+		svg,
+		img {
+			height: 100%;
+			width: 100%;
+			fill: var(--play-button-icon-color);
+			display: block;
+
+			* {
+				fill: inherit;
+			}
+		}
+	}
+
+	&__cover-image {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+		z-index: 2;
+		opacity: 1;
+		visibility: visible;
+		cursor: pointer;
+		transition: opacity $transition-speed $transition-ease, visibility 0ms linear 0ms;
+		background-color: var(--cover-image-background-color);
+
+		[data-playing="true"] & {
+			visibility: hidden;
+			opacity: 0;
+			transition: opacity $transition-speed $transition-ease, visibility 0ms linear $transition-speed;
+		}
+
+	}
+
+}

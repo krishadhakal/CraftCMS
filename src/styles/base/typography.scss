@@ -1,0 +1,317 @@
+$font-primary: "Inter";
+$font-weight-thin: 100;
+$font-weight-extralight: 200;
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+$font-weight-extrabold: 800;
+$font-weight-black: 900;
+
+@include font-face($font-primary, "Inter/Inter-Thin", $font-weight-thin);
+@include font-face($font-primary, "Inter/Inter-ThinItalic", $font-weight-thin, italic);
+@include font-face($font-primary, "Inter/Inter-ExtraLight", $font-weight-extralight);
+@include font-face($font-primary, "Inter/Inter-ExtraLightItalic", $font-weight-extralight, italic);
+@include font-face($font-primary, "Inter/Inter-Light", $font-weight-light);
+@include font-face($font-primary, "Inter/Inter-LightItalic", $font-weight-light, italic);
+@include font-face($font-primary, "Inter/Inter-Regular", $font-weight-regular);
+@include font-face($font-primary, "Inter/Inter-Italic", $font-weight-regular, italic);
+@include font-face($font-primary, "Inter/Inter-Medium", $font-weight-medium);
+@include font-face($font-primary, "Inter/Inter-MediumItalic", $font-weight-medium, italic);
+@include font-face($font-primary, "Inter/Inter-SemiBold", $font-weight-semibold);
+@include font-face($font-primary, "Inter/Inter-SemiBoldItalic", $font-weight-semibold, italic);
+@include font-face($font-primary, "Inter/Inter-Bold", $font-weight-bold);
+@include font-face($font-primary, "Inter/Inter-BoldItalic", $font-weight-bold, italic);
+@include font-face($font-primary, "Inter/Inter-ExtraBold", $font-weight-extrabold);
+@include font-face($font-primary, "Inter/Inter-ExtraBoldItalic", $font-weight-extrabold, italic);
+@include font-face($font-primary, "Inter/Inter-Black", $font-weight-black);
+@include font-face($font-primary, "Inter/Inter-BlackItalic", $font-weight-black, italic);
+
+// font styles that will be used on the site
+@mixin font-h0 {
+	@include font($font-primary, $font-weight-medium, 50px, 61px, 1.2, normal, -0.6px);
+}
+
+@mixin font-h1 {
+	@include font($font-primary, $font-weight-medium, 42px, 49px, 1.2, normal, 0);
+}
+
+@mixin font-h2 {
+	@include font($font-primary, $font-weight-medium, 35px, 39px, 1.2, normal, 0);
+}
+
+@mixin font-h3 {
+	@include font($font-primary, $font-weight-medium, 28px, 31px, 1.2, normal, 0);
+}
+
+@mixin font-h4 {
+	@include font($font-primary, $font-weight-medium, 23px, 25px, 1.2, normal, 0);
+}
+
+@mixin font-h5 {
+	@include font($font-primary, $font-weight-medium, 18px, 20px, 1.4, normal, 0);
+}
+
+@mixin font-h6 {
+	@include font($font-primary, $font-weight-medium, 13px, 14px, 1, normal, 1.4px);
+	text-transform: uppercase;
+}
+
+@mixin font-body-large {
+	@include font($font-primary, $font-weight-regular, 17px, 18px, 1.5, normal, 0);
+}
+
+@mixin font-body {
+	@include font($font-primary, $font-weight-regular, 15px, 16px, 1.5, normal, 0);
+}
+
+@mixin font-body-small {
+	@include font($font-primary, $font-weight-regular, 13px, 14px, 1.5, normal, 0);
+}
+
+@mixin font-body-xsmall {
+	@include font($font-primary, $font-weight-regular, 11px, 12px, 1.5, normal, 0);
+}
+
+@mixin font-button-large {
+	@include font($font-primary, $font-weight-medium, 15px, 16px, 1, normal, 0);
+}
+
+@mixin font-button-small {
+	@include font($font-primary, $font-weight-medium, 13px, 14px, 1, normal, 0);
+}
+
+// helper mixins
+@mixin link($theme: light) {
+	@include transition(color);
+	color: $color-button-primary-fill-light;
+
+	@if $theme==dark {
+		color: $color-button-primary-fill-dark;
+	}
+
+	&:hover {
+		color: $color-button-secondary-fill-light;
+
+		@if $theme==dark {
+			color: $color-button-secondary-fill-dark;
+		}
+	}
+}
+
+@mixin list($theme: light, $type: unordered)
+{
+	
+	li {
+		@include interpolate(padding-left, 20px, 26px);
+		@include font-body;
+		position: relative;
+
+		&:not(:last-child) {
+			margin-bottom: .5em;
+		}
+
+		&:before {
+			position: absolute;
+		}
+
+	}
+
+	// Unordered
+	@if $type==unordered {
+
+		li:before {
+			content: '\02022';
+			transform: scale(1.2);
+			@include interpolate(left, 4px, 8px);
+		}
+
+		&>li {
+			&:before {
+				transform-origin: center center;
+			}
+
+		}
+
+	}
+
+	// Ordered
+	@if $type==ordered {
+		counter-reset: section;
+
+		li:before {
+			content: '';
+			transform: none;
+			font-weight: $font-weight-bold;
+			left: 0;
+		}
+
+		&>li {
+			counter-increment: section;
+
+			&:before {
+				content: counter(section) '. ';
+			}
+
+			// sub-list
+			ol {
+				counter-reset: children;
+
+				li {
+					counter-increment: children;
+
+					&:before {
+						content: counter(children, lower-alpha) '. ';
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+}
+
+// sitewide type styles
+html {
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	text-rendering: optimizeLegibility;
+	font-smoothing: antialiased;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	@include font-body;
+	line-height: 1;
+	color: $color-black;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+strong,
+b {
+	font-weight: $font-weight-bold;
+}
+
+em,
+i {
+	font-style: italic;
+}
+
+// rich text - typically used for redactor fields
+@mixin richText($theme: light) {
+
+	&>* {
+		display: block;
+		margin-top: 1.5rem;
+		margin-bottom: 1.5rem;
+	}
+
+	&>p,
+	&>blockquote {
+		display: block;
+		margin-top: 1.5rem;
+		margin-bottom: 1.5rem;
+	}
+
+	&>ul,
+	&>ol {
+		margin-top: 1.75rem;
+		margin-bottom: 1.75rem;
+	}
+
+	&>h1,
+	&>h2,
+	&>h3,
+	&>h4,
+	&>h5,
+	&>h6 {
+		margin-top: 2.5rem;
+		margin-bottom: 1.5rem;
+	}
+
+	&>* {
+		&:first-child {
+			margin-top: 0;
+		}
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	h1 {
+		@include font-h1;
+	}
+
+	h2 {
+		@include font-h2;
+	}
+
+	h3 {
+		@include font-h3;
+	}
+
+	h4 {
+		@include font-h4;
+	}
+
+	h5 {
+		@include font-h5;
+	}
+
+	h6 {
+		@include font-h6;
+		font-weight: $font-weight-bold;
+	}
+
+	small {
+		@include font-body-small();
+	}
+
+	p {
+		@include font-body;
+	}
+
+	ul {
+		@include list($theme);
+	}
+
+	ol {
+		@include list($theme, ordered);
+	}
+
+	blockquote {
+		@include font-h4;
+	}
+
+	&>img,
+	&>figure {
+		@include font-body-small();
+		max-width: 100%;
+		width: 100%;
+		margin-top: 5em;
+		margin-bottom: 5em;
+
+		@include breakpoint("xsmall", "max") {
+			margin-top: 4em;
+			margin-bottom: 4em;
+		}
+
+		figcaption {
+			margin-top: 1em;
+		}
+	}
+
+	a {
+		@include link($theme);
+	}
+
+}

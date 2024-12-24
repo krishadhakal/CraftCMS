@@ -1,0 +1,77 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = "light" %}
+{% set intro = null %}
+{% set video = null %}
+
+{#---------- Data Handling ----------#}
+{% set imageSizes = "100vw" %}
+{% set imageOptions = [
+	{
+        width: 480,
+    },
+    {
+        width: 640,
+    },
+    {
+        width: 1000,
+    },
+    {
+        width: 1600,
+    },
+    {
+        width: 2400,
+    },
+    {
+        width: 3200,
+    },
+] %}
+
+{% if block|length %}
+	{% set disableTopSpacing = block.common_disableTopSpacing ?? false %}
+	{% set disableBottomSpacing = block.common_disableBottomSpacing ?? false %}
+	{% set variants = variants|merge([disableTopSpacing ? "disableTopSpacing", disableBottomSpacing ? "disableBottomSpacing"]) %}
+
+	{% set intro %}
+		{% apply spaceless %}
+			{% include "_components/elements/Global/Intro/Intro.handler" with {
+				theme: theme,
+				block: block,
+			} only %}
+		{% endapply %}
+	{% endset %}
+
+	{% for child in block.children.all() ?? [] %}
+		{% set childType = child.type.handle ?? null %}
+
+		{% switch childType %}
+			{% case "videoPlayer" %}
+				{% set video %}
+					{% apply spaceless %}
+						{% include "_components/elements/Media/VideoPlayer/VideoPlayer.handler" with {
+							block: child,
+							theme: theme,
+							coverImageSizes: imageSizes,
+							coverImageOptions: imageOptions,
+						} only %}
+					{% endapply %}
+				{% endset %}
+			{% default %}
+		{% endswitch %}
+
+	{% endfor %}
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/Media/VideoCentered/VideoCentered" with {
+	variants: variants,
+	theme: theme,
+	intro: intro,
+	video: video,
+} only %}

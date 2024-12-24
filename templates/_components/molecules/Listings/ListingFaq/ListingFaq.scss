@@ -1,0 +1,20 @@
+$base-class: '.mol-ListingFaq';
+
+@mixin useListingFaqVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--background-color: #{$color-base-surface-primary-dark};
+	@include sectionSpacing;
+	@include useDisableSpacing;
+	background-color: var(--background-color);
+
+	&--light {
+		--background-color: #{$color-base-surface-primary-light};
+	}
+
+	&__item {}
+}

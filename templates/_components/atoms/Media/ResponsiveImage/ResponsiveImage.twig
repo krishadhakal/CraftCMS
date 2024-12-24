@@ -1,0 +1,29 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set backgroundImage = backgroundImage ?? false %}
+{% set backgroundImageContain = backgroundImageContain ?? false %}
+{% set sizes = sizes ?? false %}
+{% set sources = sources ?? false %}
+{% set url = url ?? false %}
+{% set alt = alt ?? false %}
+
+{#---------- Data Handling ----------#}
+
+{#---------- Classes ----------#}
+{% set baseClass = "atom-ResponsiveImage" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [backgroundImage ? 'bgImage' : '', backgroundImageContain ? 'bgImageContain' : ''], []) %}
+
+{#---------- Output ----------#}
+{% if url %}
+	<img
+		class="{{ classes }}"
+		alt="{{ alt }}"
+		src="{{ url }}"
+		{% if sizes and sources %}
+			srcset="{{ sources|raw }}"
+			sizes="{{ sizes|raw }}"
+		{% endif %}
+	/>
+{% endif %}

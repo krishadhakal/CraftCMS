@@ -1,0 +1,41 @@
+$base-class: '.mol-ContentTextTypeFour';
+
+@mixin useContentTextTypeFourVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--background-color: #{$color-base-surface-primary-light};
+	--color: #{$color-base-text-primary-light};
+	@include sectionSpacing;
+	@include useDisableSpacing;
+	$self: &;
+	background-color: var(--background-color);
+	color: var(--color);
+
+	&--dark {
+		--background-color: #{$color-base-surface-primary-dark};
+		--color: #{$color-base-text-primary-dark};
+	}
+
+	@include useContentSpacing($button: true);
+
+	&__label {
+		@include font-h6;
+	}
+
+	&__heading {
+		@include font-h2;
+	}
+
+	&__copy {
+		@include richText;
+	}
+
+	&__button {
+		
+	}
+
+}

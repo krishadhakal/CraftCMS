@@ -1,0 +1,31 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set intro = intro ?? null %}
+{% set items = items ?? [] %}
+
+{#---------- Data Handling ----------#}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-ListingUnits" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% if items|length %}
+<div class="{{ classes }}">
+	{% if intro|trim|length %}
+		{{ intro }}
+	{% endif %}
+	<div class="grid-container">
+		<div class="{{ baseClass }}__items row">
+			{% for item in items %}
+				<div class="{{ baseClass }}__item column xsmall-12 small-6 large-3">
+					{{ item }}
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+{% endif %}

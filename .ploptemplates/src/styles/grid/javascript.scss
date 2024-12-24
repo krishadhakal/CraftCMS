@@ -1,0 +1,29 @@
+/**
+ * These values will not show up in content, but can be
+ * queried by JavaScript to know which breakpoint is active.
+ * 
+ * var breakpoint = window.Breakpoint.value
+ * 
+ */
+
+body:before {
+	content: "xsmall";
+	display: none; /* Prevent from displaying. */
+
+	@include breakpoint(small) {
+		content: "small";
+	}
+
+	@include breakpoint(medium) {
+		content: "medium";
+	}
+
+	@include breakpoint(large) {
+		content: "large";
+	}
+
+	@include breakpoint(xlarge) {
+		content: "xlarge";
+	}
+
+}

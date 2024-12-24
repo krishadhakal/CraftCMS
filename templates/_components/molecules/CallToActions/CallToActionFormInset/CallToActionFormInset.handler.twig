@@ -1,0 +1,86 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = "dark" %}
+{% set media = null %}
+{% set label = null %}
+{% set heading = null %}
+{% set copy = null %}
+{% set form = null %}
+
+{#---------- Data Handling ----------#}
+{% set imageAspectRatio = "14:10" %}
+{% set imageSizes = "(min-width: 560px) 95vw, 100vw" %}
+{% set imageOptions = [
+	{
+        width: 480,
+    },
+    {
+        width: 640,
+    },
+    {
+        width: 1000,
+    },
+    {
+        width: 1600,
+    },
+    {
+        width: 2400,
+    },
+    {
+        width: 3200,
+    },
+] %}
+
+{% if block|length %}
+	{% set disableTopSpacing = block.common_disableTopSpacing ?? false %}
+	{% set disableBottomSpacing = block.common_disableBottomSpacing ?? false %}
+	{% set variants = variants|merge([disableTopSpacing ? "disableTopSpacing", disableBottomSpacing ? "disableBottomSpacing"]) %}
+	
+	{% set label = block.molCallToActionFormInset_label ?? label %}
+	{% set heading = block.molCallToActionFormInset_heading ?? heading %}
+	{% set copy = helpers.getRawText(block.molCallToActionFormInset_copy, copy) %}
+	{% set formieForm = block.molCallToActionFormInset_form.one() ?? null %}
+	{% set mediaAsset = block.children.one().elMedia_media.one() ?? null %}
+
+	{% if mediaAsset|length %}
+		{% set media %}
+			{% apply spaceless %}
+				{% include "_components/elements/Media/MediaTakeover/MediaTakeover.handler" with {
+					mediaAsset: mediaAsset,
+					imageAspectRatio: imageAspectRatio,
+					imageSizes: imageSizes,
+					imageOptions: imageOptions,
+				} only %}
+			{% endapply %}
+		{% endset %}
+	{% endif %}
+
+	{% if formieForm|length %}
+		{% set form %}
+			{% apply spaceless %}
+
+				{% include "_components/elements/Forms/Form/Form.handler" with {
+					formieForm: formieForm,
+					theme: theme,
+				} only %}
+			{% endapply %}
+		{% endset %}
+	{% endif %}
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/CallToActions/CallToActionFormInset/CallToActionFormInset" with {
+	variants: variants,
+	theme: theme,
+	media: media,
+	label: label,
+	heading: heading,
+	copy: copy,
+	form: form,
+} only %}

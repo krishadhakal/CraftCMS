@@ -1,0 +1,49 @@
+$base-class: '.mol-Loader';
+
+@mixin useLoaderVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--background-color: #{$color-base-surface-primary-light};
+	--icon-color: #{$color-base-text-primary-light};
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	z-index: 9000;
+	background-color: var(--background-color);
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 100%;
+	width: 100%;
+
+	&--dark {
+		--background-color: #{$color-base-surface-primary-dark};
+		--icon-color: #{$color-base-text-primary-dark};
+	}
+
+	&__icon {
+		@include interpolate(width, 140px, 200px);
+		height: auto;
+		opacity: 0;
+
+		svg {
+			fill: var(--icon-color);
+			display: block;
+			width: 100%;
+			height: auto;
+
+			* {
+				fill: inherit;
+			}
+
+		}
+
+	}
+
+}

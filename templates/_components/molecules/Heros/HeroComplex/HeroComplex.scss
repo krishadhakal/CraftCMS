@@ -1,0 +1,108 @@
+$base-class: '.mol-HeroComplex';
+
+$full-height: false; // set to true to make hero take up full window height
+
+@mixin useHeroComplexVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--background-color: #{$color-base-surface-secondary-dark};
+	--color: #{$color-base-text-primary-dark};
+	--overlay-color: #{rgba($color-black, .5)};
+	background-color: var(--background-color);
+	color: var(--color);
+	position: relative;
+	display: flex;
+
+	&--light {
+		--background-color: #{$color-base-surface-secondary-light};
+		--color: #{$color-base-text-primary-light};
+	}
+
+	@if $full-height {
+
+		&:before {
+			content: "";
+			min-height: 100vh;
+		}
+
+	}
+	
+	&__wrapperOuter {
+		@include useHeaderSpacing;
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+	}
+
+	&__wrapperInner {
+		@include interpolate(padding-top, 60px, 100px);
+		@include interpolate(padding-bottom, 60px, 216px);
+		position: relative;
+		flex: 1;
+		z-index: 3;
+		display: flex;
+		align-items: center;
+	}
+
+	&__content {
+		
+	}
+
+	&__breadcrumbs {
+		@include interpolate(margin-bottom, $spacing-breadcrumb);
+	}
+
+	@include useContentSpacing($button: true);
+
+	&__label {
+		@include font-h6;
+	}
+
+	&__heading {
+		@include font-h1;
+		max-width: 12em;
+	}
+
+	&__copy {
+		max-width: 45em;
+		@include richText;
+	}
+
+	&__button {
+
+	}
+
+	&__carousel {
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+
+		&__inner {
+			@include overlayCarousel();
+			height: 100%;
+			width: 100%;
+
+			@include breakpoint(medium) {
+				@include positionCarouselNav("right");
+			}
+
+			&:after {
+				content: "";
+				background-color: var(--overlay-color);
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				z-index: 2;
+			}
+		}
+	}
+
+}

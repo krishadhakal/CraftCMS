@@ -1,0 +1,78 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set hideDuration = hideDuration ?? null %}
+{% set carousel = carousel ?? null %}
+{% set label = label ?? null %}
+{% set heading = heading ?? null %}
+{% set copy = copy ?? null %}
+{% set button = button ?? null %}
+{% set form = form ?? null %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-ModalInfo" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% if heading|length and (form|length or copy|length or button|length) %}
+<div class="{{ classes }}" data-modal-info-hide-duration="{{ hideDuration }}">
+	<div class="{{ baseClass }}__wrapper">
+		<div class="{{ baseClass }}__overlay" data-modal-info-hide></div>
+		<button class="{{ baseClass }}__close" data-modal-info-hide>
+			{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+				theme: theme,
+				type: "x",
+			} only %}
+		</button>
+		<div class="{{ baseClass }}__inner">
+			{% if carousel|length %}
+				<div class="{{ baseClass }}__carousel">
+					{{ carousel }}
+				</div>
+			{% endif %}
+			<div class="{{ baseClass }}__content">
+				<div class="{{ baseClass }}__introduction">
+					{% if label %}
+						<div class="{{ baseClass }}__label">
+							{{ label }}
+						</div>
+					{% endif %}
+					<h2 class="{{ baseClass }}__heading">
+						{{ heading }}
+					</h2>
+					{% if copy|length %}
+						<div class="{{ baseClass }}__copy">
+							{{ copy }}
+						</div>
+					{% endif %}
+					{% if button %}
+						{% set buttonText = button.text ?? null %}
+						{% set buttonUrl = button.url ?? null %}
+						{% set buttonTarget = button.target ?? null %}
+
+						{% if buttonText|length and buttonUrl|length %}
+							<div class="{{ baseClass }}__button">
+								{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+									size: "small",
+									theme: theme,
+									arrow: "none",
+									text: buttonText,
+									url: buttonUrl,
+									target: buttonTarget,
+								} only %}
+							</div>
+						{% endif %}
+					{% endif %}
+				</div>
+				{% if form|length %}
+					<div class="{{ baseClass }}__form">
+						{{ form }}
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %}

@@ -1,0 +1,54 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = "light" %}
+{% set items = [] %}
+
+{#---------- Data Handling ----------#}
+{% set itemData = [] %}
+
+{% if block|length %}
+	{% set disableTopSpacing = block.common_disableTopSpacing ?? false %}
+	{% set disableBottomSpacing = block.common_disableBottomSpacing ?? false %}
+	{% set variants = variants|merge([disableTopSpacing ? "disableTopSpacing", disableBottomSpacing ? "disableBottomSpacing"]) %}
+
+	{% for item in block.molQuoteStandard_items.all() ?? [] %}
+		{% set itemIconAsset = item.item_icon.one() ?? null %}
+		{% set itemQuote = item.item_quote %}
+		{% set itemAuthor = item.item_author ?? null %}
+		{% set itemIconSvg = null %}
+		{% set itemIconSize = "large" %}
+
+		{% if itemIconAsset and itemIconAsset.extension == 'svg' %}
+			{% set itemIconSvg %}
+				{{ svg(itemIconAsset) }}
+			{% endset %}
+		{% else %}
+			{% set itemIconSvg %}
+				{{ svg('@webroot/built/icons/quote.svg') }}
+			{% endset %}
+			{% set itemIconSize = "small" %}
+		{% endif %}
+
+		{% if itemQuote|length and itemAuthor|length %}
+			{% set items = items|merge([{
+				quote: itemQuote,
+				author: itemAuthor,
+				iconSvg: itemIconSvg,
+				iconSize: itemIconSize,
+			}]) %}
+		{% endif %}
+	{% endfor %}
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/Quotes/QuoteStandard/QuoteStandard" with {
+	variants: variants,
+	theme: theme,
+	items: items,
+} only %}

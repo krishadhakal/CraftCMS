@@ -1,0 +1,47 @@
+$base-class: '.mol-HeroBasic';
+
+@mixin useHeroBasicVariants($variant, $variant2: null) {
+	@include useVariants($base-class, $variant, $variant2) {
+		@content;
+	}
+}
+
+#{$base-class} {
+	--background-color: #{$color-base-surface-primary-light};
+	--color: #{$color-base-text-primary-light};
+	background-color: var(--background-color);
+	color: var(--color);
+	position: relative;
+	@include useHeaderSpacing();
+
+	&--dark {
+		--background-color: #{$color-base-surface-primary-dark};
+		--color: #{$color-base-text-primary-dark};
+	}
+
+	&__wrapper {
+		@include interpolate(padding-top, 56px);
+		@include sectionSpacingBottom();
+	}
+
+	&__breadcrumbs {
+		@include interpolate(margin-bottom, $spacing-breadcrumb);
+	}
+
+	@include useContentSpacing();
+
+	&__label {
+		@include font-h6;
+	}
+
+	&__heading {
+		@include font-h1;
+		max-width: 12em;
+	}
+
+	&__copy {
+		max-width: 40em;
+		@include richText;
+	}
+
+}

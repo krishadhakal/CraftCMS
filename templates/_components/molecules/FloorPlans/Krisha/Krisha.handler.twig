@@ -1,0 +1,20 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set blockIndex = blockIndex ?? random() %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set heading = block.krishaHeading ?? false  %}
+{% set copy = block.krishaContent ?? false  %}
+
+{#---------- Data Handling ----------#}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/FloorPlans/Krisha/Krisha" with {
+	variants: variants,
+	heading: heading,
+	copy: copy
+} only %}

@@ -1,0 +1,56 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set largeImagePosition = helpers.getOption(largeImagePosition ?? null, ["left", "right"]) %}
+{% set carousels = carousels ?? [] %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-MediaTrio" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% if carousels|length %}
+<div class="{{ classes }}">
+	<div class="grid-container {{ baseClass }}__mediaGridContainer">
+		<div class="{{ baseClass }}__items">
+			{% set itemMarkups = [] %}
+
+			{% for carousel in carousels %}
+				
+				{% set itemMarkup %}
+					<div class="{{ baseClass }}__item">
+						<div class="{{ baseClass }}__item__inner">
+							{{ carousel }}
+						</div>
+					</div>
+				{% endset %}
+
+				{% set itemMarkups = itemMarkups|merge([itemMarkup]) %}
+				
+			{% endfor %}
+
+			{% if itemMarkups|length == 3 %}
+				{% if largeImagePosition == "right" %}
+					<div class="{{ baseClass }}__items__duo">
+						{{ itemMarkups[0] }}
+						{{ itemMarkups[1] }}
+					</div>
+					<div class="{{ baseClass }}__items__single">
+						{{ itemMarkups[2] }}
+					</div>
+				{% else %}
+					<div class="{{ baseClass }}__items__single">
+						{{ itemMarkups[0] }}
+					</div>
+					<div class="{{ baseClass }}__items__duo">
+						{{ itemMarkups[1] }}
+						{{ itemMarkups[2] }}
+					</div>
+				{% endif %}
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% endif %}

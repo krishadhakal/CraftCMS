@@ -1,0 +1,39 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+
+{#---------- Data Handling ----------#}
+{% set heading = heading ?? false %}
+{% set copy = copy ?? false %}
+{% set buttonText = buttonText ?? 'Click Me' %}
+{% set buttonUrl = buttonUrl ?? '#' %}
+{% set image = image ?? false %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-AssignmentExample" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [], []) %}
+
+{#---------- Output ----------#}
+<div class="{{ classes }}">
+   <div class="container">
+        <div class="content-section">
+            {% if heading %}
+                <h2>{{ heading }}</h2>
+            {% endif %}
+            {% if copy %}
+                <p>{{ copy }}</p>
+            {% endif %}
+            {% if buttonUrl and buttonText %}
+                <a href="{{ buttonUrl }}" class="btn">
+                    {{ buttonText }}
+                </a>
+            {% endif %}
+        </div>
+        {% if image %}
+            <div class="image-section">
+                <img src="{{ image.url }}" alt="{{ image.title }}">
+            </div>
+        {% endif %}
+    </div>
+</div>

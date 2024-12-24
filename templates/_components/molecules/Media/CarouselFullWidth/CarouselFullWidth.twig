@@ -1,0 +1,24 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set intro = intro ?? null %}
+{% set carousel = carousel ?? null %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-CarouselFullWidth" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+<div class="{{ classes }}">
+	
+	{% if intro|trim|length %}
+		{{ intro }}
+	{% endif %}
+	
+	<div class="{{ baseClass }}__carousel">
+		{{ carousel }}
+	</div>
+
+</div>

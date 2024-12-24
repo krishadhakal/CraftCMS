@@ -1,0 +1,1593 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-Styleguide" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [], []) %}
+
+{#---------- Output ----------#}
+{% set buttonIconTypes = ["facebook", "instagram", "linkedin", "youtube", "twitter", "whatsapp", "houzz", "pinterest", "x", "chevron-up", "chevron-down", "chevron-left", "chevron-right", "arrow-up", "arrow-down", "arrow-left", "arrow-right"] %}
+
+<div class="{{ classes }}">
+	<div class="grid-container">
+		<div class="row">
+			<div class="column xsmall-12 large-10 offset-large-1">
+
+				<div class="{{ baseClass }}__section">
+					<h6 class="{{ baseClass }}__section__heading">
+						Colors - Primitive
+					</h6>
+					<div class="{{ baseClass }}__colors">
+
+						<div class="{{ baseClass }}__colorSetWrapper">
+							<div class="{{ baseClass }}__colorSet">
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--primary-500">
+									<div class="{{ baseClass }}__swatch__text">Primary 500</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--primary-400">
+									<div class="{{ baseClass }}__swatch__text">Primary 400</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--primary-300">
+									<div class="{{ baseClass }}__swatch__text">Primary 300</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--primary-200">
+									<div class="{{ baseClass }}__swatch__text">Primary 200</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--primary-100">
+									<div class="{{ baseClass }}__swatch__text">Primary 100</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="{{ baseClass }}__colorSetWrapper">
+							<div class="{{ baseClass }}__colorSet">
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--secondary-500">
+									<div class="{{ baseClass }}__swatch__text">Secondary 500</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--secondary-400">
+									<div class="{{ baseClass }}__swatch__text">Secondary 400</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--secondary-300">
+									<div class="{{ baseClass }}__swatch__text">Secondary 300</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--secondary-200">
+									<div class="{{ baseClass }}__swatch__text">Secondary 200</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--secondary-100">
+									<div class="{{ baseClass }}__swatch__text">Secondary 100</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="{{ baseClass }}__colorSetWrapper">
+							<div class="{{ baseClass }}__colorSet">
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--tertiary-500">
+									<div class="{{ baseClass }}__swatch__text">Tertiary 500</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--tertiary-400">
+									<div class="{{ baseClass }}__swatch__text">Tertiary 400</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--tertiary-300">
+									<div class="{{ baseClass }}__swatch__text">Tertiary 300</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--tertiary-200">
+									<div class="{{ baseClass }}__swatch__text">Tertiary 200</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--tertiary-100">
+									<div class="{{ baseClass }}__swatch__text">Tertiary 100</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="{{ baseClass }}__colorSetWrapper">
+							<div class="{{ baseClass }}__colorSet">
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--neutral-600">
+									<div class="{{ baseClass }}__swatch__text">Neutral 600</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--neutral-500">
+									<div class="{{ baseClass }}__swatch__text">Neutral 500</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--neutral-400">
+									<div class="{{ baseClass }}__swatch__text">Neutral 400</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--neutral-300">
+									<div class="{{ baseClass }}__swatch__text">Neutral 300</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--neutral-200">
+									<div class="{{ baseClass }}__swatch__text">Neutral 200</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--neutral-100">
+									<div class="{{ baseClass }}__swatch__text">Neutral 100</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--neutral-75">
+									<div class="{{ baseClass }}__swatch__text">Neutral 75</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--neutral-50">
+									<div class="{{ baseClass }}__swatch__text">Neutral 50</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="{{ baseClass }}__colorSetWrapper">
+							<div class="{{ baseClass }}__colorSet">
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--danger-500">
+									<div class="{{ baseClass }}__swatch__text">Danger 500</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--danger-400">
+									<div class="{{ baseClass }}__swatch__text">Danger 400</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--danger-300">
+									<div class="{{ baseClass }}__swatch__text">Danger 300</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--danger-200">
+									<div class="{{ baseClass }}__swatch__text">Danger 200</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--danger-100">
+									<div class="{{ baseClass }}__swatch__text">Danger 100</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+				<div class="{{ baseClass }}__section">
+					<h6 class="{{ baseClass }}__section__heading">
+						Colors - Semantic - Light
+					</h6>
+					<div class="{{ baseClass }}__colors">
+
+						<div class="{{ baseClass }}__colorSetWrapper">
+							<div class="{{ baseClass }}__colorSet {{ baseClass }}__colorSet--tokensLight">
+								
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--base-surface-primary">
+									<div class="{{ baseClass }}__swatch__text">Base - Surface Primary</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--base-surface-secondary">
+									<div class="{{ baseClass }}__swatch__text">Base - Surface Secondary</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--base-surface-tertiary">
+									<div class="{{ baseClass }}__swatch__text">Base - Surface Tertiary</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--base-text-primary">
+									<div class="{{ baseClass }}__swatch__text">Base - Text Primary</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--base-text-secondary">
+									<div class="{{ baseClass }}__swatch__text">Base - Text Secondary</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--base-accent-primary">
+									<div class="{{ baseClass }}__swatch__text">Base - Accent Primary</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--base-accent-secondary">
+									<div class="{{ baseClass }}__swatch__text">Base - Accent Secondary</div>
+								</div>
+
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--unit-table-header-fill">
+									<div class="{{ baseClass }}__swatch__text">Unit Table - Header Fill</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--unit-table-header-text">
+									<div class="{{ baseClass }}__swatch__text">Unit Table - Header Text</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--unit-table-row-fill">
+									<div class="{{ baseClass }}__swatch__text">Unit Table - Row Fill</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--unit-table-row-text">
+									<div class="{{ baseClass }}__swatch__text">Unit Table - Row Text</div>
+								</div>
+
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--button-primary-fill">
+									<div class="{{ baseClass }}__swatch__text">Button - Primary Fill</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--button-primary-fill-text">
+									<div class="{{ baseClass }}__swatch__text">Button - Primary Fill Text</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--button-primary-text">
+									<div class="{{ baseClass }}__swatch__text">Button - Primary Text</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--button-secondary-fill">
+									<div class="{{ baseClass }}__swatch__text">Button - Secondary Fill</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--button-secondary-fill-text">
+									<div class="{{ baseClass }}__swatch__text">Button - Secondary Fill Text</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--button-secondary-text">
+									<div class="{{ baseClass }}__swatch__text">Button - Secondary Text</div>
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+				<div class="{{ baseClass }}__section">
+					<h6 class="{{ baseClass }}__section__heading">
+						Colors - Semantic - Dark
+					</h6>
+					<div class="{{ baseClass }}__colors">
+
+						<div class="{{ baseClass }}__colorSetWrapper">
+							<div class="{{ baseClass }}__colorSet {{ baseClass }}__colorSet--tokensDark">
+								
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--base-surface-primary">
+									<div class="{{ baseClass }}__swatch__text">Base - Surface Primary</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--base-surface-secondary">
+									<div class="{{ baseClass }}__swatch__text">Base - Surface Secondary</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--base-surface-tertiary">
+									<div class="{{ baseClass }}__swatch__text">Base - Surface Tertiary</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--base-text-primary">
+									<div class="{{ baseClass }}__swatch__text">Base - Text Primary</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--base-text-secondary">
+									<div class="{{ baseClass }}__swatch__text">Base - Text Secondary</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--base-accent-primary">
+									<div class="{{ baseClass }}__swatch__text">Base - Accent Primary</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--base-accent-secondary">
+									<div class="{{ baseClass }}__swatch__text">Base - Accent Secondary</div>
+								</div>
+
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--unit-table-header-fill">
+									<div class="{{ baseClass }}__swatch__text">Unit Table - Header Fill</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--unit-table-header-text">
+									<div class="{{ baseClass }}__swatch__text">Unit Table - Header Text</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--unit-table-row-fill">
+									<div class="{{ baseClass }}__swatch__text">Unit Table - Row Fill</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--unit-table-row-text">
+									<div class="{{ baseClass }}__swatch__text">Unit Table - Row Text</div>
+								</div>
+
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--button-primary-fill">
+									<div class="{{ baseClass }}__swatch__text">Button - Primary Fill</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--button-primary-fill-text">
+									<div class="{{ baseClass }}__swatch__text">Button - Primary Fill Text</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--button-primary-text">
+									<div class="{{ baseClass }}__swatch__text">Button - Primary Text</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--button-secondary-fill">
+									<div class="{{ baseClass }}__swatch__text">Button - Secondary Fill</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--button-secondary-fill-text">
+									<div class="{{ baseClass }}__swatch__text">Button - Secondary Fill Text</div>
+								</div>
+								<div class="{{ baseClass }}__swatch {{ baseClass }}__swatch--button-secondary-text">
+									<div class="{{ baseClass }}__swatch__text">Button - Secondary Text</div>
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+				<div class="{{ baseClass }}__section">
+					<h6 class="{{ baseClass }}__section__heading">
+						Typography
+					</h6>
+					<div class="{{ baseClass }}__typography">
+						<h1 class="{{ baseClass }}__h0">Heading 0</h1>
+						<p class="{{ baseClass }}__body">Body font. Lorem ipsum dolor sit amet, fringilla meliore fermentum libris ac erroribus. Pri rhoncus cotidieque magna cursus iaculis natum unum tellus donec arcu dignissim altera quo curabitur simul natoque nisl hendrerit.</p>
+						<h1 class="{{ baseClass }}__h1">Heading 1</h1>
+						<p class="{{ baseClass }}__body">Body font. Lorem ipsum dolor sit amet, fringilla meliore fermentum libris ac erroribus. Pri rhoncus cotidieque magna cursus iaculis natum unum tellus donec arcu dignissim altera quo curabitur simul natoque nisl hendrerit.</p>
+						<h2 class="{{ baseClass }}__h2">Heading 2</h1>
+						<p class="{{ baseClass }}__body">Body font. Lorem ipsum dolor sit amet, fringilla meliore fermentum libris ac erroribus. Pri rhoncus cotidieque magna cursus iaculis natum unum tellus donec arcu dignissim altera quo curabitur simul natoque nisl hendrerit.</p>
+						<h3 class="{{ baseClass }}__h3">Heading 3</h1>
+						<p class="{{ baseClass }}__body">Body font. Lorem ipsum dolor sit amet, fringilla meliore fermentum libris ac erroribus. Pri rhoncus cotidieque magna cursus iaculis natum unum tellus donec arcu dignissim altera quo curabitur simul natoque nisl hendrerit.</p>
+						<h4 class="{{ baseClass }}__h4">Heading 4</h1>
+						<p class="{{ baseClass }}__body">Body font. Lorem ipsum dolor sit amet, fringilla meliore fermentum libris ac erroribus. Pri rhoncus cotidieque magna cursus iaculis natum unum tellus donec arcu dignissim altera quo curabitur simul natoque nisl hendrerit.</p>
+						<h5 class="{{ baseClass }}__h5">Heading 5</h1>
+						<p class="{{ baseClass }}__body">Body font. Lorem ipsum dolor sit amet, fringilla meliore fermentum libris ac erroribus. Pri rhoncus cotidieque magna cursus iaculis natum unum tellus donec arcu dignissim altera quo curabitur simul natoque nisl hendrerit.</p>
+						<h6 class="{{ baseClass }}__h6">Heading 6</h1>
+						<p class="{{ baseClass }}__body">Body font. Lorem ipsum dolor sit amet, fringilla meliore fermentum libris ac erroribus. Pri rhoncus cotidieque magna cursus iaculis natum unum tellus donec arcu dignissim altera quo curabitur simul natoque nisl hendrerit.</p>
+						<p class="{{ baseClass }}__body">Body font. Lorem ipsum dolor sit amet, altera penatibus case argumentum tation faucibus varius egestas. Mauris libris magnis lacus. Ornare congue quo aeque gravida. Tristique phasellus causae.</p>
+						<p class="{{ baseClass }}__body">Body font. Lorem ipsum dolor sit amet, molestie nostro quaeque praesent recteque postulant tristique metus elit, complectitur dicat antiopam consulatu.</p>
+						<p class="{{ baseClass }}__body">Body font. <a href="#">This is a link.</a> Lorem ipsum dolor sit amet, brute rhoncus sit dicant fermentum antiopam dicat diam laoreet sapien dictas. Tristique dignissim.</p>
+						<p class="{{ baseClass }}__body">Body font. Lorem ipsum dolor sit amet, elitr quisque quam mauris parturient porttitor elaboraret pharetra auctor simul placerat apeirian omittantur inermis ac modo vocibus case offendit deserunt ut fuisset vis detraxit adhuc argumentum euismod ligula periale, elementum admodum mazim.</p>
+						<p class="{{ baseClass }}__body-large">Body large font. Lorem ipsum dolor sit amet, scelerisque tritani mazim, netus convallis porttitor potenti mediocrem, quaeque invenire debitis maiorum nisi. Bonorum pretium partem nec felis arcu condimentum blandit, ius. Vitae pertinax. Mauris.</p>
+						<p class="{{ baseClass }}__body-small">Body small font. Lorem ipsum dolor sit amet, turpis magnis feugiat inermis case cetero. Pulvinar dui gravida. Tempor nostro eripuit, suscipit quis natoque qui iudicabit imperdiet urna epicurei eleifend ultricies aeque invenire periale.</p>
+						<p class="{{ baseClass }}__body-xsmall">Body xsmall font. Lorem ipsum dolor sit amet, dicant omittantur mel ligula deleniti fusce consequuntur noster imperdiet mus nec temporibus pharetra semper nominavi nunc. Curabitur magnis pertinax. Partem tempus habitant percipitur consequat, meliore.</p>
+						<ul class="{{ baseClass }}__list-unordered">
+							<li>Unordered list item</li>
+							<li>Unordered list item</li>
+							<li>Unordered list item</li>
+						</ul>
+						<ol class="{{ baseClass }}__list-ordered">
+							<li>Ordered list item</li>
+							<li>Ordered list item</li>
+							<li>Ordered list item</li>
+						</ol>
+					</div>
+				</div>
+
+				<div class="{{ baseClass }}__section">
+					<h6 class="{{ baseClass }}__section__heading">
+						Button Primary - Light
+					</h6>
+					<div class="{{ baseClass }}__section__content {{ baseClass }}__section__content--light {{ baseClass }}__buttons">
+						<div class="{{ baseClass }}__buttons__wrapper">
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "light",
+								style: "filled",
+								shape: "square",
+								arrow: "left",
+								url: "#",
+								text: "Button",
+							} only %}
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "light",
+								style: "filled",
+								shape: "square",
+								arrow: "left",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "light",
+								style: "outline",
+								shape: "square",
+								arrow: "left",
+								url: "#",
+								text: "Button",
+							} only %}
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "light",
+								style: "outline",
+								shape: "square",
+								arrow: "left",
+								url: "#",
+								text: "Button",
+							} only %}
+							
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "light",
+								style: "filled",
+								shape: "round",
+								arrow: "left",
+								url: "#",
+								text: "Button",
+							} only %}
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "light",
+								style: "filled",
+								shape: "round",
+								arrow: "left",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "light",
+								style: "outline",
+								shape: "round",
+								arrow: "left",
+								url: "#",
+								text: "Button",
+							} only %}
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "light",
+								style: "outline",
+								shape: "round",
+								arrow: "left",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "light",
+								style: "filled",
+								shape: "square",
+								arrow: "right",
+								url: "#",
+								text: "Button",
+							} only %}
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "light",
+								style: "filled",
+								shape: "square",
+								arrow: "right",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "light",
+								style: "outline",
+								shape: "square",
+								arrow: "right",
+								url: "#",
+								text: "Button",
+							} only %}
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "light",
+								style: "outline",
+								shape: "square",
+								arrow: "right",
+								url: "#",
+								text: "Button",
+							} only %}
+							
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "light",
+								style: "filled",
+								shape: "round",
+								arrow: "right",
+								url: "#",
+								text: "Button",
+							} only %}
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "light",
+								style: "filled",
+								shape: "round",
+								arrow: "right",
+								url: "#",
+								text: "Button",
+							} only %}
+							
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "light",
+								style: "outline",
+								shape: "round",
+								arrow: "right",
+								url: "#",
+								text: "Button",
+							} only %}
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "light",
+								style: "outline",
+								shape: "round",
+								arrow: "right",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "light",
+								style: "filled",
+								shape: "square",
+								arrow: "none",
+								url: "#",
+								text: "Button",
+							} only %}
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "light",
+								style: "filled",
+								shape: "square",
+								arrow: "none",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "light",
+								style: "outline",
+								shape: "square",
+								arrow: "none",
+								url: "#",
+								text: "Button",
+							} only %}
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "light",
+								style: "outline",
+								shape: "square",
+								arrow: "none",
+								url: "#",
+								text: "Button",
+							} only %}
+							
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "light",
+								style: "filled",
+								shape: "round",
+								arrow: "none",
+								url: "#",
+								text: "Button",
+							} only %}
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "light",
+								style: "filled",
+								shape: "round",
+								arrow: "none",
+								url: "#",
+								text: "Button",
+							} only %}
+							
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "light",
+								style: "outline",
+								shape: "round",
+								arrow: "none",
+								url: "#",
+								text: "Button",
+							} only %}
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "light",
+								style: "outline",
+								shape: "round",
+								arrow: "none",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "light",
+								style: "filled",
+								shape: "square",
+								arrow: "left",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "light",
+								style: "filled",
+								shape: "square",
+								arrow: "right",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "light",
+								style: "filled",
+								shape: "square",
+								arrow: "left",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "light",
+								style: "filled",
+								shape: "square",
+								arrow: "right",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "light",
+								style: "outline",
+								shape: "square",
+								arrow: "left",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "light",
+								style: "outline",
+								shape: "square",
+								arrow: "right",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "light",
+								style: "outline",
+								shape: "square",
+								arrow: "left",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "light",
+								style: "outline",
+								shape: "square",
+								arrow: "right",
+								url: "#",
+								text: "",
+							} only %}
+							
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "light",
+								style: "filled",
+								shape: "round",
+								arrow: "left",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "light",
+								style: "filled",
+								shape: "round",
+								arrow: "right",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "light",
+								style: "filled",
+								shape: "round",
+								arrow: "left",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "light",
+								style: "filled",
+								shape: "round",
+								arrow: "right",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "light",
+								style: "outline",
+								shape: "round",
+								arrow: "left",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "light",
+								style: "outline",
+								shape: "round",
+								arrow: "right",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "light",
+								style: "outline",
+								shape: "round",
+								arrow: "left",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "light",
+								style: "outline",
+								shape: "round",
+								arrow: "right",
+								url: "#",
+								text: "",
+							} only %}
+
+						</div>
+					</div>
+				</div>
+
+				<div class="{{ baseClass }}__section">
+					<h6 class="{{ baseClass }}__section__heading">
+						Button Primary - Dark
+					</h6>
+					<div class="{{ baseClass }}__section__content {{ baseClass }}__section__content--dark {{ baseClass }}__buttons">
+						<div class="{{ baseClass }}__buttons__wrapper">
+							
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "dark",
+								style: "filled",
+								shape: "square",
+								arrow: "left",
+								url: "#",
+								text: "Button",
+							} only %}
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "dark",
+								style: "filled",
+								shape: "square",
+								arrow: "left",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "dark",
+								style: "outline",
+								shape: "square",
+								arrow: "left",
+								url: "#",
+								text: "Button",
+							} only %}
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "dark",
+								style: "outline",
+								shape: "square",
+								arrow: "left",
+								url: "#",
+								text: "Button",
+							} only %}
+							
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "dark",
+								style: "filled",
+								shape: "round",
+								arrow: "left",
+								url: "#",
+								text: "Button",
+							} only %}
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "dark",
+								style: "filled",
+								shape: "round",
+								arrow: "left",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "dark",
+								style: "outline",
+								shape: "round",
+								arrow: "left",
+								url: "#",
+								text: "Button",
+							} only %}
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "dark",
+								style: "outline",
+								shape: "round",
+								arrow: "left",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "dark",
+								style: "filled",
+								shape: "square",
+								arrow: "right",
+								url: "#",
+								text: "Button",
+							} only %}
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "dark",
+								style: "filled",
+								shape: "square",
+								arrow: "right",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "dark",
+								style: "outline",
+								shape: "square",
+								arrow: "right",
+								url: "#",
+								text: "Button",
+							} only %}
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "dark",
+								style: "outline",
+								shape: "square",
+								arrow: "right",
+								url: "#",
+								text: "Button",
+							} only %}
+							
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "dark",
+								style: "filled",
+								shape: "round",
+								arrow: "right",
+								url: "#",
+								text: "Button",
+							} only %}
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "dark",
+								style: "filled",
+								shape: "round",
+								arrow: "right",
+								url: "#",
+								text: "Button",
+							} only %}
+							
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "dark",
+								style: "outline",
+								shape: "round",
+								arrow: "right",
+								url: "#",
+								text: "Button",
+							} only %}
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "dark",
+								style: "outline",
+								shape: "round",
+								arrow: "right",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "dark",
+								style: "filled",
+								shape: "square",
+								arrow: "none",
+								url: "#",
+								text: "Button",
+							} only %}
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "dark",
+								style: "filled",
+								shape: "square",
+								arrow: "none",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "dark",
+								style: "outline",
+								shape: "square",
+								arrow: "none",
+								url: "#",
+								text: "Button",
+							} only %}
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "dark",
+								style: "outline",
+								shape: "square",
+								arrow: "none",
+								url: "#",
+								text: "Button",
+							} only %}
+							
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "dark",
+								style: "filled",
+								shape: "round",
+								arrow: "none",
+								url: "#",
+								text: "Button",
+							} only %}
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "dark",
+								style: "filled",
+								shape: "round",
+								arrow: "none",
+								url: "#",
+								text: "Button",
+							} only %}
+							
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "dark",
+								style: "outline",
+								shape: "round",
+								arrow: "none",
+								url: "#",
+								text: "Button",
+							} only %}
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "dark",
+								style: "outline",
+								shape: "round",
+								arrow: "none",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "dark",
+								style: "filled",
+								shape: "square",
+								arrow: "left",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "dark",
+								style: "filled",
+								shape: "square",
+								arrow: "right",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "dark",
+								style: "filled",
+								shape: "square",
+								arrow: "left",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "dark",
+								style: "filled",
+								shape: "square",
+								arrow: "right",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "dark",
+								style: "outline",
+								shape: "square",
+								arrow: "left",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "dark",
+								style: "outline",
+								shape: "square",
+								arrow: "right",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "dark",
+								style: "outline",
+								shape: "square",
+								arrow: "left",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "dark",
+								style: "outline",
+								shape: "square",
+								arrow: "right",
+								url: "#",
+								text: "",
+							} only %}
+							
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "dark",
+								style: "filled",
+								shape: "round",
+								arrow: "left",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "dark",
+								style: "filled",
+								shape: "round",
+								arrow: "right",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "dark",
+								style: "filled",
+								shape: "round",
+								arrow: "left",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "dark",
+								style: "filled",
+								shape: "round",
+								arrow: "right",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "dark",
+								style: "outline",
+								shape: "round",
+								arrow: "left",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "large",
+								theme: "dark",
+								style: "outline",
+								shape: "round",
+								arrow: "right",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "dark",
+								style: "outline",
+								shape: "round",
+								arrow: "left",
+								url: "#",
+								text: "",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+								size: "small",
+								theme: "dark",
+								style: "outline",
+								shape: "round",
+								arrow: "right",
+								url: "#",
+								text: "",
+							} only %}
+
+						</div>
+					</div>
+				</div>
+
+				<div class="{{ baseClass }}__section">
+					<h6 class="{{ baseClass }}__section__heading">
+						Button Secondary - Light
+					</h6>
+					<div class="{{ baseClass }}__section__content {{ baseClass }}__section__content--light {{ baseClass }}__buttons">
+						<div class="{{ baseClass }}__buttons__wrapper">
+
+							{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+								size: "large",
+								theme: "light",
+								style: "underline",
+								arrow: "left",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+								size: "small",
+								theme: "light",
+								style: "underline",
+								arrow: "left",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+								size: "large",
+								theme: "light",
+								style: "noUnderline",
+								arrow: "left",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+								size: "small",
+								theme: "light",
+								style: "noUnderline",
+								arrow: "left",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+								size: "large",
+								theme: "light",
+								style: "underline",
+								arrow: "right",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+								size: "small",
+								theme: "light",
+								style: "underline",
+								arrow: "right",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+								size: "large",
+								theme: "light",
+								style: "noUnderline",
+								arrow: "right",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+								size: "small",
+								theme: "light",
+								style: "noUnderline",
+								arrow: "right",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+								size: "large",
+								theme: "light",
+								style: "underline",
+								arrow: "none",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+								size: "small",
+								theme: "light",
+								style: "underline",
+								arrow: "none",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+								size: "large",
+								theme: "light",
+								style: "noUnderline",
+								arrow: "none",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+								size: "small",
+								theme: "light",
+								style: "noUnderline",
+								arrow: "none",
+								url: "#",
+								text: "Button",
+							} only %}
+
+						</div>
+					</div>
+				</div>
+
+				<div class="{{ baseClass }}__section">
+					<h6 class="{{ baseClass }}__section__heading">
+						Button Secondary - Dark
+					</h6>
+					<div class="{{ baseClass }}__section__content {{ baseClass }}__section__content--dark {{ baseClass }}__buttons">
+						<div class="{{ baseClass }}__buttons__wrapper">
+
+							{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+								size: "large",
+								theme: "dark",
+								style: "underline",
+								arrow: "left",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+								size: "small",
+								theme: "dark",
+								style: "underline",
+								arrow: "left",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+								size: "large",
+								theme: "dark",
+								style: "noUnderline",
+								arrow: "left",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+								size: "small",
+								theme: "dark",
+								style: "noUnderline",
+								arrow: "left",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+								size: "large",
+								theme: "dark",
+								style: "underline",
+								arrow: "right",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+								size: "small",
+								theme: "dark",
+								style: "underline",
+								arrow: "right",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+								size: "large",
+								theme: "dark",
+								style: "noUnderline",
+								arrow: "right",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+								size: "small",
+								theme: "dark",
+								style: "noUnderline",
+								arrow: "right",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+								size: "large",
+								theme: "dark",
+								style: "underline",
+								arrow: "none",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+								size: "small",
+								theme: "dark",
+								style: "underline",
+								arrow: "none",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+								size: "large",
+								theme: "dark",
+								style: "noUnderline",
+								arrow: "none",
+								url: "#",
+								text: "Button",
+							} only %}
+
+							{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+								size: "small",
+								theme: "dark",
+								style: "noUnderline",
+								arrow: "none",
+								url: "#",
+								text: "Button",
+							} only %}
+
+						</div>
+					</div>
+				</div>
+
+				<div class="{{ baseClass }}__section">
+					<h6 class="{{ baseClass }}__section__heading">
+						Button Icon - Light
+					</h6>
+					<div class="{{ baseClass }}__section__content {{ baseClass }}__section__content--light {{ baseClass }}__buttons">
+						<div class="{{ baseClass }}__buttons__wrapper">
+
+							{% for type in buttonIconTypes %}
+
+								{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+									size: "large",
+									theme: "light",
+									style: "filled",
+									shape: "round",
+									type: type,
+									url: "#",
+									target: "_blank",
+								} only %}
+
+								{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+									size: "small",
+									theme: "light",
+									style: "filled",
+									shape: "round",
+									type: type,
+									url: "#",
+									target: "_blank",
+								} only %}
+
+								{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+									size: "large",
+									theme: "light",
+									style: "outline",
+									shape: "round",
+									type: type,
+									url: "#",
+									target: "_blank",
+								} only %}
+
+								{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+									size: "small",
+									theme: "light",
+									style: "outline",
+									shape: "round",
+									type: type,
+									url: "#",
+									target: "_blank",
+								} only %}
+
+								{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+									size: "large",
+									theme: "light",
+									style: "filled",
+									shape: "square",
+									type: type,
+									url: "#",
+									target: "_blank",
+								} only %}
+
+								{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+									size: "small",
+									theme: "light",
+									style: "filled",
+									shape: "square",
+									type: type,
+									url: "#",
+									target: "_blank",
+								} only %}
+
+								{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+									size: "large",
+									theme: "light",
+									style: "outline",
+									shape: "square",
+									type: type,
+									url: "#",
+									target: "_blank",
+								} only %}
+
+								{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+									size: "small",
+									theme: "light",
+									style: "outline",
+									shape: "square",
+									type: type,
+									url: "#",
+									target: "_blank",
+								} only %}
+
+							{% endfor %}
+							
+						</div>
+					</div>
+				</div>
+
+				<div class="{{ baseClass }}__section">
+					<h6 class="{{ baseClass }}__section__heading">
+						Button Icon - Dark
+					</h6>
+					<div class="{{ baseClass }}__section__content {{ baseClass }}__section__content--dark {{ baseClass }}__buttons">
+						<div class="{{ baseClass }}__buttons__wrapper">
+
+							{% for type in buttonIconTypes %}
+
+								{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+									size: "large",
+									theme: "dark",
+									style: "filled",
+									shape: "round",
+									type: type,
+									url: "#",
+									target: "_blank",
+								} only %}
+
+								{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+									size: "small",
+									theme: "dark",
+									style: "filled",
+									shape: "round",
+									type: type,
+									url: "#",
+									target: "_blank",
+								} only %}
+
+								{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+									size: "large",
+									theme: "dark",
+									style: "outline",
+									shape: "round",
+									type: type,
+									url: "#",
+									target: "_blank",
+								} only %}
+
+								{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+									size: "small",
+									theme: "dark",
+									style: "outline",
+									shape: "round",
+									type: type,
+									url: "#",
+									target: "_blank",
+								} only %}
+
+								{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+									size: "large",
+									theme: "dark",
+									style: "filled",
+									shape: "square",
+									type: type,
+									url: "#",
+									target: "_blank",
+								} only %}
+
+								{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+									size: "small",
+									theme: "dark",
+									style: "filled",
+									shape: "square",
+									type: type,
+									url: "#",
+									target: "_blank",
+								} only %}
+
+								{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+									size: "large",
+									theme: "dark",
+									style: "outline",
+									shape: "square",
+									type: type,
+									url: "#",
+									target: "_blank",
+								} only %}
+
+								{% include "_components/atoms/Buttons/ButtonIcon/ButtonIcon" with {
+									size: "small",
+									theme: "dark",
+									style: "outline",
+									shape: "square",
+									type: type,
+									url: "#",
+									target: "_blank",
+								} only %}
+
+							{% endfor %}
+							
+						</div>
+					</div>
+				</div>
+
+				<div class="{{ baseClass }}__section">
+					<h6 class="{{ baseClass }}__section__heading">
+						Form - Light
+					</h6>
+					<div class="{{ baseClass }}__section__content {{ baseClass }}__section__content--light">
+						{% include "_components/elements/Forms/Form/Form.handler" with {
+							theme: "light",
+							formieForm: craft.formie.forms({ handle: 'allFields' }).one(),
+						} only %}
+					</div>
+				</div>
+
+				<div class="{{ baseClass }}__section">
+					<h6 class="{{ baseClass }}__section__heading">
+						Form - Dark
+					</h6>
+					<div class="{{ baseClass }}__section__content {{ baseClass }}__section__content--dark">
+						{% include "_components/elements/Forms/Form/Form.handler" with {
+							theme: "dark",
+							formieForm: craft.formie.forms({ handle: 'allFields' }).one(),
+						} only %}
+					</div>
+				</div>
+
+				{% set query = craft.entries.limit(1) %}
+				{% paginate query as pageInfo, pageEntries %}
+
+				<div class="{{ baseClass }}__section">
+					<h6 class="{{ baseClass }}__section__heading">
+						Pagination - Light
+					</h6>
+					<div class="{{ baseClass }}__section__content {{ baseClass }}__section__content--light">
+						{% include "_components/elements/Global/Pagination/Pagination.handler" with {
+							theme: "light",
+							pageInfo: pageInfo,
+						} only %}
+					</div>
+				</div>
+
+				<div class="{{ baseClass }}__section">
+					<h6 class="{{ baseClass }}__section__heading">
+						Pagination - Dark
+					</h6>
+					<div class="{{ baseClass }}__section__content {{ baseClass }}__section__content--dark">
+						{% include "_components/elements/Global/Pagination/Pagination.handler" with {
+							theme: "dark",
+							pageInfo: pageInfo,
+						} only %}
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>

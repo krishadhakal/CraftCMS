@@ -1,0 +1,33 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set link = link ?? null %}
+{% set copy = copy ?? null %}
+
+{#---------- Data Handling ----------#}
+{% set linkUrl = link.url ?? null %}
+{% set linkTarget = link.target ?? null %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-Banner" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% if copy|length %}
+	{% set markup %}
+		<h6 class="{{ baseClass }}__copy">
+			{{ copy }}
+		</h6>
+	{% endset %}
+	{% if linkUrl|length %}
+		<a href="{{ linkUrl }}" target="{{ linkTarget }}" class="{{ classes }}">
+			{{ markup }}
+		</a>
+	{% else %}
+		<div class="{{ classes }}">
+			{{ markup }}
+		</div>
+	{% endif %}
+{% endif %}

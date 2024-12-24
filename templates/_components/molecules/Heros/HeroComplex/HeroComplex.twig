@@ -1,0 +1,82 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["dark", "light"]) %}
+{% set carousel = carousel ?? null %}
+{% set showBreadcrumb = showBreadcrumb ?? false %}
+{% set breadcrumbs = breadcrumbs ?? null %}
+{% set label = label ?? null %}
+{% set heading = heading ?? null %}
+{% set copy = copy ?? null %}
+{% set button = button ?? null %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-HeroComplex" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% if heading|length %}
+<div class="{{ classes }}">
+
+	{% if carousel|length %}
+		<div class="{{ baseClass }}__carousel">
+			<div class="{{ baseClass }}__carousel__inner">
+				{{ carousel }}
+			</div>
+		</div>
+	{% endif %}
+
+	<div class="{{ baseClass }}__wrapperOuter">
+
+		<div class="{{ baseClass }}__wrapperInner">
+
+			<div class="grid-container">
+				
+				{% if showBreadcrumb %}
+					<div class="{{ baseClass }}__breadcrumbs">
+						{{ breadcrumbs }}
+					</div>
+				{% endif %}
+
+				<div class="{{ baseClass }}__content">
+					{% if label %}
+						<h5 class="{{ baseClass }}__label">
+							{{ label }}
+						</h5>
+					{% endif %}
+					<h1 class="{{ baseClass }}__heading">
+						{{ heading }}
+					</h1>
+					{% if copy %}
+						<div class="{{ baseClass }}__copy">
+							{{ copy }}
+						</div>
+					{% endif %}
+					{% if button %}
+						{% set buttonText = button.text ?? null %}
+						{% set buttonUrl = button.url ?? null %}
+						{% set buttonTarget = button.target ?? null %}
+
+						{% if buttonText|length and buttonUrl|length %}
+							<div class="{{ baseClass }}__button">
+								{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+									theme: theme,
+									arrow: "right",
+									target: buttonTarget,
+									url: buttonUrl,
+									text: buttonText,
+								} only %}
+							</div>
+						{% endif %}
+					{% endif %}
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</div>
+{% endif %}

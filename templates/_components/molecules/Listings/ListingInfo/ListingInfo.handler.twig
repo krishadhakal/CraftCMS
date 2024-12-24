@@ -1,0 +1,87 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = "light" %}
+{% set intro = null %}
+{% set items = [] %}
+
+{#---------- Data Handling ----------#}
+{% set cardImageSizes = "(min-width: 1024px) 25vw, (min-width: 560px) 50vw, 100vw" %}
+{% set cardImageOptions = [
+	{
+		width: 480,
+	},
+	{
+		width: 640,
+	},
+	{
+		width: 800,
+	},
+	{
+		width: 1200,
+	},
+] %}
+
+{% if block|length %}
+	{% set disableTopSpacing = block.common_disableTopSpacing ?? false %}
+	{% set disableBottomSpacing = block.common_disableBottomSpacing ?? false %}
+	{% set variants = variants|merge([disableTopSpacing ? "disableTopSpacing", disableBottomSpacing ? "disableBottomSpacing"]) %}
+
+	{% set intro %}
+		{% apply spaceless %}
+			{% include "_components/elements/Global/Intro/Intro.handler" with {
+				theme: theme,
+				block: block,
+			} only %}
+		{% endapply %}
+	{% endset %}
+
+	{% for item in block.molListingInfo_items.all() ?? [] %}
+		{% set itemImageAsset = item.item_image.one() ?? null %}
+		{% set itemHeading = item.item_heading ?? null %}
+		{% set itemCopy = helpers.getRawText(item.item_copy) ?? null %}
+		{% set itemLink = null %}
+		{% set itemLinkField = item.item_link ?? null %}
+
+		{% if itemLinkField %}
+			{% set itemLink = {
+				text: itemLinkField.getCustomText(),
+				url: helpers.generateLinkUrl(itemLinkField),
+				target: helpers.generateLinkTarget(itemLinkField),
+			} %}
+		{% endif %}
+		
+		{% if itemImageAsset|length and itemHeading|length %}
+			{% set itemMarkup %}
+				{% apply spaceless %}
+					{% include "_components/elements/Cards/CardInfo/CardInfo.handler" with {
+						theme: theme,
+						imageSizes: cardImageSizes,
+						imageOptions: cardImageOptions,
+						imageAsset: itemImageAsset,
+						heading: itemHeading,
+						copy: itemCopy,
+						link: itemLink,
+					} only %}
+				{% endapply %}
+			{% endset %}
+
+			{% set items = items|merge([itemMarkup]) %}
+		
+		{% endif %}
+	{% endfor %}
+
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/Listings/ListingInfo/ListingInfo" with {
+	variants: variants,
+	theme: theme,
+	intro: intro,
+	items: items,
+} only %}

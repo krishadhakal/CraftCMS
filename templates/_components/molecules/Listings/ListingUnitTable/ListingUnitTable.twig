@@ -1,0 +1,107 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set intro = intro ?? null %}
+{% set filters = filters ?? null %}
+{% set properties = properties ?? [] %}
+{% set items = items ?? [] %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-ListingUnitTable" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% if items|length or filters|length %}
+<div class="{{ classes }}">
+	{% if intro|trim|length %}
+		{{ intro }}
+	{% endif %}
+	<div class="grid-container">
+		{% if filters|length %}
+			<div class="{{ baseClass }}__filters row">
+				<div class="column xsmall-12">
+					{{ filters }}
+				</div>
+			</div>
+		{% endif %}
+		<div class="row">
+			<div class="column xsmall-12">
+				<div class="{{ baseClass }}__chart">
+					<div class="{{ baseClass }}__chart__header">
+						<div class="{{ baseClass }}__chart__header__heading">
+							Units
+						</div>
+						<div class="{{ baseClass }}__chart__header__property" data-property="title">
+							Unit
+						</div>
+						{% for propertyKey, propertyValue in properties %}
+							{% set propertyHeading = propertyValue.heading ?? null %}
+							{% set propertyFootnote = propertyValue.footnote ?? null %}
+
+							<div class="{{ baseClass }}__chart__header__property" data-property={{ propertyKey }}>
+								<div class="{{ baseClass }}__chart__header__property__text">
+									{{ propertyHeading }}{{ propertyFootnote|length ? "*"}}
+								</div>
+							</div>
+						{% endfor %}
+						<div class="{{ baseClass }}__chart__header__property" data-property="button">
+						</div>
+					</div>
+					<div class="{{ baseClass }}__chart__items">
+						{% for item in items %}
+							{% set itemTitle = item.title ?? null %}
+							{% set itemId = item.id ?? null %}
+							{% set itemIsAvailable = item.isAvailable ?? null %}
+
+							<div class="{{ baseClass }}__chart__item" {{ item.isAvailable != true ? "data-unavailable" }}>
+								<div class="{{ baseClass }}__chart__item__property" data-property="title">
+									<div class="{{ baseClass }}__chart__item__property__text">
+										{{ itemTitle }}
+									</div>
+								</div>
+								{% for property in properties|keys %}
+									{% set itemValue = attribute(item, property) ?? null %}
+									<div class="{{ baseClass }}__chart__item__property" data-property={{ property }}>
+										<div class="{{ baseClass }}__chart__item__property__text">
+											{{ itemValue ?? '-' }}
+										</div>
+									</div>
+								{% endfor %}
+								<div class="{{ baseClass }}__chart__item__details">
+									<ul>
+									{% for propertyKey, propertyValue in properties %}
+										{% set propertyHeading = propertyValue.heading ?? null %}
+										{% set itemValue = attribute(item, propertyKey) ?? null %}
+
+										{% if itemValue|length %}
+											<li>
+												<strong>{{ propertyHeading }}:</strong> {{ itemValue }}
+											</li>
+										{% endif %}
+									{% endfor %}
+									</ul>
+								</div>
+								<div class="{{ baseClass }}__chart__item__property" data-property="button">
+									{% if itemId|length %}
+										<button class="{{ baseClass }}__chart__item__button" data-modal-unit-show data-modal-unit-unit-id="{{ itemId }}">
+											{% include "_components/atoms/Buttons/ButtonSecondary/ButtonSecondary" with {
+												size: "large",
+												theme: theme,
+												style: "noUnderline",
+												arrow: "right",
+												text: "View Details",
+											} only %}
+										</button>
+									{% endif %}
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %}

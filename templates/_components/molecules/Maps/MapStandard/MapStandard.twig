@@ -1,0 +1,31 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set componentId = componentId ?? 'mapStandard_' ~ random() %}
+{% set zoom = zoom ?? "" %}
+{% set features = features ?? [] %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-MapStandard" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% if features|length %}
+<div class="{{ classes }}" data-theme="{{ theme }}" id="{{ componentId }}">
+	<div class="{{ baseClass }}__mapWrapper">
+		<div class="{{ baseClass }}__map"></div>
+	</div>
+</div>
+{% js %}
+	// Mapbox Features
+	window.MapData_{{ componentId }} = {
+		geoJson: {
+			"type": "FeatureCollection",
+			"features": {{ features|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
+		},
+		zoom: {{ zoom|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
+	}
+{% endjs %}
+{% endif %}

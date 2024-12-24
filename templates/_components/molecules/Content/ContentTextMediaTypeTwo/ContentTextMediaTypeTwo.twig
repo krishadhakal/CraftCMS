@@ -1,0 +1,88 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set theme = helpers.getOption(theme ?? null, ["light", "dark"]) %}
+{% set carousel = carousel ?? null %}
+{% set label = label ?? null %}
+{% set heading = heading ?? null %}
+{% set imageSizes = imageSizes ?? null %}
+{% set imageSources = imageSources ?? null %}
+{% set imageUrl = imageUrl ?? null %}
+{% set imageAlt = imageAlt ?? null %}
+{% set copy = copy ?? null %}
+{% set iconInfoItems = iconInfoItems ?? [] %}
+{% set button = button ?? null %}
+
+{#---------- Classes ----------#}
+{% set baseClass = "mol-ContentTextMediaTypeTwo" %}
+{% set variants = variants ?? [] %}
+{% set classes = helpers.generateClasses(baseClass, variants, [theme], []) %}
+
+{#---------- Output ----------#}
+{% if heading|length and carousel|length and copy|length %}
+<div class="{{ classes }}">
+	<div class="{{ baseClass }}__wrapper">
+			<div class="{{ baseClass }}__mediaWrapper">
+				<div class="{{ baseClass }}__media">
+					<div class="{{ baseClass }}__carousel">
+						{{ carousel }}
+					</div>
+				</div>
+			</div>
+			<div class="{{ baseClass }}__content">
+				<div class="{{ baseClass }}__content__inner">
+					{% if label|length %}
+						<h5 class="{{ baseClass }}__label">
+							{{ label }}
+						</h5>
+					{% endif %}
+					<h2 class="{{ baseClass }}__heading">
+						{{ heading }}
+					</h2>
+					{% if imageUrl|length %}
+						<div class="{{ baseClass }}__imageWrapper">
+							{% include "_components/atoms/Media/ResponsiveImage/ResponsiveImage" with {
+								sizes: imageSizes,
+								sources: imageSources,
+								url: imageUrl,
+								alt: imageAlt,
+							} only %}
+						</div>
+					{% endif %}
+					{% if copy|length %}
+						<div class="{{ baseClass }}__copy">
+							{{ copy }}
+						</div>
+					{% endif %}
+					{% if iconInfoItems|length %}
+						<div class="{{ baseClass }}__infoIconItems">
+							{% for item in iconInfoItems %}
+								<div class="{{ baseClass }}__infoIconItem">
+									{{ item }}
+								</div>
+							{% endfor %}
+						</div>
+					{% endif %}
+					{% if button %}
+						{% set buttonText = button.text ?? null %}
+						{% set buttonUrl = button.url ?? null %}
+						{% set buttonTarget = button.target ?? null %}
+
+						{% if buttonText|length and buttonUrl|length %}
+							<div class="{{ baseClass }}__button">
+								{% include "_components/atoms/Buttons/ButtonPrimary/ButtonPrimary" with {
+									theme: theme,
+									style: "outline",
+									arrow: "right",
+									target: buttonTarget,
+									url: buttonUrl,
+									text: buttonText,
+								} only %}
+							</div>
+						{% endif %}
+					{% endif %}
+				</div>
+			</div>
+	</div>
+</div>
+{% endif %}

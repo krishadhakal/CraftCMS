@@ -1,0 +1,66 @@
+{% import '_macros/helpers' as helpers %}
+
+{#---------- Parameters ----------#}
+{% set block = block ?? null %}
+{% set entry = entry ?? null %}
+
+{#---------- Output Variables ----------#}
+{% set variants = [] %}
+{% set theme = "light" %}
+{% set intro = null %}
+{% set items = [] %}
+
+{#---------- Data Handling ----------#}
+{% if block|length %}
+	{% set disableTopSpacing = block.common_disableTopSpacing ?? false %}
+	{% set disableBottomSpacing = block.common_disableBottomSpacing ?? false %}
+	{% set variants = variants|merge([disableTopSpacing ? "disableTopSpacing", disableBottomSpacing ? "disableBottomSpacing"]) %}
+
+	{% set intro %}
+		{% apply spaceless %}
+			{% include "_components/elements/Global/Intro/Intro.handler" with {
+				theme: theme,
+				block: block,
+			} only %}
+		{% endapply %}
+	{% endset %}
+
+	{% set itemData = [] %}
+
+	{% for item in block.molListingIconInfo_items.all() ?? [] %}
+		{% set itemIconAsset = item.item_icon.one() ?? null %}
+		{% set itemHeading = item.item_heading ?? null %}
+		{% set itemCopy = item.item_copy ?? null %}
+
+		{% if itemHeading|length %}
+			{% set itemData = itemData|merge([{
+				heading: itemHeading,
+				copy: itemCopy,
+				icon: itemIconAsset
+			}]) %}
+		{% endif %}
+	{% endfor %}
+
+	{% if itemData|length %}
+		{% for item in itemData %}
+			{% set itemMarkup %}
+				{% apply spaceless %}
+					{% include "_components/elements/Cards/CardIconInfo/CardIconInfo.handler" with {
+						theme: theme,
+						data: item,
+					} only %}
+				{% endapply %}
+			{% endset %}
+
+			{% set items = items|merge([itemMarkup]) %}
+		{% endfor %}
+	{% endif %}
+{% endif %}
+
+{#---------- Output ----------#}
+{% include "_components/molecules/Listings/ListingIconInfo/ListingIconInfo" with {
+	variants: variants,
+	theme: theme,
+	intro: intro,
+	items: items,
+} only %}
